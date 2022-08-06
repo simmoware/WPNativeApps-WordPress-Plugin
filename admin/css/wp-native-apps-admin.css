@@ -1,0 +1,404 @@
+.wp-menu-image img{
+  height: 20px;
+}
+
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+}
+.flex-row{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+}
+/*
+================================================================================
+============================ CSS FOR Tabs STARTS================================
+*/
+.tab-content.inactive{
+  display: none;
+}
+
+#TB_iframeContent #wpadminbar{
+  display: none;
+}
+#general > .flex-wrap{
+  display: flex;
+  flex-wrap: wrap;
+flex-direction: column;
+min-height: 66vh;
+justify-content: flex-start;
+margin: 20px 0;
+}
+#general .flex-wrap > .flex-item{
+  margin:1em 0;
+
+}
+.general_app_col1, .general_hide_header_col1, .general_topbar_navigation_section {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.section_heading {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+    margin:15px 0;
+}
+label.inputLabel{
+  font-size: 12px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.itemSelectorWrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.choose_button_with_icon {
+  cursor: pointer;
+  border: 1px solid;
+  height: 2em;
+  padding: 8px;
+  color: #72aee6;
+  background: transparent;
+  border-color: #72aee6;
+  border-radius: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  font-weight: bold;
+}
+.arrow_north:after {
+    content: '\2197';
+}
+.itemSelectorWrap.topbar_backgroundColorSection {
+    justify-content: space-between;
+    max-width: 270px;
+    flex-wrap: wrap;
+}
+
+.topbar_bannerLogo .wpnaImageUploadPreview {
+    border: 1px solid #ececec;
+    min-height: 100px;
+    min-width: 400px;
+  }
+.wpnaImageUploadPreview {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+  }
+
+/* Iframe to choose elements to hide (header,footer and other)*/
+iframe.test #wpadminbar{
+  display: none;
+}
+
+.iFrameWindow {
+    position:fixed;
+    z-index:99999;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:100%;
+    height:100vh;
+    background:rgba(0,0,0,0.6);
+}
+
+.iFrameContainer {
+    display:block;
+    width:90%;
+    max-width:1400px;
+    height:90%;
+    height:90vh;
+    max-height:880px;
+    margin:40px auto;
+    background-color:#E3E3E3;
+    border-radius:14px;
+    padding:10px 20px 10px 20px;
+}
+
+.iFrameContainer iframe {
+    display:block;
+    width:100%;
+    height:calc(100% - 40px);
+}
+
+.iFrameTitle {
+    display:block;
+    width:100%;
+    height:30px;
+}
+
+.iFrameURL {
+    float:left;
+    font-size:14px;
+    font-family:"Open Sans SemiBold";
+    width:40%;
+    overflow:hidden;
+    text-align:center;
+    margin-top:2px;
+}
+
+.iFrameCloseWindow {
+    float:left;
+    width:30%;
+    text-align:right;
+}
+
+.iFrameCloseButton {
+    float:right;
+    box-sizing: border-box;
+    margin-top:3px;
+    -webkit-appearance:none;
+    border:none;
+    margin-right:10px;
+    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-close.png") center right no-repeat;
+    background-size:contain;
+    width:20px;
+    height:15px;
+}
+
+.iFrameCloseButton:hover {
+    cursor:pointer;
+}
+
+.iFrameNavigationWindow {
+    float:left;
+    font-size:14px;
+    width:30%;
+    overflow:hidden;
+    text-align:center;
+}
+
+.iFrameForwardButton {
+    float:left;
+    box-sizing: border-box;
+    margin-top:3px;
+    -webkit-appearance:none;
+    border:none;
+    margin-right:10px;
+    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-forward.png") center center no-repeat;
+    background-size:contain;
+    opacity:0.5;
+    width:20px;
+    height:15px;
+}
+
+.iFrameForwardButton:hover {
+    cursor:pointer;
+}
+
+.iFrameBackButton {
+    float:left;
+    margin-right:10px;
+    margin-top:3px;
+    -webkit-appearance:none;
+    border:none;
+    background-color:transparent;
+    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-back.png") center center no-repeat;
+    background-size:contain;
+    opacity:0.5;
+    width:20px;
+    height:15px;
+}
+
+.iFrameBackButton:hover {
+    cursor:pointer;
+}
+
+/*
+================================================================================
+============================ CSS FOR Tabs ENDS==================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR iFrame BEGINS==================================
+*/
+.iFrameWindow {
+  position:fixed;
+  z-index:99999;
+  top:0px;
+  left:0px;
+  width:100%;
+  height:100%;
+  height:100vh;
+  background:rgba(0,0,0,0.6);
+}
+.iFrameContainer {
+  display:block;
+  width:90%;
+  max-width:1400px;
+  height:90%;
+  height:90vh;
+  max-height:880px;
+  margin:40px auto;
+  background-color:#E3E3E3;
+  border-radius:14px;
+  padding:10px 20px 10px 20px;
+}
+.iFrameContainer iframe {
+  display:block;
+  width:100%;
+  height:calc(100% - 80px);
+}
+.iFrameTitle {
+  display:block;
+  width:100%;
+  height:30px;
+}
+.iFrameURL {
+  float:left;
+  font-size:14px;
+  font-family:"Open Sans SemiBold";
+  width:40%;
+  overflow:hidden;
+  text-align:center;
+  margin-top:2px;
+}
+.iFrameCloseWindow {
+  float:left;
+  width:30%;
+  text-align:right;
+}
+.iFrameCloseButton {
+  float:right;
+  box-sizing: border-box;
+  margin-top:3px;
+  -webkit-appearance:none;
+  border:none;
+  margin-right:10px;
+  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-close.png") center right no-repeat;
+  background-size:contain;
+  width:20px;
+  height:15px;
+}
+.iFrameCloseButton:hover {
+  cursor:pointer;
+}
+.iFrameNavigationWindow {
+  float:left;
+  font-size:14px;
+  width:30%;
+  overflow:hidden;
+  text-align:center;
+}
+.iFrameForwardButton {
+  float:left;
+  box-sizing: border-box;
+  margin-top:3px;
+  -webkit-appearance:none;
+  border:none;
+  margin-right:10px;
+  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-forward.png") center center no-repeat;
+  background-size:contain;
+  opacity:0.5;
+  width:20px;
+  height:15px;
+}
+.iFrameForwardButton:hover {
+  cursor:pointer;
+}
+.iFrameBackButton {
+  float:left;
+  margin-right:10px;
+  margin-top:3px;
+  -webkit-appearance:none;
+  border:none;
+  background-color:transparent;
+  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-back.png") center center no-repeat;
+  background-size:contain;
+  opacity:0.5;
+  width:20px;
+  height:15px;
+}
+.iFrameBackButton:hover {
+  cursor:pointer;
+}
+.selectionContainer {
+  display:block;
+  width:100%;
+  padding-top:14px;
+  height:40px;
+}
+.selectionType {
+  float:left;
+  width:20%;
+}
+.elementSelection {
+  -webkit-appearance:none;
+  border:none;
+  width:100%;
+  border-radius:8px;
+  background-color:white;
+  font-size:16px !important;
+}
+.selectionSelector {
+  width:60%;
+  float:left;
+  background-color:white;
+  border-top-right-radius:3px;
+  border-bottom-right-radius:3px;
+  height: 33px;
+}
+.selectionSelectorString {
+  border:none !important;
+  border-radius:0px !important;
+  line-height:16px;
+  font-size:16px;
+  width:calc(100% - 106px);
+}
+.selectionSelectorChild {
+  float: right;
+  position: relative;
+  top: 4px;
+  right: 62px;
+  -webkit-appearance: none;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+}
+.selectionSelectorParent {
+  float: right;
+  position: relative;
+  top: 4px;
+  right: -35px;
+  -webkit-appearance: none;
+  border: none;
+  padding: 5px;
+  border-radius: 4px;
+}
+.selectionDone {
+  width:20%;
+  float:left;
+  height:33px;
+  border-top-right-radius:3px;
+  border-bottom-right-radius:3px;
+}
+.selectionDone button {
+  border:none;
+  width:100%;
+  -webkit-appearance:none;
+  background-color:#31C669;
+  color:white;
+  font-weight:bold;
+  text-align:center;
+  height:33px;
+}
+.selectionDone button:hover {
+  cursor:pointer;
+}
+/*
+================================================================================
+============================ CSS FOR iFrame ENDS ==================================
+*/

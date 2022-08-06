@@ -1,0 +1,42 @@
+<div class="iFrameWindow" onclick="closeiFrameWindow(event);">
+    <div class='iFrameContainer'>
+        <div class="iFrameTitle">
+            <div class="iFrameNavigationWindow">
+                <button type="button" class="iFrameBackButton">
+                    <span class="screen-reader-text">Back</span>
+                </button>
+                <button type="button" class="iFrameForwardButton">
+                    <span class="screen-reader-text">Forward</span>
+                </button>
+            </div>
+            <div class="iFrameURL">[[DISPLAY_URL]]</div>
+            <div class="iFrameCloseWindow">
+                <button type="button" class="iFrameCloseButton" onclick="closeiFrameWindow(event);">
+                    <span class="screen-reader-text">Close</span>
+                </button>
+            </div>
+        </div>
+        <iframe hspace="0" allowtransparency="true" src="[[URL]]" id="[[ID]]" frameborder="0">
+            This feature requires inline frames. You have iframes disabled or your browser does not support them.
+        </iframe>
+        <div class='selectionContainer'>
+            <div class='selectionType'>
+                <select class='elementSelection' disabled="disabled">
+                    <option value='Header'>Header</option>
+                </select>
+            </div>
+            <div class="selectionSelector">
+                <input type='text' class='selectionSelectorString' value="" />
+                <button class='selectionSelectorChild' onclick="selectChild('header_selection_iframe', 'header');">
+                    Child
+                </button>
+                <button class='selectionSelectorParent' onclick="selectParent('header_selection_iframe', 'header');">
+                    Parent
+                </button>
+            </div>
+            <div class="selectionDone">
+                <button class='selectionDoneButton' onclick="doneSelection('header');">Done</button>
+            </div>
+        </div>
+    </div>
+</div>
