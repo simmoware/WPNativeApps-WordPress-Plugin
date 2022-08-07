@@ -11,9 +11,42 @@
 .flex-row{
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 
 }
+.wpna_settings_page_left{
+  /* width: 60%
+  padding: 20px 5% */
+  border-right: 1.5px solid #D5D5D5;
+  padding: 50px 20px;
+  flex:2;
+}
+.wpna_settings_page_right{
+  /* width: 40%; */
+  /* padding: 20px 5% */
+  padding: 50px 20px;
+  flex:1;
+}
+
+.wpna_settings_page_wrap.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+.flexitem{
+  /* background-color: red; */
+  /* width: 50vw; */
+}
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+  background-color: red;
+}
+
+
 /*
 ================================================================================
 ============================ CSS FOR Tabs STARTS================================
@@ -402,3 +435,39 @@ iframe.test #wpadminbar{
 ================================================================================
 ============================ CSS FOR iFrame ENDS ==================================
 */
+.splash_screen_backgroundLogo_preview{
+  height: 250px;
+  width: 250px;
+}
+section.splashScreenSection{
+    width: 50%;
+    align-items: center;
+}
+.w50p{
+  width: 50%;
+}
+.w60p{
+  width:60%;
+}
+.w40p{
+  width:40%;
+}
+form#wpnaSettingsForm > div{
+  width: 100%;
+}
+span.wpnaicon{
+  background:transparent url("/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png") center center no-repeat;
+}
+img.wpnaNoticeIcon{
+  width: 40px;
+  height: auto;
+}
+.aifs{
+  align-items: flex-start;
+}
+.jc-se{
+  justify-content:space-evenly;
+}
+.jc-fx{
+  justify-content: flex-start;
+}

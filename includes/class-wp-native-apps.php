@@ -156,7 +156,7 @@ class Wp_Native_Apps {
 
 		// Add Admin pages
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_menu_pages');
-		// $this->loader->add_action( 'admin_notices', $plugin_admin, 'admin_notices');
+		$this->loader->add_action( 'admin_notices', $plugin_admin, 'admin_notices');
 
 
 

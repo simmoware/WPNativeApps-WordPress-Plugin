@@ -335,12 +335,14 @@ function closeiFrameWindow(event) {
     }
 }
 
+//===========================================================================================//
 //========================== Settings -> Navigation -> Bottom Bar Script STARTS ============//
 
-jQuery(document).ready(function($){
-	$('select.bottomBarItemType').on('change',function(){
-		var type = $(this).val();
-		const section = $(this).parents('.navigationBottomBarItem');
+//Function to handle Link Type change action.
+function handleBottomBarLinkTypeChange(el){
+		$=jQuery;
+		var type = $(el).val();
+		const section = $(el).parents('.navigationBottomBarItem');
 
 		switch (type){
 			case 'page':
@@ -357,18 +359,122 @@ jQuery(document).ready(function($){
 					break;
 			}
 		}
+}
+
+//===== Script to add new navigationIcon item in Navigation Tab STARTS===============//
+jQuery(document).ready(function($){
+	$('#addBottomNavigationIcon').on('click',function(){
+		var count = document.querySelectorAll('.navigationBottomBarItem').length;
+		// var count = parseInt(iconCount +1);
+		if (count <= 4 ){
+			var newIconHtml = $('#navigationBottomBarItemGeneric').html();
+			newIconHtml = newIconHtml.replaceAll('{{iconcount}}',count+1);
+			console.log(count);
+			if(count >2){
+				var removeIcon = '<span id="removeBottomBarNavigationIcon" class="button" onclick="javascript:removeBottomBarNavigationIcon();">Remove</span>';
+			}else{
+				var removeIcon = '';
+			}
+
+
+			$('span#removeBottomBarNavigationIcon').remove();
+			$('.navigationBottomBarItem:nth(0)').parent().append('<div class="flex-column navigationBottomBarItem">'+newIconHtml+'</div>'+removeIcon);
+
+			if(count == 4){
+				$('#addBottomNavigationIcon').hide();
+			}else{
+				$('#addBottomNavigationIcon').show();
+			}
+		}
 	});
-
-	$('select.bottomBarItemUrlInternal').on('change',function(){
-		var pageName = $(this).children("option:selected").text();
-		const section = $(this).parents('.navigationBottomBarItem');
-		section.find('input.bottomBarItemText').val(pageName);
-
-
-	})
-
 });
 
+function removeBottomBarNavigationIcon(){
+	$=jQuery;
+	var count = parseInt(document.querySelectorAll('.navigationBottomBarItem').length) -1;
+	// console.log(count);
+	if(count >= 3){
+		if(confirm("Do you want to remove this?")){
+			$('.navigationBottomBarItem:nth('+count+')').remove();
+			$('#addBottomNavigationIcon').show();
+			if(count == 3){
+				$('span#removeBottomBarNavigationIcon').remove();
+			}
+		}
 
+	}
+}
+//===== Script to add/remvoe navigationIcon item in Navigation for Bottom BarTab ENDS=============//
 
+//===========================================================================================//
 //========================== Settings -> Navigation -> Bottom Bar Script ENDS ==============//
+
+
+//===========================================================================================//
+//========================== Settings -> Navigation -> Hamburger Menu STARTS ============//
+//Function to handle Link Type change action.
+function handleHamburgerLinkTypeChange(el){
+		$=jQuery;
+		var type = $(el).val();
+		const section = $(el).parents('.navigationHamburgerItem');
+
+		switch (type){
+			case 'page':
+			{
+				section.find('select.hamburgerItemUrlInternal').show();
+				section.find('input.hamburgerItemUrlExternal').hide();
+				break;
+			}
+
+			case 'external':
+			{
+					section.find('select.hamburgerItemUrlInternal').hide();
+					section.find('input.hamburgerItemUrlExternal').show();
+					break;
+			}
+		}
+}
+//===== Script to add/remove navigationIcon item in Hamburger Section of Navigation Tab STARTS===============//
+jQuery(document).ready(function($){
+	$('#addHamburgerNavigationIcon').on('click',function(){
+		var count = document.querySelectorAll('.navigationHamburgerItem').length;
+		// var count = parseInt(iconCount +1);
+		if (count <= 4 ){
+			var newIconHtml = $('#navigationHamburgerItemGeneric').html();
+			newIconHtml = newIconHtml.replaceAll('{{iconcount}}',count+1);
+			console.log(count);
+			if(count >2){
+				var removeIcon = '<span id="removeHamburgerNavigationIcon" class="button" onclick="javascript:removeHamburgerNavigationIcon();">Remove</span>';
+			}else{
+				var removeIcon = '';
+			}
+
+
+			$('span#removeHamburgerNavigationIcon').remove();
+			$('.navigationHamburgerItem:nth(0)').parent().append('<div class="flex-column navigationHamburgerItem">'+newIconHtml+'</div>'+removeIcon);
+
+			if(count == 4){
+				$('#addHamburgerNavigationIcon').hide();
+			}else{
+				$('#addHamburgerNavigationIcon').show();
+			}
+		}
+	});
+});
+
+function removeHamburgerNavigationIcon(){
+	$=jQuery;
+	var count = parseInt(document.querySelectorAll('.navigationHamburgerItem').length) -1;
+	// console.log(count);
+	if(count >= 3){
+		if(confirm("Do you want to remove this?")){
+			$('.navigationHamburgerItem:nth('+count+')').remove();
+			$('#addHamburgerNavigationIcon').show();
+			if(count == 3){
+				$('span#removeHamburgerNavigationIcon').remove();
+			}
+		}
+
+	}
+}
+//===== Script to add/remove navigationIcon item in Hamburger Section of Navigation Tab ENDS===============//

@@ -63,7 +63,7 @@ jQuery( function($){
     uploadSection.children('.wpna_img_id').val('');
     uploadSection.children('.wpna_img_url').val('');
     uploadSection.children('.wpna-remove').hide();
-    uploadSection.children('.wpna-upload').addClass('upload').html('Upload Image').show();
+    uploadSection.children('.wpna-upload').addClass('upload').html('Upload Image').show().click();
 
 		// button.hide().prev().addClass( 'button' ).html( 'Upload image' ); // replace the image with text
 	});

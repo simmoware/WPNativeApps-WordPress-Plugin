@@ -65,6 +65,12 @@ class Wp_Native_Apps_Admin {
 
 	}
 
+	public function wpna_addAdminNotice($notice){
+		$admin_notices = $this->admin_notices;
+		$admin_notices[] = $notice;
+		$this->admin_notices = $admin_notices;
+	}
+
 	/**
 	 * Register the stylesheets for the admin area.
 	 *
@@ -172,6 +178,25 @@ class Wp_Native_Apps_Admin {
 		}
 		global $wpnativeapps;
 		$wpnativeapps = $this->wpnativeapps;
+
+		$setupNotices = array(
+			array(
+						'type'=>'success is-dismissable',
+						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+						'title'=>'Introduction to WPNativeApps',
+						'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be confirgure craefully in order to acheeve the vest restutl.'
+						),
+						array(
+									'type'=>'warning',
+									'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+									'title'=>'Configure Settings to see app preview',
+									'message'=>''
+									),
+		);
+		foreach($setupNotices as $notice){
+			$this->wpna_addAdminNotice($notice);
+		}
+
 		include_once dirname(__FILE__) . '/partials/wp-native-apps-settings.php';
 	}
 
@@ -179,9 +204,31 @@ class Wp_Native_Apps_Admin {
 	  $admin_notices = $this->admin_notices;
 		if(!empty($admin_notices)){
 			foreach ($admin_notices as $notice){
-				$class = $notice['type'];
-	    	$message = __( $notice['message'], 'wpna' );
-				printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $message ) );
+				$type = $notice['type'];
+				$class = 'notice notice-'.$type;
+				$iconHtml = empty($notice['icon']) ? '': '<img class="wpnaNoticeIcon" src="'.$notice["icon"].'" />' ;
+				$title = empty($notice['title']) ? '' : '<h1>'.$notice["title"].'</h1>';
+				$message = __( $notice['message'], 'wpna' );
+
+
+				printf('
+				<div class="notice notice-%1$s is-dismissible">
+					'.$iconHtml.'
+					'.$title.'
+					<p>%2$s</p>
+				</div>', esc_attr( $class ), esc_html( $message ));
+
+
+
+				// printf( '<div class="%1$s"><p>%2$s%3$s%4$s</p></div>', esc_attr( $class ), $iconHtml, $title, esc_html( $message ) );
+
+
+				// $class = $notice['type'];
+	    	// $message = __( $notice['message'], 'wpna' );
+				//
+				// printf( '<div class="notice notice-%1$s flex-row %1$s">%2$s<div class="wpnaNoticeText">%3$s</div></div>', esc_attr( $class ),$iconHtml, esc_html( $message ) );
+
+
 			}
 		}
 	}
@@ -198,7 +245,7 @@ $ret = array(
 												'type'=>'other', 'selector'=>'.other-class',
 												'type'=>'other', 'selector'=>'.another-class'
 											),
-	'topbarnav'=>array('navigationStructure'=>'logoonly',
+	'topbarnav'=>array('navigationStructure'=>'1',
 											'backgroundColor'=>'#ececec',
 											'statusBarTextColor'=>'#fff',
 											'bannerLogo'=>'https://wpnativeapps.com/cdn-cgi/image/metadata=none/wp-content/uploads/2022/05/wpn-white-logo-wordmark.png',
@@ -217,11 +264,17 @@ $ret = array(
 
 }
 
-public function  wpna_image_uploadField($inputName='wpna_imageUploadField', $imageUrl = ''){
+public function  wpna_image_uploadField($args){
 		ob_start();
-		if($imageUrl == ''){
-			$imageUrl =  plugin_dir_url( __FILE__ ).'images/no-image.png';
-		}
+		$default = array(
+													'inputName'=>'wpnaImage'.rand(),
+													'imageUrl'=>plugin_dir_url( __FILE__ ).'images/no-image.png',
+													'uploadText'=>'Upload Image',
+													'changeText'=>'Change Image',
+												);
+	 $args = wp_parse_args( $args, $default );
+		extract($args);
+
 		ob_start();
 		?>
 		<div class="wpnaImageUploadSection <?php echo $inputName?>_section">
