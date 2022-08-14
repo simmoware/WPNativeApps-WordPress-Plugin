@@ -97,6 +97,12 @@ class Wp_Native_Apps_Public {
 		 */
 
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-public.js', array( 'jquery' ), $this->version, false );
+		wp_localize_script( $this->plugin_name, 'WPNativeApps',
+		        array(
+		            'is_user_logged_in' => is_user_logged_in()
+		        )
+		    );
+
 
 	}
 

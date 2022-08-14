@@ -1,7 +1,12 @@
+div#wpna_settings_tabs {
+    background-color: #ececec;
+}
 .wp-menu-image img{
   height: 20px;
 }
-
+#wpnaSettingsForm .wp-picker-container .hidden {
+    display: inline-block;
+}
 .flex-column{
   display: flex;
   flex-direction: column;
@@ -119,6 +124,12 @@ label.inputLabel{
     max-width: 270px;
     flex-wrap: wrap;
 }
+.topbar_backgroundColorSection{
+  min-height: 100px;
+}
+.topbar_statusbar_textColor {
+  /* min-height: 250px; */
+}
 
 .topbar_bannerLogo .wpnaImageUploadPreview {
     border: 1px solid #ececec;
@@ -126,9 +137,9 @@ label.inputLabel{
     min-width: 400px;
   }
 .wpnaImageUploadPreview {
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
   }
 
 /* Iframe to choose elements to hide (header,footer and other)*/
@@ -435,6 +446,11 @@ iframe.test #wpadminbar{
 ================================================================================
 ============================ CSS FOR iFrame ENDS ==================================
 */
+
+.splash_screen_backgroundImage_preview{
+  height: 400px;
+  width: 220px;
+}
 .splash_screen_backgroundLogo_preview{
   height: 250px;
   width: 250px;
@@ -453,7 +469,7 @@ section.splashScreenSection{
   width:40%;
 }
 form#wpnaSettingsForm > div{
-  width: 100%;
+  width: 96%;
 }
 span.wpnaicon{
   background:transparent url("/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png") center center no-repeat;
@@ -462,7 +478,7 @@ img.wpnaNoticeIcon{
   width: 40px;
   height: auto;
 }
-.aifs{
+.ai-fs, .aifs{
   align-items: flex-start;
 }
 .jc-se{
@@ -470,4 +486,74 @@ img.wpnaNoticeIcon{
 }
 .jc-fx{
   justify-content: flex-start;
+}
+.jc-sb {
+    justify-content: space-between;
+    /* align-items: center; */
+}
+.flex-column.generalSettings {
+    justify-content: space-between;
+    height: 1980px;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding: 0 25px;
+}
+.topbarnav-previewsection {
+  /* min-height: 300px; */
+}
+.topbarnav-previewsection .previewImages{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  height: 100px;
+  width: 300px;
+}
+.width250{
+  width: 250px;
+}
+.topbar_bannerLogo{
+  height: 300px;
+}
+.ai-c {
+    align-items: center;
+}
+.height150{
+  height: 150px;
+}
+.bannerLogoUploadWrap .wpna_bannerLogo{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.wpna_bannerLogo_section{
+  display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+/*
+.h1{
+  font-size: 22px;
+  font-weight: bold;
+}
+.h2{
+  font-size: 18px;
+  font-weight: bold;
+}
+.h3{
+  font-size: 14px;
+  font-weight: bold;
+} */
+
+.navStructureVisual img {
+    max-width: 320px;
+}
+.topNavPageSettings .wpnaImageUploadPreview {
+    height: 40px;
+    width: 40px;
+}
+.topNavOptionsParent {
+    min-height: 500px;
+}
+.settingParent {
+    padding: 20px 0;
 }

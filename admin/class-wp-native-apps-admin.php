@@ -90,6 +90,13 @@ class Wp_Native_Apps_Admin {
 		 * class.
 		 */
 
+		 $wp_scripts = wp_scripts();
+		 wp_enqueue_style('plugin_name-admin-ui-css',
+		                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-core']->ver . '/themes/smoothness/jquery-ui.css',
+		                 false,
+		                 $this->version,
+		                 false);
+
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-native-apps-admin.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 
 	}
@@ -117,12 +124,18 @@ class Wp_Native_Apps_Admin {
 			//  wp_enqueue_media();
 		 // }
 		 if (get_current_screen()->id == 'wpnativeapps-settings') {
-	    wp_enqueue_style('thickbox');
-	    wp_enqueue_script('plugin-install');
+	    // wp_enqueue_style('thickbox');
+			wp_enqueue_script('jquery-ui-core');// enqueue jQuery UI Core
+    	wp_enqueue_script('jquery-ui-tabs');// enqueue jQuery UI Tabs
+	    // wp_enqueue_script('plugin-install');
 	  }
-
+		// wp_enqueue_script('jquery-ui-core');// enqueue jQuery UI Core
+    // wp_enqueue_script('jquery-ui-tabs');// enqueue jQuery UI Tabs
 		wp_enqueue_style( 'wp-color-picker' );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array( 'jquery', 'wp-color-picker' ), date("YmdHis"), false );
+
+		wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.js', array( 'wp-color-picker' ), date("YmdHis"), false );
+		// wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array( 'jquery', 'wp-color-picker' ), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array('jquery', 'jquery-ui-core' , 'jquery-ui-tabs'), date("YmdHis"), false );
 		wp_localize_script( $this->plugin_name, 'WPNativeApps',
 		        array(
 		            'pluginURL' => plugin_dir_url( __FILE__ ),
@@ -281,7 +294,7 @@ public function  wpna_image_uploadField($args){
 			<div class="wpnaImageUploadPreview  <?php echo $inputName;?>_preview" style="background-image: url('<?php echo $imageUrl;?>');"></div>
 			<a href="javascript:void(0)" class="wpna-remove  <?php echo $inputName;?>_remove button">Change Image</a>
 			<a style="display:none;" href="#" class="button wpna-upload <?php echo $inputName;?>_upload">Upload image</a>
-			<input type="hidden" name="<?php echo $inputName;?>_image_id"  class="wpna_img_id" value="<?php echo absint( $defaultLogoId ) ?>">
+			<input type="hidden" name="<?php echo $inputName;?>_image_id"  class="wpna_img_id" value="">
 			<input type="hidden" name="<?php echo $inputName;?>_image_url"  class="wpna_img_url" value="<?php echo absint( $imageUrl ) ?>">
 		</div>
 		<?php

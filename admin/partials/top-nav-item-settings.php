@@ -1,5 +1,5 @@
 
-<section class="toNavIndividualPageSetup">
+<!-- <div class="toNavIndividualPageSetup">
   <label>How would you like your top bar navigation to be structured?</label>
   <section class="navStructureRow flex-row">
     <div class="navStructureOption">
@@ -34,4 +34,4 @@
   </section>
 
 
-</section>
+</div> -->

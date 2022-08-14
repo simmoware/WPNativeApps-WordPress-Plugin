@@ -3,7 +3,7 @@
   <div class="flex-row bottomBarItemWrapTop">
     <div class="bottomBarItemType">
       <select onchange="handleBottomBarLinkTypeChange(this)" required class="bottomBarItemType" name="bottomBarItemType_1">
-        <option disabled selected>Select a Link Type</option>
+        <!-- <option disabled selected>Select a Link Type</option> -->
         <option value="page">Page</option>
         <option value="external">External</option>
       </select>
@@ -78,14 +78,15 @@
 <div class="flex-column">
   <section class="flex=row mb10">
     <div class="flex-item flex-column navigation_bottomBar_section">
-      <div class="section_heading">
+      <h1 class=" ">
         Bottom Nav
-      </div>
+      </h1>
+      <div class="flex-column navigationBottomBarItems">
       <div class="flex-column navigationBottomBarItem">
         <div class="flex-row bottomBarItemWrapTop">
           <div class="bottomBarItemType">
             <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_1">
-              <option disabled selected>Select a Link Type</option>
+              <!-- <option disabled selected>Select a Link Type</option> -->
               <option value="page">Page</option>
               <option value="external">External</option>
             </select>
@@ -118,8 +119,9 @@
         </div>
       </div>
     </div>
+    </div>
     <div class="addNewNavigationIcon">
-      <a id="addBottomNavigationIcon" href="javascript:void(0)">Add another navigation icon</a>
+      <a id="addBottomNavigationIcon" href="javascript:void(0)" onclick="addBottomBarNavigationIcon(this)">Add another navigation icon</a>
     </div>
   </section>
 

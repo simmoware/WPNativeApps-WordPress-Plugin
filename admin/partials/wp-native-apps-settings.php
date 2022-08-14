@@ -10,6 +10,43 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
   <div class="flexitem wpna_settings_page_left w60p ">
     <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo get_admin_page_title(); ?></h1>
     <?php $this->admin_notices(); ?>
+
+
+  <div id="wpna_settings_tabs">
+  <ul>
+    <li><a href="#general">General</a></li>
+    <li><a href="#bottomNav">Bottom Nav</a></li>
+    <li><a href="#topNav">Top Nav</a></li>
+    <li><a href="#prompts">Prompts</a></li>
+    <li><a href="#authentication">Authentication</a></li>
+  </ul>
+  <form id="wpnaSettingsForm" method="post" action="<?php echo esc_html(admin_url('admin-post.php'));?>">
+    <div id="general" class="tab-content generalSettings">
+      <?php include_once dirname(__FILE__) . '/general.php';?>
+    </div>
+    <div id="bottomNav" class="tab-content" style="display:none;">
+      <?php include_once dirname(__FILE__) . '/bottomnav.php';?>
+    </div>
+    <div id="topNav" class="tab-content" style="display:none;">
+      <?php include_once dirname(__FILE__) . '/topnav.php';?>
+    </div>
+    <div id="prompts" class="tab-content" style="display:none;">
+      <?php include_once dirname(__FILE__) . '/prompts.php';?>
+    </div>
+    <div id="authentication" class="tab-content" style="display:none;">
+      <?php include_once dirname(__FILE__) . '/prompts.php';?>
+    </div>
+
+    <p><?php  submit_button('Save','primary','wpna-save-general',false);wp_nonce_field('wpna-save','wpna-save-general');?></p>
+
+
+
+  </form>
+</div>
+
+
+
+  <!--
     <div class="wpna_tabs_wrap">
     <nav class="nav-tab-wrapper">
       <a href="javascript:void(0)" targetTab="#general" class="tabcontrol nav-tab <?php if($tab===null || $tab==='general'):?>nav-tab-active<?php endif; ?>">General</a>
@@ -20,7 +57,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
 
     <div class="tab-content-wrap flex-row">
       <form id="wpnaSettingsForm" method="post" action="<?php echo esc_html(admin_url('admin-post.php'));?>">
-        <div id="general" class="tab-content">
+        <div id="general" class="tab-content generalSettings">
           <?php include_once dirname(__FILE__) . '/general.php';?>
         </div>
         <div id="navigation" class="tab-content" style="display:none;">
@@ -44,7 +81,7 @@ $tab = isset($_GET['tab']) ? $_GET['tab'] : $default_tab;
 
 
     </div>
-  </div>
+  </div> -->
   <!-- <div class="sticky w40p">
     <h2>Preview you App</h2>
     <div id="app_preview">

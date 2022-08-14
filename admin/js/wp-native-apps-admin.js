@@ -1,7 +1,10 @@
+var topNavTabs = null;
 (function( $ ) {
 	'use strict';
 	 	$(window).load(function(){
 			$('.color-picker').wpColorPicker();
+			var settingsMainTab = $('#wpna_settings_tabs').tabs();
+			this.topNavTabs = $('#topNavTabs').tabs();
 
 			$('a.tabcontrol').click(function(event){
 				console.log('test');
@@ -15,6 +18,7 @@
 		});
 
 })( jQuery );
+$=jQuery;
 
 function getTemplate(template, params, callback) {
     var $ = jQuery;
@@ -361,8 +365,25 @@ function handleBottomBarLinkTypeChange(el){
 		}
 }
 
+
+
+// When Page is slected from dropdown, copy the page name to Label input.
+	$(document).on('change','select.bottomBarItemUrlInternal',function(){
+		var pageName = $(this).find(":selected").text();
+		const section = $(this).parents('.navigationBottomBarItem');
+		section.find('input.bottomBarItemText').val(pageName);
+
+		// Update the Tab name in Top Nav Tab as well when Page Name Changes Here
+		var name = section.find('input.bottomBarItemText').attr('name');
+		var count = parseInt(name.replace(/[^0-9.]/g, ""));
+		$('ul#topNavTabsControl li:nth-child('+count+') a').text(pageName);
+	});
+
+
 //===== Script to add new navigationIcon item in Navigation Tab STARTS===============//
+/*
 jQuery(document).ready(function($){
+	topNavTabs = $('#topNavTabs').tabs();
 	$('#addBottomNavigationIcon').on('click',function(){
 		var count = document.querySelectorAll('.navigationBottomBarItem').length;
 		// var count = parseInt(iconCount +1);
@@ -379,6 +400,7 @@ jQuery(document).ready(function($){
 
 			$('span#removeBottomBarNavigationIcon').remove();
 			$('.navigationBottomBarItem:nth(0)').parent().append('<div class="flex-column navigationBottomBarItem">'+newIconHtml+'</div>'+removeIcon);
+			addTopNavTabsItem(topNavTabs,count);
 
 			if(count == 4){
 				$('#addBottomNavigationIcon').hide();
@@ -388,22 +410,119 @@ jQuery(document).ready(function($){
 		}
 	});
 });
+*/
 
-function removeBottomBarNavigationIcon(){
+
+
+function showMaxItemAddedMessage(count){
+	alert('Max items added already, will add html later!!')
+}
+function addBottomBarNavigationIcon(el){
+		var section = $(el).parent().parent().find('.navigationBottomBarItems');
+		// var count = document.querySelectorAll('.navigationBottomBarItem').length;
+		var count = $(section).find('.navigationBottomBarItem').length;
+		// var count = parseInt(iconCount +1);
+		if (count <= 4 ){
+			var newIconHtml = $('#navigationBottomBarItemGeneric').html();
+			newIconHtml = newIconHtml.replaceAll('{{iconcount}}',count+1);
+			console.log(count);
+			if(count >= 1 ){
+				var removeIcon = '<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>';
+			}else{
+				var removeIcon = '';
+			}
+
+
+			$('span#removeBottomBarNavigationIcon').remove();
+
+			$(section).append('<div class="flex-column navigationBottomBarItem">'+newIconHtml + removeIcon+'</div>');
+
+			addTopNavTabsItem(count);
+
+			if(count == 4){
+				$('#addBottomNavigationIcon').hide();
+			}else{
+				$('#addBottomNavigationIcon').show();
+			}
+		}else{
+			showMaxItemAddedMessage();
+		}
+}
+function removeBottomBarNavigationIcon(el){
+
 	$=jQuery;
-	var count = parseInt(document.querySelectorAll('.navigationBottomBarItem').length) -1;
+	var section = $(el).parents('.navigationBottomBarItems');
+	var count = parseInt($(section).find('.navigationBottomBarItem').length -1);
+	console.log(count);
+
+
 	// console.log(count);
-	if(count >= 3){
+	if(count >= 1){
 		if(confirm("Do you want to remove this?")){
-			$('.navigationBottomBarItem:nth('+count+')').remove();
+			$(section).find('.navigationBottomBarItem:nth('+count+')').remove();
+			removeTopNavTabsItem(count);
 			$('#addBottomNavigationIcon').show();
-			if(count == 3){
-				$('span#removeBottomBarNavigationIcon').remove();
+			if(count > 1){
+				$(section).find('.navigationBottomBarItem').last().append('<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>');
+				// $('span#removeBottomBarNavigationIcon').remove();
 			}
 		}
 
 	}
 }
+
+function addTopNavTabsItem(count){
+
+	var count = count+1;
+	var topNavTabs = this.topNavTabs;
+	console.log(topNavTabs);
+	var topNavTabs = $('#topNavTabs').tabs();
+	console.log(topNavTabs);
+
+	var label = $('input[name="bottomBarItemText_'+count+'"]').val() || 'Page';
+	var icon = $('input[name="bottomBarItemIcon_'+count+'_image_url"]').val();
+
+	var tabTemplate = '<li><a href="#{{topNavTabId}}"><span class="topNavPageIcon"></span>{{topNavTabLabel}}</li></a>';
+	var tabContent = $('#topNavIndividualPageSetupGeneric').html();
+
+
+		// var label = tabTitle.val() || "Tab " + tabCounter,
+		id = "topNavPage_"+count;
+		li = $( tabTemplate.replaceAll('{{topNavTabId}}',id).replaceAll('{{topNavTabLabel}}',label));
+		tabContentHtml = tabContent.replaceAll('{{bottomBarPageCount}}', count);
+
+
+	topNavTabs.find( ".ui-tabs-nav" ).append( li );
+
+
+
+	// topNavTabs.append('<div id="topNavPage_'+count+'" data-pageCount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">');
+	// topNavTabs.find('div#'+id).removeAll();
+	topNavTabs.append( '<div id="topNavPage_'+count+'" data-pageCount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">'+tabContentHtml+'</div>' );
+	// topNavTabs.append( "<div id='" + id + "' class='flex-column '>" + tabContentHtml + "</div>" );
+	topNavTabs.tabs( "refresh" );
+	this.topNavTabs = topNavTabs;
+
+}
+
+function removeTopNavTabsItem(count){
+	var topNavTabs =	this.topNavTabs;
+	// var topNavTabs = $('#topNavTabs').tabs();
+	$('li[aria-controls="topNavPage_'+count+'"]').remove();
+	$('#topNavPage_'+count).remove();
+  topNavTabs.tabs( "refresh" );
+	this.topNavTabs = topNavTabs;
+}
+
+$(document).on('change','.navigation_bottomBar_section input.bottomBarItemText',function(){
+	var name = $(this).attr('name');
+
+	var count = parseInt(name.replace(/[^0-9.]/g, ""));
+	$('ul#topNavTabsControl li:nth-child('+count+') a').text($(this).val());
+
+});
+
+
 //===== Script to add/remvoe navigationIcon item in Navigation for Bottom BarTab ENDS=============//
 
 //===========================================================================================//
@@ -478,3 +597,156 @@ function removeHamburgerNavigationIcon(){
 	}
 }
 //===== Script to add/remove navigationIcon item in Hamburger Section of Navigation Tab ENDS===============//
+
+$(document).ready(function() {
+	/*
+	$(".settingSelect input[type='radio']").on('change', function() {
+		$(".topNav_optionParent").each(function() {
+			$(this).find(".settingParent").addClass("hide");
+		});
+		var topNavOptionParent = findOptionParent(this, "topNav_optionParent");
+		$(topNavOptionParent).find(".settingParent").removeClass("hide");
+	});
+	*/
+
+/*
+	$(".optionRadio input").on("change", function() {
+		var optionParent = findOptionParent(this, 'optionParent');
+		var selectedOptionNumber = $(optionParent).attr("data-id");
+		$(optionParent).parent().find(".optionParent").each(function() {
+			if ($(this).attr('data-id') != selectedOptionNumber) {
+				$(this).find(".conditionalSettings").addClass("hide");
+			}
+		});
+		$(optionParent).find('.conditionalSettings').removeClass("hide");
+	});
+	*/
+/*
+	function findOptionParent(el, name) {
+		while (!$(el).hasClass(name)) {
+			el = $(el).parent();
+		}
+		return el;
+	}
+	*/
+});
+
+$(document).on("change", ".settingSelect input[type='radio']",function(){
+
+		$(".topNav_optionParent").each(function() {
+			$(this).find(".settingParent").addClass("hide");
+		});
+		var topNavOptionParent = findOptionParent(this, "topNav_optionParent");
+		$(topNavOptionParent).find(".settingParent").removeClass("hide");
+
+});
+
+$(document).on("change", ".optionRadio input", function() {
+	var optionParent = findOptionParent(this, 'optionParent');
+	var selectedOptionNumber = $(optionParent).attr("data-id");
+	$(optionParent).parent().find(".optionParent").each(function() {
+		if ($(this).attr('data-id') != selectedOptionNumber) {
+			$(this).find(".conditionalSettings").addClass("hide");
+		}
+	});
+	$(optionParent).find('.conditionalSettings').removeClass("hide");
+});
+
+function findOptionParent(el, name) {
+	while (!$(el).hasClass(name)) {
+		el = $(el).parent();
+	}
+	return el;
+}
+
+
+
+//======== Top Nav Tab Scripts =========
+function handleTopNavLinkTypeChange(el){
+	$=jQuery;
+	var type = $(el).val();
+	const section = $(el).parents('.topNavPageIconItem');
+	console.log(type);
+	console.log(section);
+	switch (type){
+		case 'page':
+		{
+			section.find('select.topNavItemUrlInternal').show();
+			section.find('input.topNavItemUrlExternal').hide();
+			break;
+		}
+
+		case 'external':
+		{
+				section.find('select.topNavItemUrlInternal').hide();
+				section.find('input.topNavItemUrlExternal').show();
+				break;
+		}
+		case 'share':
+		{
+			section.find('select.topNavItemUrlInternal').hide();
+			section.find('input.topNavItemUrlExternal').hide();
+			break;
+		}
+	}
+}
+
+function addTopNavNavigationIcon(el){
+
+			var section = $(el).parents('section.navStructureRow');
+			var pageCount = $(el).parents('.topNavPageSettings').attr('data-pageCount');
+			var structureCount = $(el).parents('.navStructureRow').attr('data-structure');
+			var navItemsCount = parseInt($(section).find('.topNavPageIconItem').length);
+
+
+
+
+
+			// var count = document.querySelectorAll('navigation_bottomBar_section .navigationBottomBarItem').length;
+			// var count = parseInt(iconCount +1);
+			if (navItemsCount <= 2 ){
+				var newIconHtml = $('#topNavNaviagionIconGeneric').html();
+				newIconHtml = newIconHtml.replaceAll('{{iconCount}}',navItemsCount+1).replaceAll('{{pageCount}}',pageCount).replaceAll('{{structureCount}}',structureCount);
+				if(navItemsCount >=1){
+					var removeIcon = '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForPage(this);">Remove</span>';
+				}else{
+					var removeIcon = '';
+				}
+
+
+				$(section).find('span.removeNavigationIconRow').remove();
+
+				$(el).parent().before('<div class="flex-column topNavPageIconItem">'+newIconHtml+'</div>'+removeIcon);
+
+				if(navItemsCount == 2){
+					$(section).find('.addNewNavigationIcon').hide();
+				}else{
+					$(section).find('.addNewNavigationIcon').show();
+				}
+			}else{
+				showMaxItemAddedMessage();
+				// console.log('Max item added!');
+			}
+
+
+
+}
+function removeTopNavigationIconForPage(el){
+	$=jQuery;
+	var section = $(el).parents('section.navStructureRow');
+
+	var count = parseInt($(section).find('.topNavPageIconItem').length);
+	// console.log(count);
+	// if(count >= 1){
+		if(confirm("Do you want to remove this?")){
+			$(section).find('.topNavPageIconItem:nth('+(count-1)+')').remove()
+			// $(removeel).remove();
+			$(section).find('.addNewNavigationIcon').show();
+			console.log(count);
+			if(count == 2){
+					$(section).find('span.removeNavigationIconRow').remove();
+			}
+		}
+
+	// }
+}
