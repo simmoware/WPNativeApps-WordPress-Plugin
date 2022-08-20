@@ -77,11 +77,10 @@ function run_wp_native_apps() {
 
 	$plugin = new Wp_Native_Apps();
 	$plugin->run();
-
 }
 run_wp_native_apps();
 
-if (isset($_GET['hidetoolbar'])) 
+if (isset($_GET['hidetoolbar']))
 {
     add_filter('show_admin_bar', '__return_false');
 }

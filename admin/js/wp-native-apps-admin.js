@@ -12,14 +12,34 @@ var topNavTabs = null;
 				var context = $('.wpna_tabs_wrap');
 				$('a.tabcontrol', context).removeClass('nav-tab-active');
 				$(this).addClass('nav-tab-active');
-				$('div.tab-content', context).hide();
-				$( 'div'+$(this).attr('targetTab'), context ).show();
+				$('div.tab-content', context).addClass('hide');
+				$( 'div'+$(this).attr('targetTab'), context ).removeClass('hide');
 			});
 		});
 
 })( jQuery );
 $=jQuery;
+function add_element_to_hide(el){
+	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
+	var hideElementHtml = `<div class="flex-row jc-sb ai-fe">
+		<div class="flex-column">
+			<h3>Select Element to Hide</h3>
+			<input
+						type="text"
+						name="otherHide_${elementCount+1}"
+						class="otherHideElement"
+						value=""
+						required
+			/>
+		</div>
+		<div class="flex-column">
+			<div class="choose_button_with_icon" onclick="buildElementiFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
+		</div>
+	</div>
+	`
+	$(el).before(hideElementHtml);
 
+}
 function getTemplate(template, params, callback) {
     var $ = jQuery;
     $.ajax({
@@ -35,21 +55,27 @@ function getTemplate(template, params, callback) {
 }
 
 function cssPath(el) {
-    if (!(el instanceof Element)) return;
+    if (typeof el.nodeName === "undefined") { 
+        return;
+    }
+    
     var path = [];
-    while (el.nodeType === Node.ELEMENT_NODE) {
-        var selector = el.nodeName.toLowerCase();
-        if (el.id) {
-            selector += '#' + el.id;
-        } else if (el.className) {
-            selector += '.' + el.className.replace(/ /g, ".");
-        } else {
-            var sib = el, nth = 1;
-            while (sib.nodeType === Node.ELEMENT_NODE && (sib = sib.previousSibling) && nth++);
-            selector += ":nth-child("+nth+")";
-        }
-        if (el.tagName !== "HTML" && el.tagName !== "BODY") {
-            path.unshift(selector);
+    //while (el.nodeType === Node.ELEMENT_NODE) {
+    while (el !== null) {
+        if (el.nodeName !== "#document") {
+            var selector = el.nodeName.toLowerCase();
+            if (el.id) {
+                selector += '#' + el.id;
+            } else if (el.className) {
+                selector += '.' + el.className.replace(/ /g, ".");
+            } else {
+                var sib = el, nth = 1;
+                while (sib.nodeType === Node.ELEMENT_NODE && (sib = sib.previousSibling) && nth++);
+                selector += ":nth-child("+nth+")";
+            }
+            if (el.tagName !== "HTML" && el.tagName !== "BODY") {
+                path.unshift(selector);
+            }
         }
         el = el.parentNode;
     }
@@ -299,11 +325,11 @@ function setElementInput() {
 
 function doneSelection(type) {
     if (type == 'header') {
-        jQuery("#wpna_hide_header").val(selectedHeader);
+        jQuery("#headerToHide").val(selectedHeader);
     } else if (type == 'footer') {
-        jQuery("#wpna_hide_footer").val(selectedFooter);
+        jQuery("#footerToHide").val(selectedFooter);
     } else {
-        jQuery("#wpna_hide_other").val(selectedElement);
+        jQuery("#elemeent1").val(selectedElement);
     }
     jQuery(".iFrameWindow").remove();
 }
@@ -328,7 +354,12 @@ function closeiFrameWindow(event) {
         "selectionSelectorChild",
         "selectionSelectorParent",
         "selectionDone",
-        "selectionDoneButton"
+        "selectionDoneButton",
+        "iFrame_Half_Container",
+        "iFrame_Half_ContainerH3",
+        "iFrame_Half_ContainerH5",
+        "iFrame_Half_ContainerP",
+        "iFrame_SelectorTools_Container"
     ];
 
     if ($.inArray(cl, ignores) == -1 && typeof cl !== "undefined") {
@@ -351,15 +382,15 @@ function handleBottomBarLinkTypeChange(el){
 		switch (type){
 			case 'page':
 			{
-				section.find('select.bottomBarItemUrlInternal').show();
-				section.find('input.bottomBarItemUrlExternal').hide();
+				section.find('select.bottomBarItemUrlInternal').removeClass('hide');
+				section.find('input.bottomBarItemUrlExternal').addClass('hide');
 				break;
 			}
 
 			case 'external':
 			{
-					section.find('select.bottomBarItemUrlInternal').hide();
-					section.find('input.bottomBarItemUrlExternal').show();
+					section.find('select.bottomBarItemUrlInternal').addClass('hide');
+					section.find('input.bottomBarItemUrlExternal').removeClass('hide');
 					break;
 			}
 		}
@@ -403,9 +434,9 @@ jQuery(document).ready(function($){
 			addTopNavTabsItem(topNavTabs,count);
 
 			if(count == 4){
-				$('#addBottomNavigationIcon').hide();
+				$('#addBottomNavigationIcon').addClass('hide');
 			}else{
-				$('#addBottomNavigationIcon').show();
+				$('#addBottomNavigationIcon').removeClass('hide');
 			}
 		}
 	});
@@ -440,9 +471,9 @@ function addBottomBarNavigationIcon(el){
 			addTopNavTabsItem(count);
 
 			if(count == 4){
-				$('#addBottomNavigationIcon').hide();
+				$('#addBottomNavigationIcon').addClass('hide');
 			}else{
-				$('#addBottomNavigationIcon').show();
+				$('#addBottomNavigationIcon').removeClass('hide');
 			}
 		}else{
 			showMaxItemAddedMessage();
@@ -461,7 +492,7 @@ function removeBottomBarNavigationIcon(el){
 		if(confirm("Do you want to remove this?")){
 			$(section).find('.navigationBottomBarItem:nth('+count+')').remove();
 			removeTopNavTabsItem(count);
-			$('#addBottomNavigationIcon').show();
+			$('#addBottomNavigationIcon').removeClass('hide');
 			if(count > 1){
 				$(section).find('.navigationBottomBarItem').last().append('<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>');
 				// $('span#removeBottomBarNavigationIcon').remove();
@@ -540,15 +571,15 @@ function handleHamburgerLinkTypeChange(el){
 		switch (type){
 			case 'page':
 			{
-				section.find('select.hamburgerItemUrlInternal').show();
-				section.find('input.hamburgerItemUrlExternal').hide();
+				section.find('select.hamburgerItemUrlInternal').removeClass('hide');
+				section.find('input.hamburgerItemUrlExternal').addClass('hide');
 				break;
 			}
 
 			case 'external':
 			{
-					section.find('select.hamburgerItemUrlInternal').hide();
-					section.find('input.hamburgerItemUrlExternal').show();
+					section.find('select.hamburgerItemUrlInternal').addClass('hide');
+					section.find('input.hamburgerItemUrlExternal').removeClass('hide');
 					break;
 			}
 		}
@@ -573,9 +604,9 @@ jQuery(document).ready(function($){
 			$('.navigationHamburgerItem:nth(0)').parent().append('<div class="flex-column navigationHamburgerItem">'+newIconHtml+'</div>'+removeIcon);
 
 			if(count == 4){
-				$('#addHamburgerNavigationIcon').hide();
+				$('#addHamburgerNavigationIcon').addClass('hide');
 			}else{
-				$('#addHamburgerNavigationIcon').show();
+				$('#addHamburgerNavigationIcon').removeClass('hide');
 			}
 		}
 	});
@@ -588,7 +619,7 @@ function removeHamburgerNavigationIcon(){
 	if(count >= 3){
 		if(confirm("Do you want to remove this?")){
 			$('.navigationHamburgerItem:nth('+count+')').remove();
-			$('#addHamburgerNavigationIcon').show();
+			$('#addHamburgerNavigationIcon').removeClass('hide');
 			if(count == 3){
 				$('span#removeHamburgerNavigationIcon').remove();
 			}
@@ -671,21 +702,21 @@ function handleTopNavLinkTypeChange(el){
 	switch (type){
 		case 'page':
 		{
-			section.find('select.topNavItemUrlInternal').show();
-			section.find('input.topNavItemUrlExternal').hide();
+			section.find('select.topNavItemUrlInternal').removeClass('hide');
+			section.find('input.topNavItemUrlExternal').addClass('hide');
 			break;
 		}
 
 		case 'external':
 		{
-				section.find('select.topNavItemUrlInternal').hide();
-				section.find('input.topNavItemUrlExternal').show();
+				section.find('select.topNavItemUrlInternal').addClass('hide');
+				section.find('input.topNavItemUrlExternal').removeClass('hide');
 				break;
 		}
 		case 'share':
 		{
-			section.find('select.topNavItemUrlInternal').hide();
-			section.find('input.topNavItemUrlExternal').hide();
+			section.find('select.topNavItemUrlInternal').addClass('hide');
+			section.find('input.topNavItemUrlExternal').addClass('hide');
 			break;
 		}
 	}
@@ -719,9 +750,9 @@ function addTopNavNavigationIcon(el){
 				$(el).parent().before('<div class="flex-column topNavPageIconItem">'+newIconHtml+'</div>'+removeIcon);
 
 				if(navItemsCount == 2){
-					$(section).find('.addNewNavigationIcon').hide();
+					$(section).find('.addNewNavigationIcon').addClass('hide');
 				}else{
-					$(section).find('.addNewNavigationIcon').show();
+					$(section).find('.addNewNavigationIcon').removeClass('hide');
 				}
 			}else{
 				showMaxItemAddedMessage();
@@ -741,7 +772,7 @@ function removeTopNavigationIconForPage(el){
 		if(confirm("Do you want to remove this?")){
 			$(section).find('.topNavPageIconItem:nth('+(count-1)+')').remove()
 			// $(removeel).remove();
-			$(section).find('.addNewNavigationIcon').show();
+			$(section).find('.addNewNavigationIcon').removeClass('hide');
 			console.log(count);
 			if(count == 2){
 					$(section).find('span.removeNavigationIconRow').remove();

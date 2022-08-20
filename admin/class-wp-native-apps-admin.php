@@ -50,6 +50,15 @@ class Wp_Native_Apps_Admin {
 	private $wpnativeapps;
 
 	/**
+	 * Default Configuration File Fetched From Storage/ Or later fetched from s3bucket.
+	 *
+	 * @since    1.0.0
+	 * @access   private
+	 * @var      string    $wpnativeapps    The current version of this plugin.
+	 */
+	private $wpNativeAppSettings;
+
+	/**
 	 * Initialize the class and set its properties.
 	 *
 	 * @since    1.0.0
@@ -61,7 +70,7 @@ class Wp_Native_Apps_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 		$this->admin_notices = null;
-		$this->wpnativeapps = $this->wpna_get_settings();
+		$this->wpnativeAppSettings = $this->wpna_get_settings();
 
 	}
 
@@ -146,6 +155,44 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_script( 'wpnaImageUpload', plugin_dir_url( __FILE__ ) . 'js/wpnaImageUpload.js', array( 'jquery', $this->plugin_name ), date("YmdHis"), false );
 
 	}
+
+	/**
+	 * Register the Function to handle the settings form submission to store app settings.
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function handle_settings_save(){
+
+		if( isset( $_POST['wpna_save_settings_nonce'] ) && wp_verify_nonce( $_POST['wpna_save_settings_nonce'], 'wpna_save_settings_form_nonce') ) {
+
+				// sanitize the input
+				// $nds_user_meta_key = sanitize_key( $_POST['nds']['user_meta_key'] );
+				// $nds_user_meta_value = sanitize_text_field( $_POST['nds']['user_meta_value'] );
+				// $nds_user =  get_user_by( 'login',  $_POST['nds']['user_select'] );
+				// $nds_user_id = absint( $nds_user->ID ) ;
+
+				// do the processing
+
+				// add the admin notice
+				$notice = array(
+							'type'=>'success',
+							'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+							'title'=>'Settings Saved',
+							'message'=>'Your settings have been saved, click the preview button to view your preview'
+						);
+				$this->wpna_addAdminNotice($notice);
+				wp_safe_redirect( admin_url('admin.php?page=wpnativeapps-settings') );
+				exit;
+			}
+			else {
+				wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+							'response' 	=> 403,
+							'back_link' => 'admin.php?page=' . $this->plugin_name,
+					) );
+			}
+
+	}
 	/**
 	 * Register the Function to add Admin Pages for the admin area.
 	 *
@@ -194,13 +241,13 @@ class Wp_Native_Apps_Admin {
 
 		$setupNotices = array(
 			array(
-						'type'=>'success is-dismissable',
+						'type'=>'info is-dismissable',
 						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
 						'title'=>'Introduction to WPNativeApps',
 						'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be confirgure craefully in order to acheeve the vest restutl.'
 						),
 						array(
-									'type'=>'warning',
+									'type'=>'error',
 									'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
 									'title'=>'Configure Settings to see app preview',
 									'message'=>''
@@ -223,12 +270,15 @@ class Wp_Native_Apps_Admin {
 				$title = empty($notice['title']) ? '' : '<h1>'.$notice["title"].'</h1>';
 				$message = __( $notice['message'], 'wpna' );
 
-
 				printf('
 				<div class="notice notice-%1$s is-dismissible">
-					'.$iconHtml.'
-					'.$title.'
-					<p>%2$s</p>
+				    <div class="pluginIcon">
+					    '.$iconHtml.'
+					</div>
+					<div class="bannerContent">
+					    '.$title.'
+					    <p>%2$s</p>
+					</div>
 				</div>', esc_attr( $class ), esc_html( $message ));
 
 
@@ -247,33 +297,164 @@ class Wp_Native_Apps_Admin {
 	}
 
 public function wpna_get_settings(){
-
-	// Fetch settings from database and return.
-$ret = array(
-	'account'=>array('appName'=>'Test App'),
-	'hideelements'=>array(
-												'type'=>'header','selector'=>'#header',
-												'type'=>'footer','selector'=>'#wp_footer',
-												'type'=>'other', 'selector'=>'#other',
-												'type'=>'other', 'selector'=>'.other-class',
-												'type'=>'other', 'selector'=>'.another-class'
-											),
-	'topbarnav'=>array('navigationStructure'=>'1',
-											'backgroundColor'=>'#ececec',
-											'statusBarTextColor'=>'#fff',
-											'bannerLogo'=>'https://wpnativeapps.com/cdn-cgi/image/metadata=none/wp-content/uploads/2022/05/wpn-white-logo-wordmark.png',
-											'navigationbarTextColor'=>'#000',
-											'defaultIconColor'=>'#fff',
-											'activeIconColor'=>'#000'
-										),
-	'bottombarnav'=>array(
-													'backgroundColor'=>'#fff',
-													'defaultIconColor'=>'#000',
-													'activeIconColor'=>'#fff'
-
-	)
-);
-	return $ret;
+	$wpnativeAppSettings = array(
+		    "name"=> "Test App",
+		    "headerToHide"=> "#header",
+		    "footerToHide"=> "#footer",
+		    "otherHide"=> array("#elemeent1","#element2"),
+		    "splash"=> [
+		      "backgroundColor"=> "rgb(67,50,193,1)",
+		      "backgroundImage"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		    ],
+		    "topBarNav"=>[
+		      "styles"=> [
+		        "backgroundColor"=> "rgb(67,50,193,1)",
+		        "statusBarTextColor"=> "#000",
+		        "bannerLogo"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		        "topBarTextColor"=> "#fff",
+		        "topBarIconColor"=> "rgb(67,50,193,1)"
+		      ],
+		    ],
+		    "bottomBarNav"=>[
+		      "styles"=> [
+		        "backgroundColor"=> "#ececec",
+		        "defaultIconColor"=> "green",
+		        "activeIconColor"=> "blue",
+		      ],
+		      "pages"=> [
+		        [
+		          "id"=> 1,
+		          "url"=> "https://wpnativeapps.com/?page_id=599",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "name"=> "FAQ Page should be selected",
+		          "isExternal"=> false,
+		          "topNav"=>[
+		              "designType"=> "logoOnly",
+									"useLogo" => true,
+		              "logo"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		              "label"=> "TopNav Label shoulfor Page d",
+		              "alignment"=> "middle",
+		          ]
+		        ],
+		        [
+		          "id"=> 2,
+		          "url"=> "https://wpnativeapps.com.au/bottom2",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "name"=> "Page Number 2",
+		          "isExternal"=> true,
+		          "topNav"=>[
+		            "designType"=> "logoLeftBurgerRight",
+								"useLogo" => false,
+		            "logo"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+								"label"=> "TopNav Label for Page 2",
+		            "hamburger"=> [
+		              "backgroundColor"=> "rgb(67,50,193,1)",
+		              "menuIcon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		            ]
+		          ]
+		        ],
+		        [
+		          "id"=> 3,
+		          "url"=> "https://wpnativeapps.com.au/bottom3",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "name"=> "Page Number 3",
+		          "isExternal"=> true,
+		          "topNav"=>[
+		            "designType"=> "logoLeftNavRight",
+								"useLogo" => false,
+		            "logo"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+								"label"=> "TopNav Label for Page 3",
+								"buttons"=> [
+		              [
+		                "isExternal"=>true,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/link",
+		              ],
+		              [
+		                "isExternal"=>false,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/?page_id=554",
+		              ],
+		              [
+		                "isExternal"=>false,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/?page_id=885",
+		              ],
+		            ]
+		          ]
+		        ],
+		        [
+		          "id"=> 4,
+		          "url"=> "https://wpnativeapps.com.au/bottom4",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "name"=> "Page Number 4",
+		          "isExternal"=> true,
+		          "topNav"=>[
+		            "designType"=> "logoMidNavBoth",
+								"useLogo" => true,
+		            "logo"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+								"label"=> "TopNav Label for Page 3",
+		            "leftButtons"=> [
+		              [
+		                "isExternal"=>true,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/leftbutton",
+		              ],
+		            ],
+		            "rightButtons"=> [
+		              [
+		                "isExternal"=>false,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/rightbutton1",
+		              ],
+		              [
+		                "isExternal"=>false,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/rightbutton2",
+		              ],
+		              [
+		                "isExternal"=>false,
+		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		                "url"=> "https://wpnativeapps.com/?page_id=31",
+		              ],
+		            ]
+		          ]
+		        ],
+		      ],
+		    ],
+		    "prompts"=>[
+		      "promptLocatoinService"=>true,
+		      "promptItems"=>[
+		      "pushNotification"=>[
+		        "styles"=> [
+		          "backgroundColor"=> "rgb(67,50,193,1)",
+		          "textColor"=> "#000",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "title"=>"Prompt Title Text",
+		          "description"=>"Prompt Description",
+		          "acceptButtonText"=>"Accept",
+		          "acceptButtonColor"=>"rgb(67,50,193,1)",
+		        ]
+		      ],
+		      "trackingService"=>[
+		        "styles"=> [
+		          "backgroundColor"=> "rgb(67,50,193,1)",
+		          "textColor"=> "#000",
+		          "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		          "title"=>"Prompt Title Text",
+		          "description"=>"Prompt Description",
+		          "acceptButtonText"=>"Accept",
+		          "acceptButtonColor"=>"rgb(67,50,193,1)",
+		        ]
+		      ]
+		    ]
+		  ],
+		  "authenticationSettings"=>[
+		    "accountRequired"=>true,
+		    "authenticationPage"=>"https://wpnativeapps.com/?page_id=554"
+		  ]
+		);
+return $wpnativeAppSettings;
 
 }
 
@@ -299,6 +480,12 @@ public function  wpna_image_uploadField($args){
 		</div>
 		<?php
 		return ob_get_clean();
+}
+
+function getIDfromGUID( $guid ){
+    global $wpdb;
+    return $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $guid ) );
+
 }
 
 }

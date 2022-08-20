@@ -164,6 +164,8 @@ class Wp_Native_Apps {
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_scripts' );
 
+		$this->loader->add_action( 'admin_post_handle_wpna_settings_submit', $plugin_admin, 'handle_settings_save');
+
 	}
 
 	/**

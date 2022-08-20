@@ -1,41 +1,49 @@
 <div class="iFrameWindow" onclick="closeiFrameWindow(event);">
     <div class='iFrameContainer'>
-        <div class="iFrameTitle">
-            <div class="iFrameNavigationWindow">
-                <button type="button" class="iFrameBackButton">
-                    <span class="screen-reader-text">Back</span>
-                </button>
-                <button type="button" class="iFrameForwardButton">
-                    <span class="screen-reader-text">Forward</span>
-                </button>
-            </div>
-            <div class="iFrameURL">[[DISPLAY_URL]]</div>
-            <div class="iFrameCloseWindow">
-                <button type="button" class="iFrameCloseButton" onclick="closeiFrameWindow(event);">
-                    <span class="screen-reader-text">Close</span>
-                </button>
-            </div>
+        <div class='iFrameTitle'>
+            <button type="button" class="iFrameCloseButton" onclick="closeiFrameWindow(event);">
+                <span class="screen-reader-text">Close</span>
+            </button>
         </div>
-        <iframe hspace="0" allowtransparency="true" src="[[URL]]" id="[[ID]]" frameborder="0">
-            This feature requires inline frames. You have iframes disabled or your browser does not support them.
-        </iframe>
-        <div class='selectionContainer'>
-            <div class='selectionType'>
-                <select class='elementSelection' disabled="disabled">
-                    <option value='Header'>Header</option>
-                </select>
-            </div>
-            <div class="selectionSelector">
-                <input type='text' class='selectionSelectorString' value="" />
-                <button class='selectionSelectorChild' onclick="selectChild('header_selection_iframe', 'header');">
-                    Child
-                </button>
-                <button class='selectionSelectorParent' onclick="selectParent('header_selection_iframe', 'header');">
-                    Parent
-                </button>
-            </div>
-            <div class="selectionDone">
-                <button class='selectionDoneButton' onclick="doneSelection('header');">Done</button>
+        <div class='iFrame_Half_Container'>
+            <h3 class='iFrame_Half_ContainerH3'>Select the header section on your website.</h3>
+            <h5 class='iFrame_Half_ContainerH5'>It will be replaced in your app with native app navigation that's faster & easier for your customers to use.</h5>
+            <p class='iFrame_Half_ContainerP'>Use your mouse to hover over elements in the phone frame of this popup window. When your website's header is outlined with a red line, click it. You'll see a code appear below. It's the name of the element you clicked. Use the “Apply” button to see what it your app would look like without that element.</p>
+            <select class='elementSelection' disabled="disabled">
+                <option value='Header'>Header</option>
+            </select>
+            <textarea class='selectionSelectorString'></textarea>
+            <button class='selectionSelectorChild' onclick="selectPrev('header_selection_iframe', 'header');">
+                Prev
+            </button>
+            <button class='selectionSelectorChild' onclick="selectNext('header_selection_iframe', 'header');">
+                Next
+            </button>
+            <button class='selectionSelectorChild' onclick="selectChild('header_selection_iframe', 'header');">
+                Child
+            </button>
+            <button class='selectionSelectorParent' onclick="selectParent('header_selection_iframe', 'header');">
+                Parent
+            </button>
+            <button class='selectionApplyButton' data_toggle="off" onclick="toggleSelectedElement('header_selection_iframe', 'header');">
+                Apply
+            </button>
+            <button class='selectionDoneButton' onclick="doneSelection('header');">Done</button>
+        </div>
+        <div class='iFrame_Half_Container'>
+            <div class='iFrame_Phone_Container'>
+                <iframe hspace="0" allowtransparency="true" src="[[URL]]" id="[[ID]]" frameborder="0">
+                    This feature requires inline frames. You have iframes disabled or your browser does not support them.
+                </iframe>
+                <div class="iFrameNavigationWindow">
+                    <button type="button" class="iFrameBackButton">
+                        <span class="screen-reader-text">Back</span>
+                    </button>
+                    <div class="iFrameURL">[[DISPLAY_URL]]</div>
+                    <button type="button" class="iFrameForwardButton">
+                        <span class="screen-reader-text">Forward</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>

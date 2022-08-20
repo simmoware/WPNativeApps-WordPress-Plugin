@@ -18,7 +18,7 @@
                                       'value_field'=>'guid'
                                     ]
                                   );?>
-      <input type="text" class="bottomBarItemUrlExternal" name="bottomBarItemUrlExternal_{{iconcount}}" placeholder="Enter External URL" style="display:none;" />
+      <input type="text" class="bottomBarItemUrlExternal hide" name="bottomBarItemUrlExternal_{{iconcount}}" placeholder="Enter External URL" />
     </div>
     <div class="bottomBarItemText">
       <input type="text" class="bottomBarItemText" name="bottomBarItemText_{{iconcount}}" value="" placeholder="Enter Label"/>
@@ -36,45 +36,12 @@
   </div>
 </div>
 
-<!-- <div class="flex-column hide" id="navigationHamburgerItemGeneric">
-  <div class="flex-row hamburgerItemWrapTop">
-    <div class="hamburgerItemType">
-      <select onchange="handleHamburgerLinkTypeChange(this)" required class="hamburgerItemType" name="hamburgerItemType_1">
-        <option disabled selected>Select a Link Type</option>
-        <option value="page">Page</option>
-        <option value="external">External</option>
-      </select>
-    </div>
-    <div class="hamburgerItemUrl flex-column">
-      <?php wp_dropdown_pages(
-                                    [
-                                      'name'=>'hamburgerItemUrlInternal_{{iconcount}}',
-                                      'id'=>'hamburgerItemUrlInternal_{{iconcount}}',
-                                      'class'=>'hamburgerItemUrlInternal',
-                                      'echo'=>'1',
-                                      'value_field'=>'guid'
-                                    ]
-                                  );?>
-      <input type="text" class="hamburgerItemUrlExternal" name="hamburgerItemUrlExternal_{{iconcount}}" placeholder="Enter External URL" style="display:none;" />
-    </div>
-    <div class="hamburgerItemText">
-      <input type="text" class="hamburgerItemText" name="hamburgerItemText_{{iconcount}}" value="" placeholder="Enter Label"/>
-    </div>
-  </div>
-  <div class="flex-row flex-start hamburgerItemWrapBottom">
-    <?php
-    $args = array(
-            'inputName'=>'hamburgerItemIcon_{{iconcount}}',
-            'imageUrl'=>$image[0],
-            'uploadText'=>'Upload Icon',
-            'changeText'=>'Change Icon'
-          );
-    echo $this->wpna_image_uploadField('hamburgerItemIcon_{{iconcount}}'); ?>
-  </div>
-</div> -->
 
 
 
+<?php
+$bottomBarNavs =  $config['bottomBarNav']['pages'];
+?>
 <div class="flex-column">
   <section class="flex=row mb10">
     <div class="flex-item flex-column navigation_bottomBar_section">
@@ -82,42 +49,102 @@
         Bottom Nav
       </h1>
       <div class="flex-column navigationBottomBarItems">
-      <div class="flex-column navigationBottomBarItem">
-        <div class="flex-row bottomBarItemWrapTop">
-          <div class="bottomBarItemType">
-            <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_1">
-              <!-- <option disabled selected>Select a Link Type</option> -->
-              <option value="page">Page</option>
-              <option value="external">External</option>
-            </select>
-          </div>
-          <div class="bottomBarItemUrl flex-column">
-            <?php wp_dropdown_pages(
-                                          [
-                                            'name'=>'bottomBarItemUrlInternal_1',
-                                            'id'=>'bottomBarItemUrlInternal_1',
-                                            'class'=>'bottomBarItemUrlInternal',
-                                            'echo'=>'1',
-                                            'value_field'=>'guid'
-                                          ]
-                                        );?>
-            <input type="text" class="bottomBarItemUrlExternal" name="bottomBarItemUrlExternal_1" placeholder="Enter External URL" style="display:none;" />
-          </div>
-          <div class="bottomBarItemText">
-            <input type="text" class="bottomBarItemText" name="bottomBarItemText_1" value="" placeholder="Enter Label"/>
-          </div>
-        </div>
-        <div class="flex-row flex-start bottomBarItemWrapBottom">
+
+
+
+      <?php
+      $bottomNavHtml = '';
+      $count = 1;
+      // ob_start();
+      if(!empty($bottomBarNavs)){
+        foreach($bottomBarNavs as $bottomNav){
+          $isExternal = $bottomNav['isExternal'];
+          $url = $bottomNav['url'];
+          $icon = $bottomNav['icon'];
+          $name = $bottomNav['name'];
+          $selectedPage = ($isExternal) ? 0 : $this->getIDfromGUID($url);
+          $pageDDHTML = $this->wpna_image_uploadField("bottomBarItemIcon_".$count);
+          ?>
+
+            <div class="flex-column navigationBottomBarItem">
+              <div class="flex-row bottomBarItemWrapTop">
+                <div class="bottomBarItemType">
+                  <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_<?php echo $count;?>">
+                    <option value="page">Page</option>
+                    <option value="external">External</option>
+                  </select>
+                </div>
+                <div class="bottomBarItemUrl flex-column">
+                  <?php wp_dropdown_pages(
+                                                [
+                                                  'name'=>'bottomBarItemUrlInternal_'.$count,
+                                                  'id'=>'bottomBarItemUrlInternal_'.$count,
+                                                  'class'=>'bottomBarItemUrlInternal',
+                                                  'echo'=>'1',
+                                                  'value_field'=>'guid',
+                                                  'selected' => $selectedPage
+                                                ]
+                                              );?>
+                  <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
+                </div>
+                <div class="bottomBarItemText">
+                  <input type="text" class="bottomBarItemText" name="bottomBarItemText_<?php echo $count;?>" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                </div>
+              </div>
+              <div class="flex-row flex-start bottomBarItemWrapBottom">
+                <?php echo $pageDDHTML; ?>
+              </div>
+              <?php
+              if( $count == count($bottomBarNavs) && $count > 3 ){
+                echo '<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>';
+              }
+              ?>
+            </div>
           <?php
-          $args = array(
-                  'inputName'=>'bottomBarItemIcon_1',
-                  'imageUrl'=>$image[0],
-                  'uploadText'=>'Upload Icon',
-                  'changeText'=>'Change Icon'
-                );
-        echo $this->wpna_image_uploadField('bottomBarItemIcon_1'); ?>
-        </div>
-      </div>
+          $count++;
+        }
+      }else{
+          $count = 1;
+          $isExternal = false;
+          $url = '';
+          $icon = '';
+          $name = '';
+          $selectedPage = 0;
+          $pageDDHTML = $this->wpna_image_uploadField("bottomBarItemIcon_".$count);
+          ?>
+
+            <div class="flex-column navigationBottomBarItem">
+              <div class="flex-row bottomBarItemWrapTop">
+                <div class="bottomBarItemType">
+                  <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_<?php echo $count;?>">
+                    <option value="page">Page</option>
+                    <option value="external">External</option>
+                  </select>
+                </div>
+                <div class="bottomBarItemUrl flex-column">
+                  <?php wp_dropdown_pages(
+                                                [
+                                                  'name'=>'bottomBarItemUrlInternal_'.$count,
+                                                  'id'=>'bottomBarItemUrlInternal_'.$count,
+                                                  'class'=>'bottomBarItemUrlInternal',
+                                                  'echo'=>'1',
+                                                  'value_field'=>'guid',
+                                                  'selected' => $selectedPage
+                                                ]
+                                              );?>
+                  <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL"  />
+                </div>
+                <div class="bottomBarItemText">
+                  <input type="text" class="bottomBarItemText" name="bottomBarItemText_<?php echo $count;?>" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                </div>
+              </div>
+              <div class="flex-row flex-start bottomBarItemWrapBottom">
+                <?php echo $pageDDHTML; ?>
+              </div>
+            </div>
+          <?php
+        }
+      ?>
     </div>
     </div>
     <div class="addNewNavigationIcon">
@@ -125,45 +152,6 @@
     </div>
   </section>
 
-  <!-- <section class="flex=row mb10 mt10">
-    <div class="flex-item flex-column navigation_hamburger_section">
-      <div class="section_heading">
-        Hamburger Menu
-      </div>
-      <div class="flex-column navigationHamburgerItem">
-        <div class="flex-row hamburgerItemWrapTop">
-          <div class="hamburgerItemType">
-            <select onchange="handleHamburgerLinkTypeChange(this)"  required class="hamburgerItemType" name="hamburgerItemType_1">
-              <option disabled selected>Select a Link Type</option>
-              <option value="page">Page</option>
-              <option value="external">External</option>
-            </select>
-          </div>
-          <div class="hamburgerItemUrl flex-column">
-            <?php wp_dropdown_pages(
-                                          [
-                                            'name'=>'hamburgerItemUrlInternal_1',
-                                            'id'=>'hamburgerItemUrlInternal_1',
-                                            'class'=>'hamburgerItemUrlInternal',
-                                            'echo'=>'1',
-                                            'value_field'=>'guid'
-                                          ]
-                                        );?>
-            <input type="text" class="hamburgerItemUrlExternal" name="hamburgerItemUrlExternal_1" placeholder="Enter External URL" style="display:none;" />
-          </div>
-          <div class="hamburgerItemText">
-            <input type="text" class="hamburgerItemText" name="hamburgerItemText_1" value="" placeholder="Enter Label"/>
-          </div>
-        </div>
-        <div class="flex-row flex-start hamburgerItemWrapBottom">
-          <?php echo $this->wpna_image_uploadField('hamburgerItemIcon_1'); ?>
-        </div>
-      </div>
-    </div>
-    <div class="addNewNavigationIcon">
-      <a id="addHamburgerNavigationIcon" href="javascript:void(0)">Add another Menu Item</a>
-    </div>
-  </section> -->
 
 
 </div>
