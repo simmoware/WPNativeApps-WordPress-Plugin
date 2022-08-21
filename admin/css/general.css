@@ -1,0 +1,132 @@
+h1{
+    font-size: 22px;
+}
+
+.video-preview{
+    padding: 10px;
+    width: 35%;
+    justify-content: center;
+    align-content: center;
+}
+
+#wpcontent{
+    padding-left: 0;
+}
+
+div#wpna_settings_tabs{
+    padding: 0;
+    border: none;
+    background-color: #F1F0F0;
+}
+
+.wpna_settings_page_left{
+    padding: 0;
+}
+
+.topPageSection{
+   padding: 30px 40px;
+}
+
+#wpnaSettingsForm{
+    padding-left: 30px;
+}
+
+#wpna_settings_tabs .ui-tabs-nav{
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding-left: 50px;
+    padding-right: 0;
+    border-bottom: 1.5px solid #979797 /*D5D5D5*/;
+    border-radius: 0;
+}
+
+#wpna_settings_tabs ul li a{
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.53px;
+    text-align: center;
+}
+
+.ui-state-default, 
+.ui-widget-content .ui-state-default, 
+.ui-widget-header .ui-state-default, 
+.ui-button{
+    background: #DCDCDE;
+    border: 1px solid #979797;
+}
+
+
+#wpna_settings_tabs .ui-state-default a{
+    color: rgba(0,0,0,0.5);
+}
+
+.ui-state-active, 
+.ui-widget-content .ui-state-active, 
+.ui-widget-header .ui-state-active, 
+a.ui-button:active, .ui-button:active, 
+.ui-button.ui-state-active:hover{
+    background: #F1F0F0;
+    color: black;
+}
+
+
+#wpna_settings_tabs .ui-state-active  a{
+    color: black;
+}
+
+
+#wpna_settings_tabs a.ui-tabs-anchor:focus{
+    box-shadow: none;
+}
+
+#wpna_settings_tabs.ui-tabs .ui-tabs-nav li{
+    border-radius: 0;
+    margin-right: 10px;
+}
+
+.selectorInputs > div {
+    align-items: center;
+    min-width: 60%;
+}
+
+.textcontent{
+    margin-top: 10px;
+}
+
+h2{
+    padding-left: 10px;
+}
+
+.choose_button_with_icon{
+    width: 155px;
+}
+
+.flex-column .previewSplash {
+    width: 180px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.topbarnav-previewsection .previewImages{
+    margin: auto;
+}
+
+.general_hideElements h2 {
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.wpna_settings_page_left ul{
+    list-style: disc;
+    margin-left: 25px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.bottomBarNavSection{
+    margin-top: 50px;
+}

@@ -108,6 +108,14 @@ class Wp_Native_Apps_Admin {
 
 		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-native-apps-admin.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 
+		wp_enqueue_style( $this->plugin_name.'_introduction_css', plugin_dir_url( __FILE__ ) . 'css/introduction.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_general_css', plugin_dir_url( __FILE__ ) . 'css/general.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_bottomNav_css', plugin_dir_url( __FILE__ ) . 'css/bottomNav.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_topNav_css', plugin_dir_url( __FILE__ ) . 'css/topNav.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_prompts_css', plugin_dir_url( __FILE__ ) . 'css/prompts.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_authentication_css', plugin_dir_url( __FILE__ ) . 'css/authentication.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_iframe_css', plugin_dir_url( __FILE__ ) . 'css/iframe.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+
 	}
 
 	/**
@@ -145,6 +153,7 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.js', array( 'wp-color-picker' ), date("YmdHis"), false );
 		// wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array( 'jquery', 'wp-color-picker' ), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array('jquery', 'jquery-ui-core' , 'jquery-ui-tabs'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name."_previewJs", plugin_dir_url( __FILE__ ) . 'js/iframePreview.js', array('jquery'), date("YmdHis"), false );
 		wp_localize_script( $this->plugin_name, 'WPNativeApps',
 		        array(
 		            'pluginURL' => plugin_dir_url( __FILE__ ),
@@ -166,13 +175,218 @@ class Wp_Native_Apps_Admin {
 
 		if( isset( $_POST['wpna_save_settings_nonce'] ) && wp_verify_nonce( $_POST['wpna_save_settings_nonce'], 'wpna_save_settings_form_nonce') ) {
 
-				// sanitize the input
-				// $nds_user_meta_key = sanitize_key( $_POST['nds']['user_meta_key'] );
-				// $nds_user_meta_value = sanitize_text_field( $_POST['nds']['user_meta_value'] );
-				// $nds_user =  get_user_by( 'login',  $_POST['nds']['user_select'] );
-				// $nds_user_id = absint( $nds_user->ID ) ;
+			// echo '<pre>';
+			// var_dump($_POST);die;
+			$name = 				isset($_POST['wpna_app_name']) ? sanitize_text_field($_POST['wpna_app_name']) : '';
+			$headerToHide = isset($_POST['headerToHide']) ? sanitize_text_field($_POST['headerToHide']) : '';
+			$footerToHide = isset($_POST['footerToHide']) ? sanitize_text_field($_POST['footerToHide']) : '';
+			$otherHide = 		isset($_POST['otherHide']) ? $_POST['otherHide'] : null;
 
-				// do the processing
+
+			$splash_background_color = isset($_POST['splash_backgroundColor']) ? sanitize_text_field($_POST['splash_backgroundColor']) : '';
+			$splash_backgroundImage_image_url = isset($_POST['splash_backgroundImage_image_url']) ? sanitize_url($_POST['splash_backgroundImage_image_url']) : '';
+			$splash = array(
+											'backgroundColor'=>$splash_background_color,
+											'backgroundImage'=>$splash_backgroundImage_image_url,
+										);
+
+			$topBarNav = array(
+											'styles'=> array(
+															"backgroundColor"=>	isset($_POST['topBarNav_backgroundColor']) ? sanitize_text_field($_POST['topBarNav_backgroundColor']) : '',
+															"statusBarTextColor"=> 	isset($_POST['topbar_statusbar_textColour']) ? sanitize_text_field($_POST['topbar_statusbar_textColour']) : '',
+															"bannerLogo"=> 	isset($_POST['topBarNav_styles_bannerLogo_image_url']) ? sanitize_url($_POST['topBarNav_styles_bannerLogo_image_url']) : '',
+															"topBarTextColor"=> 	isset($_POST['topbar_textColour']) ? sanitize_text_field($_POST['topbar_textColour']) : '',
+															"topBarIconColor"=>	isset($_POST['topbar_iconColor']) ? sanitize_text_field($_POST['topbar_iconColor']) : '',
+														)
+											);
+
+			// $bottombarNavPages = null;
+			$bottomBarNav = array(
+															"styles"=>array(
+																"backgroundColor"=> isset($_POST['bottombarNavStyle_backgroundColor']) ? sanitize_text_field($_POST['bottombarNavStyle_backgroundColor']) : '',
+															 "defaultIconColor"=> isset($_POST['bottombarNavStyle_defaultIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_defaultIconColor']) : '',
+															 "activeIconColor"=> isset($_POST['bottombarNavStyle_activeIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_activeIconColor']) : '',
+														 ),
+															"pages"=> array(),
+														);
+
+			$bottomBarNavPages = $_POST['bottomBarItemText'];
+				if(!empty($bottomBarNavPages)){
+					$pageCount = 1;
+					foreach($bottomBarNavPages as $page){
+						$pageType = $_POST['bottomBarItemType_'.$pageCount];
+						if($pageType == "page"){
+							$pageUrl = isset($_POST['bottomBarItemUrlInternal_'.$pageCount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pageCount]) : '';
+							$isExternal = false;
+						}else{
+							$pageUrl = isset($_POST['bottomBarItemUrlExternal_'.$pageCount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pageCount]) : '';
+							$isExternal = true;
+						}
+						$pageIcon = isset($_POST['bottomBarNavLogo_'.$pageCount]) ? sanitize_url($_POST['bottomBarNavLogo_'.$pageCount]) : '';
+
+						$designType  = isset($_POST['topNav_'.$pageCount.'_structure']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_structure']) : '';
+						$topNav = null;
+
+						switch($designType){
+							case 'logoOnly':{
+								$topNav = array(
+				              "designType"=> "logoOnly",
+											"useLogo" => $_POST['topNav_'.$pageCount.'_logoOnly_type'] == 'logo'? true : false,
+				              "logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
+				              "label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+				              "alignment"=> isset($_POST['topNav_'.$pageCount.'_logoOnly_align']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_logoOnly_align']) : '',
+								);
+								break;
+							}
+							case 'logoLeftBurgerRight':{
+								$topNav = array(
+				            "designType"=> "logoLeftBurgerRight",
+										"useLogo" => $_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+				            "hamburger"=> [
+				              "backgroundColor"=> isset($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) : '',
+				              "menuIcon"=> isset($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) : '',
+				            ]
+								);
+								break;
+							}
+							case 'logoLeftNavRight':{
+
+								$navSources = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_Source'];
+								$navInternalUrls = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_internalURL'];
+								$navExternalUrls = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_externalURL'];
+								$navIcons = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_1_image_url'];
+
+								$buttons = array();
+
+								if(!empty($navSources)){
+									$buttonCount = 1;
+									foreach ($navSources as $key=>$value){
+										$buttons[] = array(
+											"isExternal"=> $value == 'external' ? true : false,
+											"icon"=> isset($_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']: '',
+											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? $navInternalUrls[$key] : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+										);
+									}
+									$buttonCount++;
+								}
+
+								$topNav = array(
+				            "designType"=> "logoLeftNavRight",
+										"useLogo" => $_POST['topNav_'.$pageCount.'_logoLeftNavRight_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+										"buttons"=> $buttons
+								);
+								break;
+							}
+
+							case 'logoMidNavBoth':{
+
+
+								$navSources = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_Source'];
+								$navInternalUrls = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_internalURL'];
+								$navExternalUrls = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_externalURL'];
+								$navIcons = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_image_url'];
+
+								// topNav_4_logoMidNavBoth_iconImage_image_url
+
+
+
+								$leftButtons = array();
+								$rightButtons = array();
+
+								if(!empty($navSources)){
+									$buttonCount = 1;
+									$temp = array(
+										"isExternal"=> $value == 'external' ? true : false,
+										"icon"=> isset($_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']: '',
+										"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? $navInternalUrls[$key] : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+									);
+									foreach ($navSources as $key=>$value){
+										if($buttonCount == 1){
+											$leftButtons[] = $temp;
+										}else{
+											$rightButtons[] = $temp;
+										}
+									}
+									$buttonCount++;
+								}
+								$topNav = array(
+										"designType"=> "logoMidNavBoth",
+										"useLogo" => $_POST['topNav_'.$pageCount.'_logoMidNavBoth_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+										"leftButtons"=> $leftButtons,
+										"rightButtons"=> $rightButtons
+								);
+								break;
+							}
+						}
+						$bottomBarNav["pages"][] = array(
+																					"url"=> $pageUrl,
+																					"icon" => $pageIcon,
+																					"name" => $page,
+																					"isExternal" => $isExternal,
+																					"topNav" => $topNav
+																				);
+						$pageCount++;
+					}
+				}
+
+
+			$prompts = array(
+										"promptLocationService"=>$_POST["promptLocationOn"] == 'true' ? true : false,
+										"promptItems"=>array(
+														"pushNotification"=>array(
+															"styles"=> array(
+																"backgroundColor"=> isset($_POST['promptPushNoti_backgroundColor']) ? sanitize_text_field($_POST['promptPushNoti_backgroundColor'] ) : '',
+																"textColor"=>isset($_POST['promptPushNoti_textColor']) ? sanitize_text_field($_POST['promptPushNoti_textColor'] ) : '',
+																"icon"=> isset($_POST['promptPushNoti_icon_image_url']) ? sanitize_url($_POST['promptPushNoti_icon_image_url'] ) : '',
+																"title"=>isset($_POST['promptPushNoti_titleText']) ? sanitize_text_field($_POST['promptPushNoti_titleText'] ) : '',
+																"description"=>isset($_POST['promptPushNoti_descText']) ? sanitize_text_field($_POST['promptPushNoti_descText'] ) : '',
+																"acceptButtonText"=>isset($_POST['promptPushNoti_acceptButtonText']) ? sanitize_text_field($_POST['promptPushNoti_acceptButtonText'] ) : '',
+																"acceptButtonColor"=>isset($_POST['promptPushNoti_acceptButtonColor']) ? sanitize_text_field($_POST['promptPushNoti_acceptButtonColor'] ) : '',
+															)
+														),
+														"trackingService"=>array(
+															"styles"=> array(
+																"backgroundColor"=> isset($_POST['promptTracking_backgroundColor']) ? sanitize_text_field($_POST['promptTracking_backgroundColor'] ) : '',
+																"textColor"=> isset($_POST['promptTracking_textColor']) ? sanitize_text_field($_POST['promptTracking_textColor'] ) : '',
+																"icon"=> isset($_POST['promptTracking_icon_image_url']) ? sanitize_url($_POST['promptTracking_icon_image_url'] ) : '',
+																"title"=>isset($_POST['promptTracking_titleText']) ? sanitize_text_field($_POST['promptTracking_titleText'] ) : '',
+																"description"=>isset($_POST['promptTracking_descText']) ? sanitize_text_field($_POST['promptTracking_descText'] ) : '',
+																"acceptButtonText"=>isset($_POST['promptTracking_acceptButtonText']) ? sanitize_text_field($_POST['promptTracking_acceptButtonText'] ) : '',
+																"acceptButtonColor"=>isset($_POST['promptTracking_acceptButtonColor']) ? sanitize_text_field($_POST['promptTracking_acceptButtonColor'] ) : '',
+															)
+														)
+													)
+												);
+
+
+												$authentication = array(
+													"accountRequired"=> $_POST['accountRequired'] == 'yes'? true : false,
+											    "authenticationPage"=>isset($_POST['authenticationPage']) ? sanitize_url($_POST['authenticationPage']) : ''
+												);
+
+	$configSaved = array(
+		    "name"=> $name,
+		    "headerToHide"=> $headerToHide,
+		    "footerToHide"=> $footerToHide,
+		    "otherHide"=> $otherHide,
+		    "splash"=> $splash,
+		    "topBarNav"=>$topBarNav,
+		    "bottomBarNav"=>$bottomBarNav,
+		    "prompts"=>$prompts,
+		  	"authenticationSettings"=>$authentication
+		);
+
+// echo dirname(__FILE__) . '/config.json';die;
+// echo json_encode($configSaved);die;
+
+			file_put_contents(dirname(__FILE__) . '/config.json', json_encode($configSaved));
+
 
 				// add the admin notice
 				$notice = array(
@@ -296,8 +510,18 @@ class Wp_Native_Apps_Admin {
 		}
 	}
 
+
+
 public function wpna_get_settings(){
-	$wpnativeAppSettings = array(
+	$pluginConfiguration = json_decode(file_get_contents(dirname(__FILE__) . '/config.json'), true);
+	foreach ($pluginConfiguration as $ia) {
+		if (!is_array($ia)) {
+			$ia = json_decode($ia, true);
+		}
+	}
+
+	if(empty($pluginConfiguration)){
+		$pluginConfiguration = array(
 		    "name"=> "Test App",
 		    "headerToHide"=> "#header",
 		    "footerToHide"=> "#footer",
@@ -370,11 +594,11 @@ public function wpna_get_settings(){
 		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
 		                "url"=> "https://wpnativeapps.com/link",
 		              ],
-		              [
-		                "isExternal"=>false,
-		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
-		                "url"=> "https://wpnativeapps.com/?page_id=554",
-		              ],
+		              // [
+		              //   "isExternal"=>false,
+		              //   "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
+		              //   "url"=> "https://wpnativeapps.com/?page_id=554",
+		              // ],
 		              [
 		                "isExternal"=>false,
 		                "icon"=> "https://wpnativeapps.com/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png",
@@ -423,7 +647,7 @@ public function wpna_get_settings(){
 		      ],
 		    ],
 		    "prompts"=>[
-		      "promptLocatoinService"=>true,
+		      "promptLocationService"=>true,
 		      "promptItems"=>[
 		      "pushNotification"=>[
 		        "styles"=> [
@@ -454,7 +678,8 @@ public function wpna_get_settings(){
 		    "authenticationPage"=>"https://wpnativeapps.com/?page_id=554"
 		  ]
 		);
-return $wpnativeAppSettings;
+	}
+return $pluginConfiguration;
 
 }
 
@@ -462,7 +687,7 @@ public function  wpna_image_uploadField($args){
 		ob_start();
 		$default = array(
 													'inputName'=>'wpnaImage'.rand(),
-													'imageUrl'=>plugin_dir_url( __FILE__ ).'images/no-image.png',
+													'imageUrl'=>'',
 													'uploadText'=>'Upload Image',
 													'changeText'=>'Change Image',
 												);
@@ -476,7 +701,7 @@ public function  wpna_image_uploadField($args){
 			<a href="javascript:void(0)" class="wpna-remove  <?php echo $inputName;?>_remove button">Change Image</a>
 			<a style="display:none;" href="#" class="button wpna-upload <?php echo $inputName;?>_upload">Upload image</a>
 			<input type="hidden" name="<?php echo $inputName;?>_image_id"  class="wpna_img_id" value="">
-			<input type="hidden" name="<?php echo $inputName;?>_image_url"  class="wpna_img_url" value="<?php echo absint( $imageUrl ) ?>">
+			<input type="hidden" name="<?php echo $inputName;?>_image_url"  class="wpna_img_url" value="<?php echo  $imageUrl  ?>">
 		</div>
 		<?php
 		return ob_get_clean();

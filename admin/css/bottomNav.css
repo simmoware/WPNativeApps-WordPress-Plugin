@@ -1,0 +1,40 @@
+.navigationBottomBarItem {
+    padding:40px 30px;
+    background-color:#fff;
+    border:1px solid #E4E4E4;
+    margin-bottom:20px;
+    border-radius:12px;
+}
+
+.bottomBarItemWrapTop {
+    gap:10px;
+    width:100%;
+    justify-content:space-evenly;
+}
+
+.bottomBarItemType {
+    width:20%;
+}
+
+.bottomBarItemUrl, .bottomBarItemText {
+    width:40%;
+}
+
+.bottomBarItemWrapTop select, .bottomBarItemWrapTop input {
+    width:100%;
+}
+
+.wpna_settings_page_right {
+    display:none;
+}
+
+.wpnaImageUploadPreview {
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 5px;
+    background-size: 90%;
+}
+
+#removeBottomBarNavigationIcon {
+    width:240px;
+}

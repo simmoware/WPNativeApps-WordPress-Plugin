@@ -17,24 +17,31 @@ var topNavTabs = null;
 			});
 		});
 
+		$(window).resize(function () {
+		   setiPhoneFrame();
+		});
+
 })( jQuery );
 $=jQuery;
 function add_element_to_hide(el){
 	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
-	var hideElementHtml = `<div class="flex-row jc-sb ai-fe">
-		<div class="flex-column">
-			<h3>Select Element to Hide</h3>
+	var __count = parseInt(elementCount) + 1;
+	var hideElementHtml = `
+	<h4>Is there anything else you want to hide?</h4>
+	<div class="flex-row jc-sb ai-fe selectorInputs">
+		<div class="flex-row">
 			<input
 						type="text"
-						name="otherHide_${elementCount+1}"
+						name="otherHide[]"
 						class="otherHideElement"
 						value=""
 						required
 			/>
+			<div class="flex-column">
+				<div class="choose_button_with_icon" onclick="buildElementiFrame(${__count});"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
+			</div>
 		</div>
-		<div class="flex-column">
-			<div class="choose_button_with_icon" onclick="buildElementiFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
-		</div>
+
 	</div>
 	`
 	$(el).before(hideElementHtml);
@@ -55,10 +62,10 @@ function getTemplate(template, params, callback) {
 }
 
 function cssPath(el) {
-    if (typeof el.nodeName === "undefined") { 
+    if (typeof el.nodeName === "undefined") {
         return;
     }
-    
+
     var path = [];
     //while (el.nodeType === Node.ELEMENT_NODE) {
     while (el !== null) {
@@ -71,7 +78,7 @@ function cssPath(el) {
             } else {
                 var sib = el, nth = 1;
                 while (sib.nodeType === Node.ELEMENT_NODE && (sib = sib.previousSibling) && nth++);
-                selector += ":nth-child("+nth+")";
+                //selector += ":nth-child("+nth+")";
             }
             if (el.tagName !== "HTML" && el.tagName !== "BODY") {
                 path.unshift(selector);
@@ -89,6 +96,9 @@ function buildiFrame(config) {
     var $ = jQuery;
     getTemplate(config.template, config, function (content) {
         $("body").append(content);
+        setTimeout(function () {
+            setiPhoneFrame();
+        }, 500);
         $("#" + config.ID).on("load", function () {
             var iFrame = $("#" + config.ID).get(0);
             var iDoc = iFrame.contentWindow || iFrame.contentDocument;
@@ -160,6 +170,11 @@ function handleHeaderFooterClick(event, type, iDoc) {
             $(iDoc.body).find(selectedHeader).css({
                 outline: "0px"
             });
+            var selected = $(iDoc.body).find(selectedHeader).get(0);
+            if (!$(selected).is(":visible")) {
+                $(selected).fadeIn();
+                $(".selectionApplyButton").text("Apply");
+            }
             selectedHeader = path;
             setHeaderInput();
         }
@@ -168,6 +183,11 @@ function handleHeaderFooterClick(event, type, iDoc) {
             $(iDoc.body).find(selectedFooter).css({
                 outline: "0px"
             });
+            var selected = $(iDoc.body).find(selectedFooter).get(0);
+            if (!$(selected).is(":visible")) {
+                $(selected).fadeIn();
+                $(".selectionApplyButton").text("Apply");
+            }
             selectedFooter = path;
             setFooterInput();
         }
@@ -177,6 +197,11 @@ function handleHeaderFooterClick(event, type, iDoc) {
             $(iDoc.body).find(selectedElement).css({
                 outline: "0px"
             });
+            var selected = $(iDoc.body).find(selectedElement).get(0);
+            if (!$(selected).is(":visible")) {
+                $(selected).fadeIn();
+                $(".selectionApplyButton").text("Apply");
+            }
             selectedElement = path;
             setElementInput();
         } else {
@@ -207,7 +232,10 @@ function buildFooteriFrame() {
     });
 }
 
-function buildElementiFrame() {
+var elementSelectioniFrameIndex = -1;
+
+function buildElementiFrame(index) {
+    elementSelectioniFrameIndex = index;
     selectedElement = "";
     buildiFrame({
         ID:"element_selection_iframe",
@@ -216,6 +244,179 @@ function buildElementiFrame() {
         template:"selection_popover_element",
         type:"element"
     });
+}
+
+function selectNext(id, type) {
+    var $ = jQuery;
+    var iFrame = $("#" + id).get(0);
+    var iDoc = iFrame.contentWindow || iFrame.contentDocument;
+    var currentSelector = "";
+
+    if (iDoc.document) {
+        iDoc = iDoc.document;
+        var child = null;
+
+        if (type == "header") {
+            child = $(iDoc.body).find(selectedHeader).get(0);
+            currentSelector = selectedHeader;
+            if (typeof child !== "undefined") {
+                if (child.nextSibling !== null) {
+                    var siblingTest = child;
+                    var nextCount = 0;
+                    while (siblingTest.nextSibling !== null && nextCount == 0) {
+                        if (typeof siblingTest.nextSibling.tagName === "undefined") {
+                            siblingTest = siblingTest.nextSibling;
+                            child = siblingTest;
+                            nextCount = 1;
+                        }
+                    }
+                    child = siblingTest;
+                    if (typeof child.nextSibling.tagName !== "undefined") {
+                        child = child.nextSibling;
+                    }
+                }
+            }
+        } else if (type == "footer") {
+            child = $(iDoc.body).find(selectedFooter).get(0);
+            currentSelector = selectedFooter;
+            if (typeof child !== "undefined") {
+                if (child.nextSibling !== null) {
+                    var siblingTest = child;
+                    while (typeof siblingTest.nextSibling.tagName === "undefined" && siblingTest.nextSibling !== null) {
+                        siblingTest = siblingTest.nextSibling;
+                    }
+                    child = siblingTest;
+                    if (typeof child.nextSibling.tagName !== "undefined") {
+                        child = child.nextSibling;
+                    }
+                }
+            }
+        } else {
+            child = $(iDoc.body).find(selectedElement).get(0);
+            currentSelector = selectedElement;
+            if (typeof child !== "undefined") {
+                if (child.nextSibling !== null) {
+                    var siblingTest = child;
+                    while (typeof siblingTest.nextSibling.tagName === "undefined" && siblingTest.nextSibling !== null) {
+                        siblingTest = siblingTest.nextSibling;
+                    }
+                    child = siblingTest;
+                    if (typeof child.nextSibling.tagName !== "undefined") {
+                        child = child.nextSibling;
+                    }
+                }
+            }
+        }
+
+        var newCssPath = cssPath(child);
+        if (newCssPath !== currentSelector) {
+            if (typeof child !== "undefined") {
+                while (child.tagName == "SCRIPT" || child.tagName == "STYLE") {
+                    child = $(child).next().get(0);
+                }
+                var childPath = cssPath(child);
+                if (type == "header") {
+                    $(iDoc.body).find(selectedHeader).css({
+                        outline: "0px"
+                    });
+                    selectedHeader = childPath;
+                    setHeaderInput();
+                } else if (type == "footer") {
+                    $(iDoc.body).find(selectedFooter).css({
+                        outline: "0px"
+                    });
+                    selectedFooter = childPath;
+                    setFooterInput();
+                } else {
+                    $(iDoc.body).find(selectedElement).css({
+                        outline: "0px"
+                    });
+                    selectedElement = childPath;
+                    setElementInput();
+                }
+                $(child).css({
+                    outline: "8px solid red"
+                });
+            }
+        }
+    }
+}
+
+
+function selectPrev(id, type) {
+    var $ = jQuery;
+    var iFrame = $("#" + id).get(0);
+    var iDoc = iFrame.contentWindow || iFrame.contentDocument;
+    var currentSelector = "";
+
+    if (iDoc.document) {
+        iDoc = iDoc.document;
+        var child = null;
+
+        if (type == "header") {
+            child = $(iDoc.body).find(selectedHeader).get(0);
+            currentSelector = selectedHeader;
+            if (typeof child !== "undefined") {
+                if (child.previousSibling !== null) {
+                    if (typeof child.previousSibling.tagName !== "undefined") {
+                        child = child.previousSibling;
+                    }
+                }
+            }
+        } else if (type == "footer") {
+            child = $(iDoc.body).find(selectedFooter).get(0);
+            currentSelector = selectedFooter;
+            if (typeof child !== "undefined") {
+                if (child.previousSibling !== null) {
+                    if (typeof child.previousSibling.tagName !== "undefined") {
+                        child = child.previousSibling;
+                    }
+                }
+            }
+        } else {
+            child = $(iDoc.body).find(selectedElement).get(0);
+            currentSelector = selectedElement;
+            if (typeof child !== "undefined") {
+                if (child.previousSibling !== null) {
+                    if (typeof child.previousSibling.tagName !== "undefined") {
+                        child = child.previousSibling;
+                    }
+                }
+            }
+        }
+
+        var newCssPath = cssPath(child);
+        if (newCssPath !== currentSelector) {
+            if (typeof child !== "undefined") {
+                while (child.tagName == "SCRIPT" || child.tagName == "STYLE") {
+                    child = $(child).next().get(0);
+                }
+                var childPath = cssPath(child);
+                if (type == "header") {
+                    $(iDoc.body).find(selectedHeader).css({
+                        outline: "0px"
+                    });
+                    selectedHeader = childPath;
+                    setHeaderInput();
+                } else if (type == "footer") {
+                    $(iDoc.body).find(selectedFooter).css({
+                        outline: "0px"
+                    });
+                    selectedFooter = childPath;
+                    setFooterInput();
+                } else {
+                    $(iDoc.body).find(selectedElement).css({
+                        outline: "0px"
+                    });
+                    selectedElement = childPath;
+                    setElementInput();
+                }
+                $(child).css({
+                    outline: "8px solid red"
+                });
+            }
+        }
+    }
 }
 
 function selectChild(id, type) {
@@ -265,6 +466,32 @@ function selectChild(id, type) {
     }
 }
 
+function setiPhoneFrame() {
+    var $ = jQuery;
+    var iFrameShadowBox = $(".iFrameWindow").get(0);
+    if (typeof iFrameShadowBox !== "undefined") {
+        var iPhoneFrame = $(".iFrameiPhoneFrame").get(0);
+        var iframe = $(".iFramePopoverElement").get(0);
+        var iPhoneWidthScale = 1.1143923363;
+        var iPhoneHeightScale = 2.1641025641
+        $(".iFrameContainer iframe").css({
+           width: $(".iFrame_Half_Container").innerWidth()*0.9,
+           height: $(".iFrame_Half_Container").innerWidth()*0.9*iPhoneHeightScale
+        });
+        var iFrameWidth = $(iframe).outerWidth();
+        var width = iFrameWidth * iPhoneWidthScale;
+        var height = width*iPhoneHeightScale;
+        var leftOffset = (iFrameWidth-width)/-2;
+        var pos = $(iframe).offset();
+        $(iPhoneFrame).css({
+           top:58,
+           left:pos.left - leftOffset,
+           width:width,
+           height:height*0.9383155397,
+           opacity:1
+        });
+    }
+}
 
 function selectParent(id, type) {
     var $ = jQuery;
@@ -329,7 +556,10 @@ function doneSelection(type) {
     } else if (type == 'footer') {
         jQuery("#footerToHide").val(selectedFooter);
     } else {
-        jQuery("#elemeent1").val(selectedElement);
+        var others = jQuery(".otherHideElement").toArray();
+        console.log(others);
+        var theOther = others[elementSelectioniFrameIndex-1];
+        theOther.value = selectedElement;
     }
     jQuery(".iFrameWindow").remove();
 }
@@ -359,7 +589,16 @@ function closeiFrameWindow(event) {
         "iFrame_Half_ContainerH3",
         "iFrame_Half_ContainerH5",
         "iFrame_Half_ContainerP",
-        "iFrame_SelectorTools_Container"
+        "iFrame_SelectorTools_Container",
+        "selectionSelectorPrev",
+        "selectionSelectorNext",
+        "selectionApplyButton",
+        "selectionDoneButton",
+        "iFrameiPhoneFrame",
+        "iFramePopoverElement",
+        "iFrame_Phone_Container",
+        "iFrameNavigationWindow",
+        "iFrameEditURLButton"
     ];
 
     if ($.inArray(cl, ignores) == -1 && typeof cl !== "undefined") {

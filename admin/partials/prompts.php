@@ -67,7 +67,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                     <p>Choose an icon</p>
                     <?php
                         $args = array(
-                              'inputName'=>'promptPushNoti_backgroundImage',
+                              'inputName'=>'promptPushNoti_icon',
                               'imageUrl'=>$pushNotification['styles']['icon'],
                               'uploadText'=>'Upload Background Image',
                               'changeText'=>'Change Background Image'
@@ -167,7 +167,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                     <p>Choose an icon</p>
                     <?php
                         $args = array(
-                              'inputName'=>'promptTracking_backgroundImage',
+                              'inputName'=>'promptTracking_icon',
                               'imageUrl'=>$trackingService['styles']['icon'],
                               'uploadText'=>'Upload Background Image',
                               'changeText'=>'Change Background Image'
@@ -231,8 +231,8 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                 </p>
                 <div class="flex-row radioInputs">
                     <fieldset>
-                        <input type="radio" <?php echo $promptSettings['promptLocatoinService'] ? 'checked' :'';?> class="" name="promptLocationOn" id="promptLocationOn" value="true" /><label for="promptLocationOn" class="inputLabel">Enabled</label>
-                        <input type="radio" <?php echo $promptSettings['promptLocatoinService'] ? '' :'checked';?> class="" name="promptLocationOn" id="promptLocationOff" value="false" /><label for="promptLocationOff" class="inputLabel">Disabled</label>
+                        <input type="radio" <?php echo $promptSettings['promptLocationService'] ? 'checked' :'';?> class="" name="promptLocationOn" id="promptLocationOn" value="true" /><label for="promptLocationOn" class="inputLabel">Enabled</label>
+                        <input type="radio" <?php echo $promptSettings['promptLocationService'] ? '' :'checked';?> class="" name="promptLocationOn" id="promptLocationOff" value="false" /><label for="promptLocationOff" class="inputLabel">Disabled</label>
                     </fieldset>
                 </div>
             </div>

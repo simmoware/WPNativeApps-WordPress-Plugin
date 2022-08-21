@@ -250,6 +250,45 @@ $config = $this->wpnativeAppSettings;
 </div>
 <!-- ============================================================================================================================-->
 <!-- ============================================================================================================================-->
+<div class="flex-column hide" id="navigationBottomBarItemGeneric">
+  <div class="flex-row bottomBarItemWrapTop">
+    <div class="bottomBarItemType">
+      <select onchange="handleBottomBarLinkTypeChange(this)" required class="bottomBarItemType" name="bottomBarItemType_1">
+        <!-- <option disabled selected>Select a Link Type</option> -->
+        <option value="page">Page</option>
+        <option value="external">External</option>
+      </select>
+    </div>
+    <div class="bottomBarItemUrl flex-column">
+      <?php wp_dropdown_pages(
+                                    [
+                                      'name'=>'bottomBarItemUrlInternal_{{iconcount}}',
+                                      'id'=>'bottomBarItemUrlInternal_{{iconcount}}',
+                                      'class'=>'bottomBarItemUrlInternal',
+                                      'echo'=>'1',
+                                      'value_field'=>'guid'
+                                    ]
+                                  );?>
+      <input type="text" class="bottomBarItemUrlExternal hide" name="bottomBarItemUrlExternal_{{iconcount}}" placeholder="Enter External URL" />
+    </div>
+    <div class="bottomBarItemText">
+      <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="" placeholder="Enter Label"/>
+    </div>
+  </div>
+  <div class="flex-row flex-start bottomBarItemWrapBottom">
+    <?php
+    $args = array(
+            'inputName'=>'bottomBarItemIcon_{{iconcount}}',
+            'imageUrl'=>'',
+            'uploadText'=>'Upload Icon',
+            'changeText'=>'Change Icon'
+          );
+    echo $this->wpna_image_uploadField($args); ?>
+  </div>
+</div>
+
+<!-- ============================================================================================================================-->
+<!-- ============================================================================================================================-->
 <!-- ============================================================================================================================-->
 <!-- ===============================Generic HTML Blocks used in Settings=========================================================-->
 <!-- ============================================================================================================================-->
@@ -258,8 +297,11 @@ $config = $this->wpnativeAppSettings;
 
 <div class="flex-row">
   <div class="flexitem wpna_settings_page_left w60p ">
-    <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo get_admin_page_title(); ?></h1>
-    <?php $this->admin_notices(); ?>
+    <div class="topPageSection">
+        <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo get_admin_page_title(); ?></h1>
+        <?php $this->admin_notices(); ?>
+    </div>
+
 
 
   <div id="wpna_settings_tabs">

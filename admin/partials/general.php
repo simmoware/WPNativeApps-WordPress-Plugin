@@ -5,7 +5,7 @@ $defaultLogoURL = $image[0];
 ?>
 <div class="flex-column">
     <section class="general_appName flex-row jc-fs">
-        <div class="flex-column w50p">
+        <div class="flex-column w60p">
           <h4 class=" ">App Name</h4>
           <input
                 type="text"
@@ -17,14 +17,14 @@ $defaultLogoURL = $image[0];
         </div>
     </section>
     <section class="general_hideElements flex-row jc-sb">
-        <div class="flex-column w50p">
+        <div class="flex-column w60p">
             <h2 class=" ">
                 Hide web elements to make your website more app friendly
             </h2>
-            <div class="textcontent">
+            <p class="textcontent">
                 We'll need to remove your website's header and footers.
                 Our inspector tool below will open a popover that will allow you to select them on your website.
-            </div>
+            </p>
             <h4 class=" ">Header Selector</h4>
             <div class="flex-row jc-sb ai-fe selectorInputs">
                 <div class="flex-row">
@@ -57,9 +57,9 @@ $defaultLogoURL = $image[0];
                         required
                     />
                     <div class="choose_button_with_icon" onclick="buildFooteriFrame();">
-                        <a 
-                            href="javascript:void(0);" 
-                            class="" 
+                        <a
+                            href="javascript:void(0);"
+                            class=""
                             data-title="Select Element to Hide">
                                 Choose you footer
                         </a>
@@ -80,16 +80,16 @@ $defaultLogoURL = $image[0];
           <div class="flex-row">
             <input
                   type="text"
-                  name="otherHide_1"
+                  name="otherHide[]"
                   class="otherHideElement"
                   value=""
                   required
             />
             <div class="flex-column">
-                <div class="choose_button_with_icon" onclick="buildElementiFrame();">
-                    <a 
-                        href="javascript:void(0);" 
-                        class="" 
+                <div class="choose_button_with_icon" onclick="buildElementiFrame({{counter}});">
+                    <a
+                        href="javascript:void(0);"
+                        class=""
                         data-title="Select Element to Hide"
                     >
                         Choose Element
@@ -108,15 +108,15 @@ $defaultLogoURL = $image[0];
                     <div class="flex-row">
                         <input
                             type="text"
-                            name="otherHide_{$count}"
+                            name="otherHide[]"
                             class="otherHideElement"
                             value="{$value}"
                             required
                         />
-                        <div class="choose_button_with_icon" onclick="buildElementiFrame();">
-                            <a 
-                                href="javascript:void(0);" 
-                                class="" 
+                        <div class="choose_button_with_icon" onclick="buildElementiFrame({$count});">
+                            <a
+                                href="javascript:void(0);"
+                                class=""
                                 data-title="Select Element to Hide"
                             >
                                 Choose Element
@@ -134,8 +134,8 @@ $defaultLogoURL = $image[0];
       ?>
       <a class="addAnotherHideEl" href="javascript:void(0)" onclick="add_element_to_hide(this)">Add another element to hide</a>
     </div>
-    <div class="video-preview">
-      <video width="320" height="240" controls>
+    <div class="flex-column video-preview">
+      <video width="100%" height="auto" controls>
         <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.mp4';?>" type="video/mp4">
         <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.ogg';?>" type="video/ogg">
         <!-- <source src="movie.ogg" type="video/ogg"> -->
@@ -191,12 +191,12 @@ $defaultLogoURL = $image[0];
 <section class="flex-row jc-sb">
   <?php $splash = $config['splash'];?>
   <div class="splashScreenSection w60p">
-    <h2 class=" ">
+    <h1 class=" ">
       Splash Screen
-    </h2>
-    <div class="textcontent">
+    </h1>
+    <p class="textcontent">
     When someone opens your app there are 1-3 seconds before the app is ready to display. In this time we'll show what 's called a "splash" screen. A splash screen should be a very simple branded screen with ans image and your logo.
-    </div>
+    </p>
     <div class="deletedClass splash_screen_backgroundColor flex-column aifs">
         <h4 class=" ">Splash background colour</h4>
         <input
@@ -212,7 +212,7 @@ $defaultLogoURL = $image[0];
     </div>
     <div class="deletedClass splash_screen_backgroundImage">
       <h4 class=" ">Splash screen background image</h4>
-      <div class="textcontent">
+      <p class="textcontent">
 <?php printf('  If you choose to have a background image it will cover the whole screen. It will be center positioned. Please ensure that the background image doesn’t clash with your logo.
   Suggested Format:','wpnativeapps');?>
 
@@ -225,7 +225,7 @@ $defaultLogoURL = $image[0];
                 <?php printf('JPG with file size < 100KB', 'wpnativeapps');?>
               </li>
             </ul>
-        </div>
+        </p>
         <div class="flex-row iconPickerSectionVertical">
             <p>Choose a background image</p>
             <?php
@@ -243,14 +243,14 @@ $defaultLogoURL = $image[0];
 
     <!-- <div class="deletedClass splash_screen_backgroundLogo">
       <h4 class=" ">Splash screen logo</h4>
-      <div class="textcontent">
+      <p class="textcontent">
         Your logo will be center positioned. Please ensure that your logo is visible on your chosen background. Suggested format:
         <ul>
           <li>
             PNG with transapanrent background.
           </li>
         </ul>
-      </div>
+      </p>
 
         <label class="inputLabel">Choose a Logo </label>
         <?php
@@ -269,18 +269,18 @@ $defaultLogoURL = $image[0];
     -->
 
   </div>
-  <div class="splashScreenSection flex-column">
-    <img src="<?php echo plugin_dir_url(__DIR__).'/images/general/splash-thumbnail.png';?>" />
-    <span class="button previewSplash">Preview Splash Screen</span>
+  <div class="splashScreenSection flex-column w40p">
+    <img src="<?php echo plugin_dir_url(__DIR__).'/images/general/splash-thumbnail.png';?>" class="promptScreenPreview" />
+    <span class="button previewSplash ">Preview Splash Screen</span>
   </div>
 </section>
 
 
 <section class="topBarNavSection flex-row jc-fs ai-fs">
   <div class="flex-item general_topbar_navigation_section flex-column">
-    <h2 class=" ">
+    <h1 class=" ">
       Top Bar Navigation
-    </h2>
+    </h1>
     <div class="deletedClass flex-row jc-sb">
 
       <div class="input_section flex-column">
@@ -302,37 +302,35 @@ $defaultLogoURL = $image[0];
     </div>
     <div class="deletedClass topbar_statusbar_textColor flex-row jc-sb">
 
-      <div class="input_section flex-column jc-se width150">
-      <h4 class=" ">Status bar text colour</h4>
-      <div class="textcontent">
-        This is the bar on your phone that shows battery, the time and other options. We suggest choosing the colour that best contrasts with your top banner background colour.
-      </div>
-      <div class="flex-row jc-sb ai-fs width250">
-        <?php $statusBarTextColor = isset($config['topBarNav']['styles']['statusBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['statusBarTextColor']) : '#000'; ?>
-        <fieldset>
-          <input type="radio" class="" name="topbar_statusbar_textColour" value="#000" <?php echo $statusBarTextColor == "#000" ? "checked" :"" ;?>  required /><label class="inputLabel">Black</label>
-        </fieldset>
-        <fieldset>
-          <input type="radio" class="" name="topbar_statusbar_textColour" value="#fff" <?php echo $statusBarTextColor == "#fff" ? "checked" :"";?>   /><label class="inputLabel">White</label>
-        </fieldset>
-      </div>
-      </div>
-
-      <div class="topbarnav-previewsection flex-column jc-se">
-        <div class="previewImages" style="background-image: url('<?php echo plugin_dir_url(__DIR__);?>/images/general/status-bar-thumbnail.jpg');"></div>
-      </div>
-
+    <div class="input_section flex-column jc-se w60p">
+        <h4 class=" ">Status bar text colour</h4>
+        <p class="textcontent">
+            This is the bar on your phone that shows battery, the time and other options. We suggest choosing the colour that best contrasts with your top banner background colour.
+        </p>
+        <div class="flex-row radioInputs">
+            <?php $statusBarTextColor = isset($config['topBarNav']['styles']['statusBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['statusBarTextColor']) : '#000'; ?>
+            <fieldset>
+                <input type="radio" class="" name="topbar_statusbar_textColour" id="topbar_statusbar_textColourBlack" value="#000" <?php echo $statusBarTextColor == "#000" ? "checked" :"" ;?>  required />
+                <label for="topbar_statusbar_textColourBlack" class="inputLabel">Black</label>
+                <input type="radio" class="" name="topbar_statusbar_textColour" id="topbar_statusbar_textColourWhite" value="#fff" <?php echo $statusBarTextColor == "#fff" ? "checked" :"";?>   />
+                <label for="topbar_statusbar_textColourWhite" class="inputLabel">White</label>
+            </fieldset>
+        </div>
     </div>
+    <div class="topbarnav-previewsection flex-column jc-se w40p">
+        <div class="previewImages" style="background-image: url('<?php echo plugin_dir_url(__DIR__);?>/images/general/status-bar-thumbnail.jpg');"></div>
+    </div>
+</div>
 
-    <div class="topbar_bannerLogo flex-column ai-fs jc-sb">
+    <div class="topbar_bannerLogo flex-column ai-fs">
       <h4 class=" ">Banner Logo</h4>
-      <div class="textcontent">
+      <p class="textcontent">
         Suggested Formats:
         <ul>
           <li>Dimensions of 4:1 ratio. E.g. 400px WIDTH x 100px HEIGHT</li>
           <li>PNG with a transparent background</li>
         </ul>
-      </div>
+      </p>
       <div class="flex-row iconPickerSection reversePicker">
             <?php
                 $args = array(
@@ -349,27 +347,27 @@ $defaultLogoURL = $image[0];
 
     <div class="deletedClass topbar_statusbar_textColor flex-row jc-sb">
 
-      <div class="input_section flex-column jc-se width150">
-      <h4 class=" ">Tob bar text colour</h4>
-      <div class="textcontent">
-        What colour should text be when it’s in the top navigation bar? We suggest choosing the colour that best contrasts with your top banner background colour.
-      </div>
-      <div class="flex-row jc-sb ai-fs width250">
-        <?php
-        $topBarTextColor = isset($config['topBarNav']['styles']['topBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['topBarTextColor']) : "#fff";?>
-        <fieldset>
-          <input type="radio" class="" name="topbar_textColour" value="#000" <?php echo $topBarTextColor == "#000" ? "checked" :"" ;?> required /><label class="inputLabel">Black</label>
-        </fieldset>
-        <fieldset>
-          <input type="radio" class="" name="topbar_textColour" value="#fff" <?php echo $topBarTextColor == "#fff" ? "checked" :"" ;?>  /><label class="inputLabel">White</label>
-        </fieldset>
-      </div>
+    <div class="input_section flex-column jc-se w60p">
+        <h4 class=" ">Tob bar text colour</h4>
+        <p class="textcontent">
+            What colour should text be when it’s in the top navigation bar? We suggest choosing the colour that best contrasts with your top banner background colour.
+        </p>
+        <div class="flex-row radioInputs">
+            <?php
+                $topBarTextColor = isset($config['topBarNav']['styles']['topBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['topBarTextColor']) : "#fff";
+            ?>
+            <fieldset>
+                <input type="radio" class="" name="topbar_textColour" id="topbar_textColourBlack" value="#000" <?php echo $topBarTextColor == "#000" ? "checked" :"" ;?> required />
+                <label for="topbar_textColourBlack" class="inputLabel">Black</label>
+                <input type="radio" class="" name="topbar_textColour" id="topbar_textColourWhite" value="#fff" <?php echo $topBarTextColor == "#fff" ? "checked" :"" ;?>  />
+                <label for="topbar_textColourWhite" class="inputLabel">White</label>
+            </fieldset>
+        </div>
       </div>
 
-      <div class="topbarnav-previewsection flex-column jc-se">
+      <div class="topbarnav-previewsection flex-column jc-se w40p">
         <div class="previewImages" style="background-image: url('<?php echo plugin_dir_url(__DIR__);?>/images/general/top-bar-thumbnail.jpg');"></div>
       </div>
-
     </div>
 
 
@@ -405,15 +403,15 @@ $defaultLogoURL = $image[0];
   </section>
 
 
-  <section class="flex-row jc-sb">
+  <section class="bottomBarNavSection flex-row jc-sb">
     <?php
     $bottombarNavStyle = $config['bottomBarNav']['styles'];
     ?>
 
     <div class="flex-column general_bottomBar_section">
-      <h2 class=" ">
+      <h1 class=" ">
         Bottom Bar Navigation
-      </h2>
+      </h1>
       <div class="flex-column bottomBar_backgroundColorSection">
 
         <!-- <div class="input_section"> -->
@@ -463,4 +461,3 @@ $defaultLogoURL = $image[0];
 
 
   </div>
- 

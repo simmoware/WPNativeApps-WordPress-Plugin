@@ -1,44 +1,3 @@
-
-<div class="flex-column hide" id="navigationBottomBarItemGeneric">
-  <div class="flex-row bottomBarItemWrapTop">
-    <div class="bottomBarItemType">
-      <select onchange="handleBottomBarLinkTypeChange(this)" required class="bottomBarItemType" name="bottomBarItemType_1">
-        <!-- <option disabled selected>Select a Link Type</option> -->
-        <option value="page">Page</option>
-        <option value="external">External</option>
-      </select>
-    </div>
-    <div class="bottomBarItemUrl flex-column">
-      <?php wp_dropdown_pages(
-                                    [
-                                      'name'=>'bottomBarItemUrlInternal_{{iconcount}}',
-                                      'id'=>'bottomBarItemUrlInternal_{{iconcount}}',
-                                      'class'=>'bottomBarItemUrlInternal',
-                                      'echo'=>'1',
-                                      'value_field'=>'guid'
-                                    ]
-                                  );?>
-      <input type="text" class="bottomBarItemUrlExternal hide" name="bottomBarItemUrlExternal_{{iconcount}}" placeholder="Enter External URL" />
-    </div>
-    <div class="bottomBarItemText">
-      <input type="text" class="bottomBarItemText" name="bottomBarItemText_{{iconcount}}" value="" placeholder="Enter Label"/>
-    </div>
-  </div>
-  <div class="flex-row flex-start bottomBarItemWrapBottom">
-    <?php
-    $args = array(
-            'inputName'=>'bottomBarItemIcon_{{iconcount}}',
-            'imageUrl'=>$image[0],
-            'uploadText'=>'Upload Icon',
-            'changeText'=>'Change Icon'
-          );
-    echo $this->wpna_image_uploadField($args); ?>
-  </div>
-</div>
-
-
-
-
 <?php
 $bottomBarNavs =  $config['bottomBarNav']['pages'];
 ?>
@@ -60,10 +19,17 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
         foreach($bottomBarNavs as $bottomNav){
           $isExternal = $bottomNav['isExternal'];
           $url = $bottomNav['url'];
-          $icon = $bottomNav['icon'];
+          $icon = isset($bottomNav['icon']) ? $bottomNav['icon'] : '';
           $name = $bottomNav['name'];
           $selectedPage = ($isExternal) ? 0 : $this->getIDfromGUID($url);
-          $pageDDHTML = $this->wpna_image_uploadField("bottomBarItemIcon_".$count);
+          $args = array(
+            'inputName'=>'bottomBarNavLogo_'.$count,
+            'imageUrl'=>$icon,
+            'uploadText'=>'Upload Background Image',
+            'changeText'=>'Change Background Image'
+          );
+
+          $pageDDHTML = $this->wpna_image_uploadField($args);
           ?>
 
             <div class="flex-column navigationBottomBarItem">
@@ -88,7 +54,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                   <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
                 </div>
                 <div class="bottomBarItemText">
-                  <input type="text" class="bottomBarItemText" name="bottomBarItemText_<?php echo $count;?>" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                  <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label"/>
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">
@@ -135,7 +101,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                   <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL"  />
                 </div>
                 <div class="bottomBarItemText">
-                  <input type="text" class="bottomBarItemText" name="bottomBarItemText_<?php echo $count;?>" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                  <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label"/>
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">

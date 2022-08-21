@@ -1,0 +1,28 @@
+.introduction-parent {
+    margin:0 auto;
+    width:550px;
+    display:block;
+    max-width:100%;
+}
+
+.introduction-video {
+    margin:20px 0px;
+    width:100%;
+    height:auto;
+}
+
+.get-started {
+    padding:15px 25px;
+    background-color:#2271b1;
+    width:200px;
+    color:#fff;
+    text-decoration:none;
+    margin:0 auto;
+    display:block;
+    text-align:center;
+    margin-bottom:20px;
+}
+
+.get-started:hover {
+    color:#fff;
+}
