@@ -1,13 +1,8 @@
 <div class='introduction-parent'>
     <h1>Welcome to WPNativeApps</h1>
     <p>Thanks for downloading our plugin!</p>
-    <p>WPNativeApps works like magic to convert your website into a native app that users can download on th App Store and Google Play Store.</p>
-    
-    <video class='introduction-video' width="550" height="340" controls>
-      <source src="movie.mp4" type="video/mp4">
-      <source src="movie.ogg" type="video/ogg">
-    Your browser does not support the video tag.
-    </video>
+    <p>WPNativeApps works like magic to convert your website into a native app that users can download on the App Store and Google Play Store.</p>
+    <iframe class='introduction-video' width="550" height="340" src="https://www.youtube.com/embed/zmZ9nPn6Ddo" title="The Best Free Wordpress Plugin for 2022 (seriously)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
     <h2>How it works</h2>
     <h3>Configure your app settings</h3>
     <p>Use our plugin configurations to customise your app. Build your app navigation and hide web elements to make your app look & feel like a native application.</p>
@@ -15,11 +10,6 @@
     <p>WPNative Apps takes care of the App Store listing and any tweaks required.</p>
     <h3>App Live To Download</h3>
     <p>Your fans can grab your App from the App Store in less than 1 week!</p>
-    <video class='introduction-video' width="550" height="340" controls>
-      <source src="movie.mp4" type="video/mp4">
-      <source src="movie.ogg" type="video/ogg">
-    Your browser does not support the video tag.
-    </video>
     <a class='get-started' href='/wp-admin/admin.php?page=wpnativeapps-settings'>Get Started</a>
     <h2>Frequently Asked Questions</h2>
     <h3>How does the app get listed on the app store?</h3>
@@ -34,5 +24,6 @@
     <h3>Can I have a custom menu structure for the app?</h3>
     <p>Yes you can! Custom navigation is a key feature of an app.</p>
     <p>Your custom menu does need to point to an existing page on your website though.</p>
+    <a class='get-started' href='/wp-admin/admin.php?page=wpnativeapps-settings'>Get Started</a>
 </div>
 

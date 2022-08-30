@@ -158,7 +158,11 @@ class Wp_Native_Apps {
 		$this->loader->add_action( 'admin_menu', $plugin_admin, 'add_admin_menu_pages');
 		$this->loader->add_action( 'admin_notices', $plugin_admin, 'admin_notices');
 
-
+		// Add Custom Post Types ( Push Notifications and Push Notification Group)
+		$this->loader->add_action( 'init', $plugin_admin, 'add_pushnotification_postType');
+		$this->loader->add_action( 'init', $plugin_admin, 'add_pushnotification_group_postType');
+		$this->loader->add_action( 'admin_post_add_notification_group', $plugin_admin, 'handle_add_notification_group');
+		$this->loader->add_action( 'admin_post_send_push_notification', $plugin_admin, 'handle_send_push_notification');
 
 
 		$this->loader->add_action( 'admin_enqueue_scripts', $plugin_admin, 'enqueue_styles' );

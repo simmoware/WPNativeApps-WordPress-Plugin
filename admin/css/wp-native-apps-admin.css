@@ -4,6 +4,12 @@ div#wpna_settings_tabs {
 .wp-menu-image img{
   height: 20px;
 }
+
+#app_preview iframe {
+    width: 350px;
+    margin: 0 auto;
+    display: block;
+}
 #wpnaSettingsForm .wp-picker-container .hidden {
     /* display: inline-block; */
 }
@@ -48,7 +54,6 @@ div#wpna_settings_tabs {
   position: sticky;
   top: 0;
   align-self: flex-start;
-  background-color: red;
 }
 
 .wp-color-result-text{
@@ -538,12 +543,16 @@ img.wpnaNoticeIcon{
 .topbarnav-previewsection {
   /* min-height: 300px; */
 }
+.wpna_settings_page_right h2{
+    text-align: center;
+    margin-bottom: 10px;
+}
 .topbarnav-previewsection .previewImages{
   background-size: contain;
   background-repeat: no-repeat;
   background-position: 50% 50%;
   height: 100px;
-  width: 300px;
+  width: 85%;
 }
 .width250{
   width: 250px;
@@ -597,4 +606,60 @@ img.wpnaNoticeIcon{
 
 .hide{
   display: none;
+}
+
+
+#wpna_settings_tabs .ui-tabs-nav{
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding-left: 50px;
+    padding-right: 0;
+    border-bottom: 1.5px solid #979797 /*D5D5D5*/;
+    border-radius: 0;
+    line-height: inherit;
+}
+
+#wpna_settings_tabs ul li a{
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.53px;
+    text-align: center;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button{
+    background: #DCDCDE;
+    border: 1px solid #979797;
+}
+
+
+#wpna_settings_tabs .ui-state-default a{
+    color: rgba(0,0,0,0.5);
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active, .ui-button:active,
+.ui-button.ui-state-active:hover{
+    background: #F1F0F0;
+    color: black;
+}
+
+
+#wpna_settings_tabs .ui-state-active  a{
+    color: black;
+}
+
+
+#wpna_settings_tabs a.ui-tabs-anchor:focus{
+    box-shadow: none;
+}
+
+#wpna_settings_tabs.ui-tabs .ui-tabs-nav li{
+    border-radius: 0;
+    margin-right: 10px;
 }

@@ -12,7 +12,7 @@ $defaultLogoURL = $image[0];
                 name="wpna_app_name"
                 value="<?php echo isset($config['name']) ? sanitize_text_field($config['name']) :''; ?>"
                 id="wpna_app_name"
-                required
+                _not_required
                 />
         </div>
     </section>
@@ -33,7 +33,7 @@ $defaultLogoURL = $image[0];
                         name="headerToHide"
                         value="<?php echo isset($config['headerToHide']) ? sanitize_text_field($config['headerToHide']) :''; ?>"
                         id="headerToHide"
-                        required
+                        _not_required
                     />
                     <div class="choose_button_with_icon" onclick="buildHeaderiFrame();">
                         <a
@@ -54,7 +54,7 @@ $defaultLogoURL = $image[0];
                         name="footerToHide"
                         id="footerToHide"
                         value="<?php echo isset($config['footerToHide']) ? sanitize_text_field($config['footerToHide']) :''; ?>"
-                        required
+                        _not_required
                     />
                     <div class="choose_button_with_icon" onclick="buildFooteriFrame();">
                         <a
@@ -75,18 +75,18 @@ $defaultLogoURL = $image[0];
       $otherToHideHtml = '';
 
       $otherToHideHtmlDefault = <<<EOT
+      <div class="hideOtherItemWrap">
         <h4>Is there anything else you want to hide?</h4>
         <div class="flex-row jc-sb ai-fe selectorInputs">
-          <div class="flex-row">
-            <input
-                  type="text"
-                  name="otherHide[]"
-                  class="otherHideElement"
-                  value=""
-                  required
-            />
-            <div class="flex-column">
-                <div class="choose_button_with_icon" onclick="buildElementiFrame({{counter}});">
+            <div class="flex-row">
+                <input
+                    type="text"
+                    name="otherHide[]"
+                    class="otherHideElement"
+                    value=""
+                    _not_required
+                />
+                <div class="choose_button_with_icon" onclick="buildElementiFrame(1);">
                     <a
                         href="javascript:void(0);"
                         class=""
@@ -98,32 +98,43 @@ $defaultLogoURL = $image[0];
                 </div>
             </div>
         </div>
+      </div>
       EOT;
         if(!empty($otherHide)){
             foreach ($otherHide as $key => $value) {
                 $count = intval($key+1);
+                if($count > 1 && $count == count($otherHide)){
+                $removeIcon = '<a id="removeHideItem" class="button trash" href="javascript:void(0);" onclick="removeHideItem(this)"> Remove </a>';
+              }else{
+                $removeIcon = '';
+              }
                 $otherToHideHtml .= <<<EOT
-                <h4>Is there anything else you want to hide?</h4>
-                <div class="flex-row jc-sb ai-fe selectorInputs">
-                    <div class="flex-row">
-                        <input
-                            type="text"
-                            name="otherHide[]"
-                            class="otherHideElement"
-                            value="{$value}"
-                            required
-                        />
-                        <div class="choose_button_with_icon" onclick="buildElementiFrame({$count});">
-                            <a
-                                href="javascript:void(0);"
-                                class=""
-                                data-title="Select Element to Hide"
-                            >
-                                Choose Element
-                            </a>
-                            <span class="arrow_north"></span>
-                        </div>
-                    </div>
+                <div class="hideOtherItemWrap">
+                  <h4>Is there anything else you want to hide?</h4>
+                  <div class="flex-row jc-sb ai-fe selectorInputs">
+                      <div class="flex-row">
+                          <input
+                              type="text"
+                              name="otherHide[]"
+                              class="otherHideElement"
+                              value="{$value}"
+                              _not_required
+                          />
+                          <div class="choose_button_with_icon" onclick="buildElementiFrame({$count});">
+                              <a
+                                  href="javascript:void(0);"
+                                  class=""
+                                  data-title="Select Element to Hide"
+                              >
+                                  Choose Element
+                              </a>
+                              <span class="arrow_north"></span>
+                          </div>
+                          <div class="removeIcon">
+                            {$removeIcon}
+                          </div>
+                      </div>
+                  </div>
                 </div>
                 EOT;
             }
@@ -135,12 +146,19 @@ $defaultLogoURL = $image[0];
       <a class="addAnotherHideEl" href="javascript:void(0)" onclick="add_element_to_hide(this)">Add another element to hide</a>
     </div>
     <div class="flex-column video-preview">
-      <video width="100%" height="auto" controls>
+      <iframe
+            width="400"
+            height="250" src="https://www.youtube.com/embed/Vnyfn-eYXD0?list=PLCGvTqoGUptQ204kZSvuGjkHDY1b33d16"
+            title="How to build an iPhone and Android app in 5 mins | Tutorial: General Settings"
+            frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen>
+          </iframe>
+     <!-- <video width="100%" height="auto" controls>
         <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.mp4';?>" type="video/mp4">
         <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.ogg';?>" type="video/ogg">
-        <!-- <source src="movie.ogg" type="video/ogg"> -->
-        Your browser does not support the video tag.
-      </video>
+        <source src="movie.ogg" type="video/ogg">
+      </video> -->
     </div>
   </section>
 
@@ -151,7 +169,7 @@ $defaultLogoURL = $image[0];
 
       <div class="general_hide_header_col1">
         <label class="inputLabel">Header Selector</label>
-        <input type="text" name="wpna_hide_header" id="wpna_hide_header" required />
+        <input type="text" name="wpna_hide_header" id="wpna_hide_header" _not_required />
       </div>
       <div class="general_hide_selector_col2">
         <div class="choose_button_with_icon" onclick="buildHeaderiFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Header</a><span class="arrow_north"></span></div>
@@ -165,7 +183,7 @@ $defaultLogoURL = $image[0];
 
       <div class="general_hide_header_col1">
         <label class="inputLabel">Footer Selector</label>
-        <input type="text" name="wpna_hide_footer" id="wpna_hide_footer" required />
+        <input type="text" name="wpna_hide_footer" id="wpna_hide_footer" _not_required />
       </div>
       <div class="general_hide_selector_col2">
         <div class="choose_button_with_icon" onclick="buildFooteriFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Footer</a><span class="arrow_north"></span></div>
@@ -207,7 +225,7 @@ $defaultLogoURL = $image[0];
             name="splash_backgroundColor"
             id="splash_backgroundColor"
             value="<?php echo isset($config['splash']['backgroundColor']) ? sanitize_text_field($config['splash']['backgroundColor']) :''; ?>"
-            required
+            _not_required
             />
     </div>
     <div class="deletedClass splash_screen_backgroundImage">
@@ -293,7 +311,7 @@ $defaultLogoURL = $image[0];
               name="topBarNav_backgroundColor"
               id="topbar_navigation_backgroundColor"
               value="<?php echo isset($config['topBarNav']['styles']['backgroundColor']) ? sanitize_text_field($config['topBarNav']['styles']['backgroundColor']) : '';?>"
-              required
+              _not_required
             />
       </div>
 
@@ -310,7 +328,7 @@ $defaultLogoURL = $image[0];
         <div class="flex-row radioInputs">
             <?php $statusBarTextColor = isset($config['topBarNav']['styles']['statusBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['statusBarTextColor']) : '#000'; ?>
             <fieldset>
-                <input type="radio" class="" name="topbar_statusbar_textColour" id="topbar_statusbar_textColourBlack" value="#000" <?php echo $statusBarTextColor == "#000" ? "checked" :"" ;?>  required />
+                <input type="radio" class="" name="topbar_statusbar_textColour" id="topbar_statusbar_textColourBlack" value="#000" <?php echo $statusBarTextColor == "#000" ? "checked" :"" ;?>  _not_required />
                 <label for="topbar_statusbar_textColourBlack" class="inputLabel">Black</label>
                 <input type="radio" class="" name="topbar_statusbar_textColour" id="topbar_statusbar_textColourWhite" value="#fff" <?php echo $statusBarTextColor == "#fff" ? "checked" :"";?>   />
                 <label for="topbar_statusbar_textColourWhite" class="inputLabel">White</label>
@@ -357,7 +375,7 @@ $defaultLogoURL = $image[0];
                 $topBarTextColor = isset($config['topBarNav']['styles']['topBarTextColor']) ? sanitize_text_field($config['topBarNav']['styles']['topBarTextColor']) : "#fff";
             ?>
             <fieldset>
-                <input type="radio" class="" name="topbar_textColour" id="topbar_textColourBlack" value="#000" <?php echo $topBarTextColor == "#000" ? "checked" :"" ;?> required />
+                <input type="radio" class="" name="topbar_textColour" id="topbar_textColourBlack" value="#000" <?php echo $topBarTextColor == "#000" ? "checked" :"" ;?> _not_required />
                 <label for="topbar_textColourBlack" class="inputLabel">Black</label>
                 <input type="radio" class="" name="topbar_textColour" id="topbar_textColourWhite" value="#fff" <?php echo $topBarTextColor == "#fff" ? "checked" :"" ;?>  />
                 <label for="topbar_textColourWhite" class="inputLabel">White</label>
@@ -385,7 +403,7 @@ $defaultLogoURL = $image[0];
         class="color-picker" name="topbar_iconColor"
         id="topbar_iconColor"
         value="<?php echo isset($config['topBarNav']['styles']['topBarIconColor'])  ? sanitize_text_field($config['topBarNav']['styles']['topBarIconColor'])  : ''?>";
-        required />
+        _not_required />
       <!-- </div> -->
     </div>
   </div>
@@ -424,7 +442,7 @@ $defaultLogoURL = $image[0];
               name="bottombarNavStyle_backgroundColor"
               id="bottombarNavStyle_backgroundColor"
               value="<?php echo isset($bottombarNavStyle['backgroundColor']) ? sanitize_text_field($bottombarNavStyle['backgroundColor']) : '';?>"
-              required
+              _not_required
                />
         <!-- </div> -->
 
@@ -437,7 +455,7 @@ $defaultLogoURL = $image[0];
               name="bottombarNavStyle_defaultIconColor"
               id="bottombarNavStyle_defaultIconColor"
               value="<?php echo isset($bottombarNavStyle['defaultIconColor']) ? sanitize_text_field($bottombarNavStyle['defaultIconColor']) : '';?>"
-              required
+              _not_required
                />
 
 
@@ -450,7 +468,7 @@ $defaultLogoURL = $image[0];
               name="bottombarNavStyle_activeIconColor"
               id="bottombarNavStyle_activeIconColor"
               value="<?php echo isset($bottombarNavStyle['activeIconColor']) ? sanitize_text_field($bottombarNavStyle['activeIconColor']) : '';?>"
-              required
+              _not_required
                />
 
 

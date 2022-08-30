@@ -46,7 +46,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptPushNoti_backgroundColor"
                         id="promptPushNoti_backgroundColor"
                         value="<?php echo $pushNotification['styles']['backgroundColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt text colour</h4>
@@ -59,7 +59,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptPushNoti_textColor"
                         id="promptPushNoti_textColor"
                         value="<?php echo $pushNotification['styles']['textColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt icon </h4>
@@ -85,7 +85,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptPushNoti_titleText"
                         value="<?php echo $pushNotification['styles']['title'];?>"
                         placeholder="Enable Push Notifications"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt description text </h4>
@@ -106,7 +106,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptPushNoti_acceptButtonText"
                         value="<?php echo $pushNotification['styles']['acceptButtonText'];?>"
                         placeholder="Enable"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt accept button colour </h4>
@@ -119,7 +119,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptPushNoti_acceptButtonColor"
                         id="promptPushNoti_acceptButtonColor"
                         value="<?php echo $pushNotification['styles']['acceptButtonColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
             </div>
@@ -146,7 +146,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptTracking_backgroundColor"
                         id="promptTracking_backgroundColor"
                         value="<?php echo $trackingService['styles']['backgroundColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt text colour</h4>
@@ -159,7 +159,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptTracking_textColor"
                         id="promptTracking_textColor"
                         value="<?php echo $trackingService['styles']['textColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt icon </h4>
@@ -185,7 +185,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptTracking_titleText"
                         value="<?php echo $trackingService['styles']['title'];?>"
                         placeholder="Enable Push Notifications"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt description text </h4>
@@ -206,7 +206,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptTracking_acceptButtonText"
                         value="<?php echo $trackingService['styles']['acceptButtonText'];?>"
                         placeholder="Enable"
-                        required
+                        _not_required
                     />
                 </div>
                 <h4>Prompt accept button colour </h4>
@@ -219,7 +219,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         name="promptTracking_acceptButtonColor"
                         id="promptTracking_acceptButtonColor"
                         value="<?php echo $trackingService['styles']['acceptButtonColor'];?>"
-                        required
+                        _not_required
                     />
                 </div>
                 <h3 class="promptHeadingWithin">Prompt for allowing location services</h3>

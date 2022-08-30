@@ -34,7 +34,7 @@ $authenticationPage= isset($authentication['authenticationPage']) ? sanitize_tex
                 'class'=>'',
                 'echo'=>'1',
                 'value_field'=>'guid',
-                'selected'=> $this->getIDfromGUID($authenticationPage)
+                'selected'=> $this->getIDfromURL($authenticationPage)
               ]
             );?>
         </div>

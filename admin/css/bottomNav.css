@@ -4,6 +4,8 @@
     border:1px solid #E4E4E4;
     margin-bottom:20px;
     border-radius:12px;
+    flex-direction: column-reverse;
+    position: relative;
 }
 
 .bottomBarItemWrapTop {
@@ -24,10 +26,6 @@
     width:100%;
 }
 
-.wpna_settings_page_right {
-    display:none;
-}
-
 .wpnaImageUploadPreview {
     border: 1px solid #e1e1e1;
     border-radius: 4px;
@@ -36,5 +34,9 @@
 }
 
 #removeBottomBarNavigationIcon {
-    width:240px;
+    text-align: center;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 80px;
 }

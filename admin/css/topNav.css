@@ -4,9 +4,13 @@
 
 .topNavLogoAndText .wpnaImageUploadPreview, .topNavLogoAndText .wpna-remove, .topNavLogoAndText .wpna-upload  {
     display:inline-block;
-    
-}
 
+}
+img.topNavPageIcon {
+    width: 20px;
+    vertical-align: middle;
+    margin: 5px;
+}
 .topNavInput {
     width:100%;
 }

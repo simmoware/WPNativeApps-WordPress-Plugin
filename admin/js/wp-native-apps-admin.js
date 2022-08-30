@@ -15,38 +15,78 @@ var topNavTabs = null;
 				$('div.tab-content', context).addClass('hide');
 				$( 'div'+$(this).attr('targetTab'), context ).removeClass('hide');
 			});
+
+      $("#wpPayNow").on("click press", function(){
+        $.ajax({
+            url: "http://localhost:8080/v1/subscription/checkout/setup-payment?returnUrl="+$(this).attr("data-returnurl"),
+            headers: {
+                'WPNativeAppsId': $(this).attr("data-wpnativeappsid"),
+                'WPNativeAppsSecret': $(this).attr("data-wpnativeappssecret"),
+                'WPNativeAppsRequestKey': 'sO4nl&W5sVTpBOQ#Wo07bJGMdJTZ&isi$HTe#j3x'
+            },
+            success: function(result){
+            if(result.success){
+                    window.location.href = result.checkout.url;
+            }
+            console.log("Result from AJAX: ", result)
+            }
+        });
+      })
 		});
+
 
 		$(window).resize(function () {
 		   setiPhoneFrame();
 		});
 
+	$(document).on('change','#accountAddressCountry',function(){
+		var country = $(this).val();
+		console.log(country);
+		console.log('Render State here...');
+	});
+
 })( jQuery );
 $=jQuery;
+
 function add_element_to_hide(el){
 	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
 	var __count = parseInt(elementCount) + 1;
+	$('a#removeHideItem').remove();
 	var hideElementHtml = `
-	<h4>Is there anything else you want to hide?</h4>
-	<div class="flex-row jc-sb ai-fe selectorInputs">
-		<div class="flex-row">
-			<input
-						type="text"
-						name="otherHide[]"
-						class="otherHideElement"
-						value=""
-						required
-			/>
-			<div class="flex-column">
-				<div class="choose_button_with_icon" onclick="buildElementiFrame(${__count});"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
+	<div class="hideOtherItemWrap">
+		<h4>Is there anything else you want to hide?</h4>
+		<div class="flex-row jc-sb ai-fe selectorInputs">
+			<div class="flex-row">
+				<input
+							type="text"
+							name="otherHide[]"
+							class="otherHideElement"
+							value=""
+							required
+				/>
+				<div class="flex-column">
+					<div class="choose_button_with_icon" onclick="buildElementiFrame(${__count});"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
+				</div>
+				<div class="removeIcon"> <a id="removeHideItem" class="button trash" href="javascript:void(0);" onclick="removeHideItem(this)"> Remove </a> </div>
 			</div>
 		</div>
-
 	</div>
 	`
 	$(el).before(hideElementHtml);
 
 }
+function removeHideItem(el){
+	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
+	$(el).parents('.hideOtherItemWrap').remove();
+	var count = parseInt(elementCount) - 1;
+	console.log(count);
+	if(count > 1){
+		// $('.hideOtherItemWrap:last').append('Hello world');
+		$('.hideOtherItemWrap:last').find('.removeIcon').html('<a id="removeHideItem" class="button trash" href="javascript:void(0);" onclick="removeHideItem(this)"> Remove </a>');
+
+	}
+}
+
 function getTemplate(template, params, callback) {
     var $ = jQuery;
     $.ajax({
@@ -634,6 +674,32 @@ function handleBottomBarLinkTypeChange(el){
 			}
 		}
 }
+function handleHamburgerMenuLinkTypeChange(el){
+		$=jQuery;
+		var type = $(el).val();
+		const section = $(el).parents('.topNavPageIconItem');
+		switch (type){
+			case 'page':
+			{
+				section.find('select.topNavItemUrlInternal').removeClass('hide');
+				section.find('input.topNavItemUrlExternal').addClass('hide');
+				break;
+			}
+
+			case 'external':
+			{
+					section.find('select.topNavItemUrlInternal').addClass('hide');
+					section.find('input.topNavItemUrlExternal').removeClass('hide');
+					break;
+			}
+			case 'share':
+			{
+				section.find('select.topNavItemUrlInternal').addClass('hide');
+				section.find('input.topNavItemUrlExternal').addClass('hide');
+				break;
+			}
+		}
+}
 
 
 
@@ -644,12 +710,28 @@ function handleBottomBarLinkTypeChange(el){
 		section.find('input.bottomBarItemText').val(pageName);
 
 		// Update the Tab name in Top Nav Tab as well when Page Name Changes Here
-		var name = section.find('input.bottomBarItemText').attr('name');
+		var name = $(this).attr('name');
+		console.log(name);
 		var count = parseInt(name.replace(/[^0-9.]/g, ""));
-		$('ul#topNavTabsControl li:nth-child('+count+') a').text(pageName);
+		console.log(count);
+		var iconUrl = $(this).parents('.navigationBottomBarItem').find('input.wpna_img_url').val();
+		console.log(iconUrl);
+		$('ul#topNavTabsControl li:nth-child('+count+') a').html('<img src="'+iconUrl+'" class="topNavPageIcon">'+pageName);
+		updateTopNavNameIcon(count,iconUrl,pageName)
 	});
 
-
+function updateTopNavTabName(el){
+	var pageName = $(el).val();
+	var iconUrl = $(el).parents('.navigationBottomBarItem').find('input.wpna_img_url').val();
+	var count = parseInt($(el).attr('data-itemcount'));
+	console.log(count)
+	console.log(iconUrl)
+	console.log(navTitle)
+	updateTopNavNameIcon(count,iconUrl,pageName)
+}
+function updateTopNavNameIcon(count=1,iconUrl='',pageName='Home'){
+	$('ul#topNavTabsControl li:nth-child('+count+') a').html('<img src="'+iconUrl+'" class="topNavPageIcon">'+pageName);
+}
 //===== Script to add new navigationIcon item in Navigation Tab STARTS===============//
 /*
 jQuery(document).ready(function($){
@@ -707,6 +789,7 @@ function addBottomBarNavigationIcon(el){
 
 			$(section).append('<div class="flex-column navigationBottomBarItem">'+newIconHtml + removeIcon+'</div>');
 
+
 			addTopNavTabsItem(count);
 
 			if(count == 4){
@@ -717,6 +800,11 @@ function addBottomBarNavigationIcon(el){
 		}else{
 			showMaxItemAddedMessage();
 		}
+
+		// Re-initialize the color picker for added pickers
+		var pickerCount = parseInt(count+1);
+		$('.color-picker'+pickerCount).wpColorPicker();
+
 }
 function removeBottomBarNavigationIcon(el){
 
@@ -749,7 +837,7 @@ function addTopNavTabsItem(count){
 	var topNavTabs = $('#topNavTabs').tabs();
 	console.log(topNavTabs);
 
-	var label = $('input[name="bottomBarItemText_'+count+'"]').val() || 'Page';
+	var label = $('input.bottomBarItemText.item_'+count).val() || 'Page';
 	var icon = $('input[name="bottomBarItemIcon_'+count+'_image_url"]').val();
 
 	var tabTemplate = '<li><a href="#{{topNavTabId}}"><span class="topNavPageIcon"></span>{{topNavTabLabel}}</li></a>';
@@ -759,16 +847,16 @@ function addTopNavTabsItem(count){
 		// var label = tabTitle.val() || "Tab " + tabCounter,
 		id = "topNavPage_"+count;
 		li = $( tabTemplate.replaceAll('{{topNavTabId}}',id).replaceAll('{{topNavTabLabel}}',label));
-		tabContentHtml = tabContent.replaceAll('{{bottomBarPageCount}}', count);
+		tabContentHtml = tabContent.replaceAll('{{bottomBarpagecount}}', count);
 
 
 	topNavTabs.find( ".ui-tabs-nav" ).append( li );
 
 
 
-	// topNavTabs.append('<div id="topNavPage_'+count+'" data-pageCount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">');
+	// topNavTabs.append('<div id="topNavPage_'+count+'" data-pagecount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">');
 	// topNavTabs.find('div#'+id).removeAll();
-	topNavTabs.append( '<div id="topNavPage_'+count+'" data-pageCount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">'+tabContentHtml+'</div>' );
+	topNavTabs.append( '<div id="topNavPage_'+count+'" data-pagecount="'+count+'" class="topNavPageSettings flex-column ui-tabs-panel ui-corner-bottom ui-widget-content">'+tabContentHtml+'</div>' );
 	// topNavTabs.append( "<div id='" + id + "' class='flex-column '>" + tabContentHtml + "</div>" );
 	topNavTabs.tabs( "refresh" );
 	this.topNavTabs = topNavTabs;
@@ -784,6 +872,7 @@ function removeTopNavTabsItem(count){
 	this.topNavTabs = topNavTabs;
 }
 
+/*
 $(document).on('change','.navigation_bottomBar_section input.bottomBarItemText',function(){
 	var name = $(this).attr('name');
 
@@ -791,6 +880,7 @@ $(document).on('change','.navigation_bottomBar_section input.bottomBarItemText',
 	$('ul#topNavTabsControl li:nth-child('+count+') a').text($(this).val());
 
 });
+*/
 
 
 //===== Script to add/remvoe navigationIcon item in Navigation for Bottom BarTab ENDS=============//
@@ -964,7 +1054,7 @@ function handleTopNavLinkTypeChange(el){
 function addTopNavNavigationIcon(el){
 
 			var section = $(el).parents('section.navStructureRow');
-			var pageCount = $(el).parents('.topNavPageSettings').attr('data-pageCount');
+			var pagecount = $(el).parents('.topNavPageSettings').attr('data-pagecount');
 			var structureCount = $(el).parents('.navStructureRow').attr('data-structure');
 			var navItemsCount = parseInt($(section).find('.topNavPageIconItem').length);
 
@@ -976,7 +1066,7 @@ function addTopNavNavigationIcon(el){
 			// var count = parseInt(iconCount +1);
 			if (navItemsCount <= 2 ){
 				var newIconHtml = $('#topNavNaviagionIconGeneric').html();
-				newIconHtml = newIconHtml.replaceAll('{{iconCount}}',navItemsCount+1).replaceAll('{{pageCount}}',pageCount).replaceAll('{{structureCount}}',structureCount);
+				newIconHtml = newIconHtml.replaceAll('{{iconCount}}',navItemsCount+1).replaceAll('{{topNavTabCount}}',pagecount).replaceAll('{{structureCount}}',structureCount);
 				if(navItemsCount >=1){
 					var removeIcon = '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForPage(this);">Remove</span>';
 				}else{

@@ -110,10 +110,14 @@ class Wp_Native_Apps_Admin {
 
 		wp_enqueue_style( $this->plugin_name.'_introduction_css', plugin_dir_url( __FILE__ ) . 'css/introduction.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_general_css', plugin_dir_url( __FILE__ ) . 'css/general.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_publish_css', plugin_dir_url( __FILE__ ) . 'css/publish.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_account_css', plugin_dir_url( __FILE__ ) . 'css/account.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_bottomNav_css', plugin_dir_url( __FILE__ ) . 'css/bottomNav.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_topNav_css', plugin_dir_url( __FILE__ ) . 'css/topNav.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_prompts_css', plugin_dir_url( __FILE__ ) . 'css/prompts.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_pushnotifications_css', plugin_dir_url( __FILE__ ) . 'css/pushNotifications.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_authentication_css', plugin_dir_url( __FILE__ ) . 'css/authentication.css', array(), date("YmdHis")/*$this->version*/, 'all' );
+		wp_enqueue_style( $this->plugin_name.'_analytics_css', plugin_dir_url( __FILE__ ) . 'css/analytics.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 		wp_enqueue_style( $this->plugin_name.'_iframe_css', plugin_dir_url( __FILE__ ) . 'css/iframe.css', array(), date("YmdHis")/*$this->version*/, 'all' );
 
 	}
@@ -153,6 +157,10 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.js', array( 'wp-color-picker' ), date("YmdHis"), false );
 		// wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array( 'jquery', 'wp-color-picker' ), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array('jquery', 'jquery-ui-core' , 'jquery-ui-tabs'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name."_topNav", plugin_dir_url( __FILE__ ) . 'js/topnav.js', array('jquery'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name."_analytics", plugin_dir_url( __FILE__ ) . 'js/analytics.js', array('jquery'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name."_pushNotifications", plugin_dir_url( __FILE__ ) . 'js/pushNotifications.js', array('jquery'), date("YmdHis"), false );
+
 		wp_enqueue_script( $this->plugin_name."_previewJs", plugin_dir_url( __FILE__ ) . 'js/iframePreview.js', array('jquery'), date("YmdHis"), false );
 		wp_localize_script( $this->plugin_name, 'WPNativeApps',
 		        array(
@@ -166,13 +174,68 @@ class Wp_Native_Apps_Admin {
 	}
 
 	/**
+	 * Register the Function to handle the saving of notification groups.
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function handle_add_notification_group(){
+		if( isset( $_POST['addSubscriptionGroup_nonce'] ) && wp_verify_nonce( $_POST['addSubscriptionGroup_nonce'], 'wpna_addSubscriptionGroup_nonce') ) {
+			// var_dump($_POST);die;
+			$notice = array(
+						'type'=>'success',
+						'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+						'title'=>'Settings Saved',
+						'message'=>'Success'
+					);
+
+			$this->wpna_addAdminNotice($notice);
+			wp_safe_redirect( admin_url('admin.php?page=wpnativeapps-push-notification') );
+			exit;
+
+		}else {
+			echo 'Nonce failed';die;
+				wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+							'response' 	=> 403,
+							'back_link' => 'admin.php?page=wpnativeapps-push-notification?tab=subscriptionGroup',
+					) );
+			}
+	}
+	/**
+	 * Register the Function to handle the saving of notification groups.
+	 *
+	 * @since    1.0.0
+	 */
+
+	public function handle_send_push_notification(){
+		if( isset( $_POST['add_push_notification_nonce'] ) && wp_verify_nonce( $_POST['add_push_notification_nonce'], 'add_push_notification_submit_nonce') ) {
+			// var_dump($_POST);die;
+			$notice = array(
+						'type'=>'success',
+						'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+						'title'=>'Settings Saved',
+						'message'=>'Success'
+					);
+
+			$this->wpna_addAdminNotice($notice);
+			wp_safe_redirect( admin_url('admin.php?page=wpnativeapps-push-notification?tab=send') );
+			exit;
+
+		}else {
+			echo 'Nonce failed';die;
+				wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+							'response' 	=> 403,
+							'back_link' => 'admin.php?page=wpnativeapps-push-notification',
+					) );
+			}
+	}
+	/**
 	 * Register the Function to handle the settings form submission to store app settings.
 	 *
 	 * @since    1.0.0
 	 */
 
 	public function handle_settings_save(){
-
 		if( isset( $_POST['wpna_save_settings_nonce'] ) && wp_verify_nonce( $_POST['wpna_save_settings_nonce'], 'wpna_save_settings_form_nonce') ) {
 
 			// echo '<pre>';
@@ -202,81 +265,109 @@ class Wp_Native_Apps_Admin {
 
 			// $bottombarNavPages = null;
 			$bottomBarNav = array(
-															"styles"=>array(
-																"backgroundColor"=> isset($_POST['bottombarNavStyle_backgroundColor']) ? sanitize_text_field($_POST['bottombarNavStyle_backgroundColor']) : '',
-															 "defaultIconColor"=> isset($_POST['bottombarNavStyle_defaultIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_defaultIconColor']) : '',
-															 "activeIconColor"=> isset($_POST['bottombarNavStyle_activeIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_activeIconColor']) : '',
-														 ),
-															"pages"=> array(),
-														);
+				"styles"=>array(
+					"backgroundColor"=> isset($_POST['bottombarNavStyle_backgroundColor']) ? sanitize_text_field($_POST['bottombarNavStyle_backgroundColor']) : '',
+				 "defaultIconColor"=> isset($_POST['bottombarNavStyle_defaultIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_defaultIconColor']) : '',
+				 "activeIconColor"=> isset($_POST['bottombarNavStyle_activeIconColor']) ? sanitize_text_field($_POST['bottombarNavStyle_activeIconColor']) : '',
+			 ),
+				"pages"=> array(),
+			);
 
 			$bottomBarNavPages = $_POST['bottomBarItemText'];
 				if(!empty($bottomBarNavPages)){
-					$pageCount = 1;
+					$pagecount = 1;
 					foreach($bottomBarNavPages as $page){
-						$pageType = $_POST['bottomBarItemType_'.$pageCount];
+						$pageType = $_POST['bottomBarItemType_'.$pagecount];
 						if($pageType == "page"){
-							$pageUrl = isset($_POST['bottomBarItemUrlInternal_'.$pageCount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pageCount]) : '';
+							$pageUrl = isset($_POST['bottomBarItemUrlInternal_'.$pagecount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pagecount]) : '';
+							if(!empty($pageUrl))
+								$pageUrl = get_permalink($this->getIDfromGUID($pageUrl));
 							$isExternal = false;
 						}else{
-							$pageUrl = isset($_POST['bottomBarItemUrlExternal_'.$pageCount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pageCount]) : '';
+							$pageUrl = isset($_POST['bottomBarItemUrlExternal_'.$pagecount]) ? sanitize_url($_POST['bottomBarItemUrlExternal_'.$pagecount]) : '';
 							$isExternal = true;
 						}
-						$pageIcon = isset($_POST['bottomBarNavLogo_'.$pageCount]) ? sanitize_url($_POST['bottomBarNavLogo_'.$pageCount]) : '';
+						$pageIcon = isset($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) ? sanitize_url($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) : '';
 
-						$designType  = isset($_POST['topNav_'.$pageCount.'_structure']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_structure']) : '';
+						$designType  = isset($_POST['topNav_'.$pagecount.'_structure']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_structure']) : '';
 						$topNav = null;
-
 						switch($designType){
 							case 'logoOnly':{
 								$topNav = array(
 				              "designType"=> "logoOnly",
-											"useLogo" => $_POST['topNav_'.$pageCount.'_logoOnly_type'] == 'logo'? true : false,
-				              "logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
-				              "label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
-				              "alignment"=> isset($_POST['topNav_'.$pageCount.'_logoOnly_align']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_logoOnly_align']) : '',
+											"useLogo" => $_POST['topNav_'.$pagecount.'_logoOnly_type'] == 'logo'? true : false,
+				              "logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
+				              "label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
+				              "alignment"=> isset($_POST['topNav_'.$pagecount.'_logoOnly_align']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoOnly_align']) : '',
 								);
 								break;
 							}
 							case 'logoLeftBurgerRight':{
+
+								$HBItemSources = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemSource'];
+								// var_dump($navSources);die;
+								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL'];
+								// var_dump($navInternalUrls);
+								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_externalURL'];
+								// var_dump($navExternalUrls);die;
+								$hamburgerMenuItems = array();
+
+								if(!empty($HBItemSources)){
+									$buttonCount = 1;
+									foreach ($HBItemSources as $key=>$value){
+										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url'] : '';
+										$hamburgerMenuItems[] = array(
+											"isExternal"=> $value == 'external' ? true : false,
+											"icon"=> $navIcon,
+											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? get_permalink($this->getIDfromGUID($navInternalUrls[$key])) : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+										);
+										$buttonCount++;
+									}
+								}
+
+
 								$topNav = array(
 				            "designType"=> "logoLeftBurgerRight",
-										"useLogo" => $_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_type'] == 'logo'? true : false,
-										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
-										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+										"useLogo" => $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 				            "hamburger"=> [
-				              "backgroundColor"=> isset($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) : '',
-				              "menuIcon"=> isset($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) : '',
+				              "backgroundColor"=> isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) : '',
+				              "menuIcon"=> isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) : '',
+											"fontColor"=> isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuFontColor']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuFontColor']) : '',
+											"hamburgerMenuItems"=> $hamburgerMenuItems
 				            ]
 								);
+								// var_dump($topNav);die;
 								break;
 							}
 							case 'logoLeftNavRight':{
 
-								$navSources = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_Source'];
-								$navInternalUrls = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_internalURL'];
-								$navExternalUrls = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_externalURL'];
-								$navIcons = $_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_1_image_url'];
+								$navSources = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_Source'];
+								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_internalURL'];
+								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_externalURL'];
+
 
 								$buttons = array();
-
 								if(!empty($navSources)){
 									$buttonCount = 1;
 									foreach ($navSources as $key=>$value){
+										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']) ? $_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url'] : '';
+
 										$buttons[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
-											"icon"=> isset($_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pageCount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']: '',
-											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? $navInternalUrls[$key] : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+											"icon"=> $navIcon,
+											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? get_permalink($this->getIDfromGUID($navInternalUrls[$key])) : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
 										);
+										$buttonCount++;
 									}
-									$buttonCount++;
 								}
 
 								$topNav = array(
 				            "designType"=> "logoLeftNavRight",
-										"useLogo" => $_POST['topNav_'.$pageCount.'_logoLeftNavRight_type'] == 'logo'? true : false,
-										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
-										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+										"useLogo" => $_POST['topNav_'.$pagecount.'_logoLeftNavRight_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 										"buttons"=> $buttons
 								);
 								break;
@@ -285,10 +376,10 @@ class Wp_Native_Apps_Admin {
 							case 'logoMidNavBoth':{
 
 
-								$navSources = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_Source'];
-								$navInternalUrls = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_internalURL'];
-								$navExternalUrls = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_externalURL'];
-								$navIcons = $_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_image_url'];
+								$navSources = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source'];
+								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_internalURL'];
+								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_externalURL'];
+								// $navIcons = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_image_url'];
 
 								// topNav_4_logoMidNavBoth_iconImage_image_url
 
@@ -299,25 +390,25 @@ class Wp_Native_Apps_Admin {
 
 								if(!empty($navSources)){
 									$buttonCount = 1;
-									$temp = array(
-										"isExternal"=> $value == 'external' ? true : false,
-										"icon"=> isset($_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pageCount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']: '',
-										"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? $navInternalUrls[$key] : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
-									);
 									foreach ($navSources as $key=>$value){
+										$temp = array(
+											"isExternal"=> $value == 'external' ? true : false,
+											"icon"=> isset($_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']: '',
+											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? get_permalink($this->getIDfromGUID($navInternalUrls[$key])) : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+										);
 										if($buttonCount == 1){
 											$leftButtons[] = $temp;
 										}else{
 											$rightButtons[] = $temp;
 										}
+										$buttonCount++;
 									}
-									$buttonCount++;
 								}
 								$topNav = array(
 										"designType"=> "logoMidNavBoth",
-										"useLogo" => $_POST['topNav_'.$pageCount.'_logoMidNavBoth_type'] == 'logo'? true : false,
-										"logo"=> isset($_POST['topNav_'.$pageCount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pageCount.'_logo_image_url']) : '',
-										"label"=> isset($_POST['topNav_'.$pageCount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pageCount.'_text']) : '',
+										"useLogo" => $_POST['topNav_'.$pagecount.'_logoMidNavBoth_type'] == 'logo'? true : false,
+										"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
+										"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 										"leftButtons"=> $leftButtons,
 										"rightButtons"=> $rightButtons
 								);
@@ -331,7 +422,7 @@ class Wp_Native_Apps_Admin {
 																					"isExternal" => $isExternal,
 																					"topNav" => $topNav
 																				);
-						$pageCount++;
+						$pagecount++;
 					}
 				}
 
@@ -367,45 +458,99 @@ class Wp_Native_Apps_Admin {
 
 												$authentication = array(
 													"accountRequired"=> $_POST['accountRequired'] == 'yes'? true : false,
-											    "authenticationPage"=>isset($_POST['authenticationPage']) ? sanitize_url($_POST['authenticationPage']) : ''
+											    "authenticationPage"=>isset($_POST['authenticationPage']) ? get_permalink($this->getIDfromGUID(sanitize_url($_POST['authenticationPage']))) : ''
 												);
 
-	$configSaved = array(
-		    "name"=> $name,
-		    "headerToHide"=> $headerToHide,
-		    "footerToHide"=> $footerToHide,
-		    "otherHide"=> $otherHide,
-		    "splash"=> $splash,
-		    "topBarNav"=>$topBarNav,
-		    "bottomBarNav"=>$bottomBarNav,
-		    "prompts"=>$prompts,
-		  	"authenticationSettings"=>$authentication
-		);
-
-// echo dirname(__FILE__) . '/config.json';die;
-// echo json_encode($configSaved);die;
-
-			file_put_contents(dirname(__FILE__) . '/config.json', json_encode($configSaved));
+						// echo dirname(__FILE__) . '/config.json';die;
+						// echo json_encode($configSaved);die;
+						// Reading the config and storing the Licence Keys
+						$existingConfig = json_decode(file_get_contents(dirname(__FILE__) . '/config.json'), true);
+						$appId = isset($existingConfig['appId']) ? $existingConfig['appId'] : '';
+						$appSecret = isset($existingConfig['appSecret']) ? $existingConfig['appSecret'] : '';
+						$siteURL = get_site_url();
 
 
-				// add the admin notice
-				$notice = array(
-							'type'=>'success',
-							'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
-							'title'=>'Settings Saved',
-							'message'=>'Your settings have been saved, click the preview button to view your preview'
-						);
-				$this->wpna_addAdminNotice($notice);
-				wp_safe_redirect( admin_url('admin.php?page=wpnativeapps-settings') );
-				exit;
-			}
-			else {
-				wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
-							'response' 	=> 403,
-							'back_link' => 'admin.php?page=' . $this->plugin_name,
-					) );
-			}
+						$configSaved = array(
+									"appId"=> $appId,
+									"appSecret"=> $appSecret,
+									"siteURL"=> $siteURL,
+									"name"=> $name,
+									"headerToHide"=> $headerToHide,
+									"footerToHide"=> $footerToHide,
+									"otherHide"=> $otherHide,
+									"splash"=> $splash,
+									"topBarNav"=>$topBarNav,
+									"bottomBarNav"=>$bottomBarNav,
+									"prompts"=>$prompts,
+									"authenticationSettings"=>$authentication
+							);
 
+						file_put_contents(dirname(__FILE__) . '/config.json', json_encode($configSaved));
+
+
+					// add the admin notice
+					$notice = array(
+								'type'=>'success',
+								'icon'=>plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+								'title'=>'Settings Saved',
+								'message'=>'Your settings have been saved, click the preview button to view your preview'
+							);
+					$this->wpna_addAdminNotice($notice);
+					wp_safe_redirect( admin_url('admin.php?page=wpnativeapps-settings') );
+					exit;
+				}
+				else {
+					wp_die( __( 'Invalid nonce specified', $this->plugin_name ), __( 'Error', $this->plugin_name ), array(
+								'response' 	=> 403,
+								'back_link' => 'admin.php?page=' . $this->plugin_name,
+						) );
+				}
+
+	}
+
+	/**
+	 * Register the Function to add custom post type for pushnotification.
+	 *
+	 * @since    1.0.0
+	 */
+	function add_pushnotification_postType(){
+		register_post_type( 'pushnotification',
+    // CPT Options
+        array(
+            'labels' => array(
+                'name' => __( 'Push Notifications' ),
+                'singular_name' => __( 'Push Notification' )
+            ),
+            'public' => false,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'pushnotification'),
+            'show_in_rest' => true,
+						'supports'=>array('custom-fields')
+
+        )
+    );
+	}
+	/**
+	 * Register the Function to add custom post type for pushnotification group.
+	 *
+	 * @since    1.0.0
+	 */
+	function add_pushnotification_group_postType(){
+		register_post_type( 'pushnotification-group',
+    // CPT Options
+        array(
+            'labels' => array(
+                'name' => __( 'Push Notification Groups' ),
+                'singular_name' => __( 'Push Notification Group' )
+            ),
+            'public' => false,
+            'has_archive' => true,
+            'rewrite' => array('slug' => 'pushnotification-group'),
+            'show_in_rest' => true,
+						'supports'=>array('custom-fields')
+
+        )
+    );
 	}
 	/**
 	 * Register the Function to add Admin Pages for the admin area.
@@ -440,11 +585,57 @@ class Wp_Native_Apps_Admin {
 					'wpnativeapps-settings',
 					array($this, 'wpnativeapps_settings')
 				);
+		add_submenu_page(
+					'wpnativeapps',
+					'WPNativeApps',
+					'Account',
+					'manage_options',
+					'wpnativeapps-account',
+					array($this, 'wpnativeapps_account')
+				);
+		add_submenu_page(
+					'wpnativeapps',
+					'WPNativeApps',
+					'Publish',
+					'manage_options',
+					'wpnativeapps-publish',
+					array($this, 'wpnativeapps_publish')
+				);
+		add_submenu_page(
+					'wpnativeapps',
+					'WPNativeApps',
+					'Push Notifications',
+					'manage_options',
+					'wpnativeapps-push-notification',
+					array($this, 'wpnativeapps_push_notifications')
+				);
+		add_submenu_page(
+					'wpnativeapps',
+					'WPNativeApps',
+					'Analytics',
+					'manage_options',
+					'wpnativeapps-analytics',
+					array($this, 'wpnativeapps_analytics')
+				);
 	}
 
 	public function wpnativeapps_dashboard(){
 		include_once dirname(__FILE__) . '/partials/wp-native-apps-introduction.php';
 	}
+	public function wpnativeapps_account(){
+		include_once dirname(__FILE__) . '/partials/account.php';
+	}
+	public function wpnativeapps_publish(){
+		include_once dirname(__FILE__) . '/partials/publish.php';
+	}
+
+public function wpnativeapps_push_notifications(){
+	include_once dirname(__FILE__) . '/partials/push-notifications.php';
+}
+
+public function wpnativeapps_analytics(){
+	include_once dirname(__FILE__) . '/partials/analytics.php';
+}
 
 	public function wpnativeapps_settings(){
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -494,16 +685,6 @@ class Wp_Native_Apps_Admin {
 					    <p>%2$s</p>
 					</div>
 				</div>', esc_attr( $class ), esc_html( $message ));
-
-
-
-				// printf( '<div class="%1$s"><p>%2$s%3$s%4$s</p></div>', esc_attr( $class ), $iconHtml, $title, esc_html( $message ) );
-
-
-				// $class = $notice['type'];
-	    	// $message = __( $notice['message'], 'wpna' );
-				//
-				// printf( '<div class="notice notice-%1$s flex-row %1$s">%2$s<div class="wpnaNoticeText">%3$s</div></div>', esc_attr( $class ),$iconHtml, esc_html( $message ) );
 
 
 			}
@@ -679,7 +860,8 @@ public function wpna_get_settings(){
 		  ]
 		);
 	}
-return $pluginConfiguration;
+
+	return $pluginConfiguration;
 
 }
 
@@ -710,7 +892,12 @@ public function  wpna_image_uploadField($args){
 function getIDfromGUID( $guid ){
     global $wpdb;
     return $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid=%s", $guid ) );
+}
+
+function getIDfromURL( $url ){
+		return url_to_postid($url);
 
 }
+
 
 }

@@ -4,7 +4,7 @@ h1{
 
 .video-preview{
     padding: 10px;
-    width: 35%;
+    /* width: 35%; */
     justify-content: center;
     align-content: center;
 }
@@ -29,60 +29,6 @@ div#wpna_settings_tabs{
 
 #wpnaSettingsForm{
     padding-left: 30px;
-}
-
-#wpna_settings_tabs .ui-tabs-nav{
-    background: none;
-    border: none;
-    box-shadow: none;
-    padding-left: 50px;
-    padding-right: 0;
-    border-bottom: 1.5px solid #979797 /*D5D5D5*/;
-    border-radius: 0;
-}
-
-#wpna_settings_tabs ul li a{
-    font-weight: 600;
-    font-size: 16px;
-    letter-spacing: -0.53px;
-    text-align: center;
-}
-
-.ui-state-default, 
-.ui-widget-content .ui-state-default, 
-.ui-widget-header .ui-state-default, 
-.ui-button{
-    background: #DCDCDE;
-    border: 1px solid #979797;
-}
-
-
-#wpna_settings_tabs .ui-state-default a{
-    color: rgba(0,0,0,0.5);
-}
-
-.ui-state-active, 
-.ui-widget-content .ui-state-active, 
-.ui-widget-header .ui-state-active, 
-a.ui-button:active, .ui-button:active, 
-.ui-button.ui-state-active:hover{
-    background: #F1F0F0;
-    color: black;
-}
-
-
-#wpna_settings_tabs .ui-state-active  a{
-    color: black;
-}
-
-
-#wpna_settings_tabs a.ui-tabs-anchor:focus{
-    box-shadow: none;
-}
-
-#wpna_settings_tabs.ui-tabs .ui-tabs-nav li{
-    border-radius: 0;
-    margin-right: 10px;
 }
 
 .selectorInputs > div {
@@ -129,4 +75,8 @@ h2{
 
 .bottomBarNavSection{
     margin-top: 50px;
+}
+
+#removeHideItem {
+    margin-left:10px;
 }

@@ -21,7 +21,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
           $url = $bottomNav['url'];
           $icon = isset($bottomNav['icon']) ? $bottomNav['icon'] : '';
           $name = $bottomNav['name'];
-          $selectedPage = ($isExternal) ? 0 : $this->getIDfromGUID($url);
+          $selectedPage = ($isExternal) ? 0 : $this->getIDfromURL($url);
           $args = array(
             'inputName'=>'bottomBarNavLogo_'.$count,
             'imageUrl'=>$icon,
@@ -36,25 +36,27 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
               <div class="flex-row bottomBarItemWrapTop">
                 <div class="bottomBarItemType">
                   <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_<?php echo $count;?>">
-                    <option value="page">Page</option>
-                    <option value="external">External</option>
+                    <option value="page" <?php echo ($isExternal) ? '': 'selected';?>>Page</option>
+                    <option value="external" <?php echo ($isExternal) ? 'selected': '';?>>External</option>
                   </select>
                 </div>
                 <div class="bottomBarItemUrl flex-column">
-                  <?php wp_dropdown_pages(
+                  <?php
+                  $ddClass = ($isExternal)? 'hide ' : '';
+                  wp_dropdown_pages(
                                                 [
                                                   'name'=>'bottomBarItemUrlInternal_'.$count,
                                                   'id'=>'bottomBarItemUrlInternal_'.$count,
-                                                  'class'=>'bottomBarItemUrlInternal',
+                                                  'class'=>$ddClass.'bottomBarItemUrlInternal',
                                                   'echo'=>'1',
                                                   'value_field'=>'guid',
                                                   'selected' => $selectedPage
                                                 ]
                                               );?>
-                  <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
+                  <input type="text" class="bottomBarItemUrlExternal <?php echo ($isExternal)? '' : 'hide';?>" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
                 </div>
                 <div class="bottomBarItemText">
-                  <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                  <input type="text" data-itemcount = "<?php echo $count;?>" class="bottomBarItemText item_<?php echo $count;?>" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label" onchange="updateTopNavTabName(this)"/>
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">
