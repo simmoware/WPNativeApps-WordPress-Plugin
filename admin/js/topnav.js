@@ -20,7 +20,7 @@ function addTopNavHamburgerItem(el){
 
 
 				$(section).find('.addNewNavigationIcon').removeClass('hide');
-		
+
 
 
 
@@ -44,3 +44,11 @@ function removeTopNavigationIconForHamburger(el){
 
 	// }
 }
+
+// When Page is slected from dropdown, copy the page name to Label input.
+	$(document).on('change','select.topNavItemUrlInternal',function(){
+		var pageName = $(this).find(":selected").text();
+		const section = $(this).parents('.topNavPageIconItem');
+		section.find('input.topNavItemLabel').val(pageName);
+	});
+	

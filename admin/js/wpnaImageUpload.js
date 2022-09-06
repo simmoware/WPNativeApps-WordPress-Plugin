@@ -59,9 +59,9 @@ jQuery( function($){
 		event.preventDefault();
     const button = $(this);
 		const uploadSection = $(this).parent('.wpnaImageUploadSection');
-    uploadSection.children('.wpnaImageUploadPreview').css('background-image','');
-    uploadSection.children('.wpna_img_id').val('');
-    uploadSection.children('.wpna_img_url').val('');
+    // uploadSection.children('.wpnaImageUploadPreview').css('background-image','');
+    // uploadSection.children('.wpna_img_id').val('');
+    // uploadSection.children('.wpna_img_url').val('');
     uploadSection.children('.wpna-remove').hide();
     uploadSection.children('.wpna-upload').addClass('upload').html('Upload Image').show().click();
 

@@ -637,14 +637,15 @@ $config = $this->wpnativeAppSettings;
 
   <div id="wpna_settings_tabs">
   <ul>
-    <li><a href="#general">General</a></li>
-    <li><a href="#bottomNav">Bottom Nav</a></li>
-    <li><a href="#topNav">Top Nav</a></li>
-    <li><a href="#prompts">Prompts</a></li>
-    <li><a href="#authentication">Authentication</a></li>
+    <li class="settingsTab"><a href="#general">General</a></li>
+    <li class="settingsTab"><a href="#bottomNav">Bottom Nav</a></li>
+    <li class="settingsTab"><a href="#topNav">Top Nav</a></li>
+    <li class="settingsTab"><a href="#prompts">Prompts</a></li>
+    <li class="settingsTab"><a href="#authentication">Authentication</a></li>
   </ul>
   <?php $wpna_save_settings_nonce = wp_create_nonce( 'wpna_save_settings_form_nonce' ); ?>
   <form id="wpnaSettingsForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+    <input type="hidden" id="currentTabInput" name="currentTab" value="<?php echo isset($_GET['section']) ? $_GET['section'] : 0;?>" />
     <input type="hidden" name="action" value="handle_wpna_settings_submit">
     <input type="hidden" name="wpna_save_settings_nonce" value="<?php echo $wpna_save_settings_nonce ?>" />
     <div id="general" class="tab-content generalSettings">
@@ -662,7 +663,7 @@ $config = $this->wpnativeAppSettings;
     <div id="authentication" class="tab-content" style="display:none;">
       <?php include_once dirname(__FILE__) . '/authentication.php';?>
     </div>
-    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save"></p>
+    <p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save" onclick=""></p>
 
   </form>
 </div>
@@ -683,7 +684,7 @@ $config = $this->wpnativeAppSettings;
         $(window).bind('load', function()
         {
             $("#app_preview").append(`
-                <iframe id="previewAppIframe" src="https://appetize.io/embed/fmrsxxwsqagbkdpqjlqs6qouo4?device=iphone12promax&osVersion=14.5&scale=75&deviceColor=black&launchUrl=wpnativeapps://?config=<?php
+                <iframe id="previewAppIframe" src="https://appetize.io/embed/mu7bz2yie6wgfgrtsmg42euhau?device=iphone12promax&osVersion=14.5&scale=75&deviceColor=black&launchUrl=wpnativeapps://?config=<?php
             echo esc_url( plugins_url( 'config.json', dirname(__FILE__) ) );
             ?>" width="100%" height="1000px" scrolling="no" ></iframe>
             `);

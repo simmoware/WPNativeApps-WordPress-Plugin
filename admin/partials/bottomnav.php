@@ -115,7 +115,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
       ?>
     </div>
     </div>
-    <div class="addNewNavigationIcon">
+    <div class="addNewNavigationIcon <?php echo ($count > 4) ? "hide" : "";?>">
       <a id="addBottomNavigationIcon" href="javascript:void(0)" onclick="addBottomBarNavigationIcon(this)">Add another navigation icon</a>
     </div>
   </section>

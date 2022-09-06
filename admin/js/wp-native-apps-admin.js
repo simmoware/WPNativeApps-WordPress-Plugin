@@ -3,8 +3,14 @@ var topNavTabs = null;
 	'use strict';
 	 	$(window).load(function(){
 			$('.color-picker').wpColorPicker();
-			var settingsMainTab = $('#wpna_settings_tabs').tabs();
-			this.topNavTabs = $('#topNavTabs').tabs();
+			document.currentTabInput = getUrlParameter('section');
+			document.topNavTabsCurrent = getUrlParameter('topnav');
+			// var selectedMainTab = $('input#something').val();
+			// var topNav = $('input#something').val();
+			// var settingsMainTab = $('#wpna_settings_tabs').tabs({active : $('input#currentTab').val()});
+			var settingsMainTab = $('#wpna_settings_tabs').tabs({active :  document.currentTabInput });
+			// this.topNavTabs = $('#topNavTabs').tabs({active : $('input#topNavTabsCurrent').val()});
+			this.topNavTabs = $('#topNavTabs').tabs({active :  document.topNavTabsCurrent });
 
 			$('a.tabcontrol').click(function(event){
 				console.log('test');
@@ -47,6 +53,34 @@ var topNavTabs = null;
 
 })( jQuery );
 $=jQuery;
+
+var getUrlParameter = function getUrlParameter(sParam) {
+    var sPageURL = window.location.search.substring(1),
+        sURLVariables = sPageURL.split('&'),
+        sParameterName,
+        i;
+
+    for (i = 0; i < sURLVariables.length; i++) {
+        sParameterName = sURLVariables[i].split('=');
+
+        if (sParameterName[0] === sParam) {
+            return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+        }
+    }
+    return false;
+};
+
+$(document).on('click','#wpna_settings_tabs li.settingsTab',function(){
+	$('input#currentTabInput').val($(this).index());
+	// document.currentTabInput =  $(this).index();
+	// console.log($(this).index());
+});
+
+$(document).on('click','li.topNavTabs',function(){
+	$('input#topNavTabsCurrent').val($(this).index());
+	// document.topNavTabsCurrent =  $(this).index();
+	// console.log($(this).index());
+});
 
 function add_element_to_hide(el){
 	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
@@ -720,6 +754,9 @@ function handleHamburgerMenuLinkTypeChange(el){
 		updateTopNavNameIcon(count,iconUrl,pageName)
 	});
 
+
+
+
 function updateTopNavTabName(el){
 	var pageName = $(el).val();
 	var iconUrl = $(el).parents('.navigationBottomBarItem').find('input.wpna_img_url').val();
@@ -840,7 +877,7 @@ function addTopNavTabsItem(count){
 	var label = $('input.bottomBarItemText.item_'+count).val() || 'Page';
 	var icon = $('input[name="bottomBarItemIcon_'+count+'_image_url"]').val();
 
-	var tabTemplate = '<li><a href="#{{topNavTabId}}"><span class="topNavPageIcon"></span>{{topNavTabLabel}}</li></a>';
+	var tabTemplate = '<li class="topNavTabs"><a href="#{{topNavTabId}}"><span class="topNavPageIcon"></span>{{topNavTabLabel}}</li></a>';
 	var tabContent = $('#topNavIndividualPageSetupGeneric').html();
 
 

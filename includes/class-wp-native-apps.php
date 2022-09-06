@@ -170,6 +170,8 @@ class Wp_Native_Apps {
 
 		$this->loader->add_action( 'admin_post_handle_wpna_settings_submit', $plugin_admin, 'handle_settings_save');
 
+		$this->loader->add_action ('rest_api_init', $plugin_admin, 'wpna_register_configuration_route');
+
 	}
 
 	/**
