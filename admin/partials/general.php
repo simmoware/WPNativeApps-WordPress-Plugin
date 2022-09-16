@@ -74,7 +74,7 @@ $defaultLogoURL = $image[0];
       // $otherHide = 1;
       $otherToHideHtml = '';
 
-      $otherToHideHtmlDefault = <<<EOT
+      $otherToHideHtmlDefault = '
       <div class="hideOtherItemWrap">
         <h4>Is there anything else you want to hide?</h4>
         <div class="flex-row jc-sb ai-fe selectorInputs">
@@ -99,7 +99,7 @@ $defaultLogoURL = $image[0];
             </div>
         </div>
       </div>
-      EOT;
+      ';
         if(!empty($otherHide)){
             foreach ($otherHide as $key => $value) {
                 $count = intval($key+1);
@@ -108,7 +108,7 @@ $defaultLogoURL = $image[0];
               }else{
                 $removeIcon = '';
               }
-                $otherToHideHtml .= <<<EOT
+                $otherToHideHtml .= '
                 <div class="hideOtherItemWrap">
                   <h4>Is there anything else you want to hide?</h4>
                   <div class="flex-row jc-sb ai-fe selectorInputs">
@@ -117,10 +117,10 @@ $defaultLogoURL = $image[0];
                               type="text"
                               name="otherHide[]"
                               class="otherHideElement"
-                              value="{$value}"
+                              value="'.$value.'"
                               _not_required
                           />
-                          <div class="choose_button_with_icon" onclick="buildElementiFrame({$count});">
+                          <div class="choose_button_with_icon" onclick="buildElementiFrame('.$count.');">
                               <a
                                   href="javascript:void(0);"
                                   class=""
@@ -131,12 +131,12 @@ $defaultLogoURL = $image[0];
                               <span class="arrow_north"></span>
                           </div>
                           <div class="removeIcon">
-                            {$removeIcon}
+                            '.$removeIcon.'
                           </div>
                       </div>
                   </div>
                 </div>
-                EOT;
+                ';
             }
         echo $otherToHideHtml;
       }else{
@@ -146,65 +146,9 @@ $defaultLogoURL = $image[0];
       <a class="addAnotherHideEl" href="javascript:void(0)" onclick="add_element_to_hide(this)">Add another element to hide</a>
     </div>
     <div class="flex-column video-preview">
-      <iframe
-            width="400"
-            height="250" src="https://www.youtube.com/embed/Vnyfn-eYXD0?list=PLCGvTqoGUptQ204kZSvuGjkHDY1b33d16"
-            title="How to build an iPhone and Android app in 5 mins | Tutorial: General Settings"
-            frameborder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowfullscreen>
-          </iframe>
-     <!-- <video width="100%" height="auto" controls>
-        <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.mp4';?>" type="video/mp4">
-        <source src="<?php echo plugin_dir_url(__DIR__).'/videos/wpna-preview.ogg';?>" type="video/ogg">
-        <source src="movie.ogg" type="video/ogg">
-      </video> -->
+      <?php echo wp_video_shortcode(array('src' => "https://youtu.be/Vnyfn-eYXD0", 'width'=>"400", 'height'=>"250") );?>
     </div>
   </section>
-
-
-  <!-- <div class="flex-item">
-
-    <div class="header_selector deletedClass">
-
-      <div class="general_hide_header_col1">
-        <label class="inputLabel">Header Selector</label>
-        <input type="text" name="wpna_hide_header" id="wpna_hide_header" _not_required />
-      </div>
-      <div class="general_hide_selector_col2">
-        <div class="choose_button_with_icon" onclick="buildHeaderiFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Header</a><span class="arrow_north"></span></div>
-      </div>
-    </div>
-  </div> -->
-
-  <!-- <div class="flex-item">
-
-    <div class="header_selector deletedClass">
-
-      <div class="general_hide_header_col1">
-        <label class="inputLabel">Footer Selector</label>
-        <input type="text" name="wpna_hide_footer" id="wpna_hide_footer" _not_required />
-      </div>
-      <div class="general_hide_selector_col2">
-        <div class="choose_button_with_icon" onclick="buildFooteriFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Footer</a><span class="arrow_north"></span></div>
-      </div>
-    </div>
-  </div> -->
-<!--
-  <div class="flex-item">
-
-    <div class="header_selector deletedClass">
-      <div class="general_hide_header_col1">
-        <label class="inputLabel">Is there anything else you want to hide?</label>
-        <input type="text" name="wpna_hide_other" id="wpna_hide_other" />
-      </div>
-      <div class="general_hide_selector_col2">
-        <div class="choose_button_with_icon" onclick="buildElementiFrame();"><a href="javascript:void(0);" class="" data-title="Select Element to Hide">Choose Element</a><span class="arrow_north"></span></div>
-      </div>
-    </div>
-    <a href="javascript:void(0)" onclick="add_element_to_hide(this)">Add another element to hide</a>
-
-  </div> -->
 
 <section class="flex-row jc-sb">
   <?php $splash = $config['splash'];?>
@@ -289,7 +233,7 @@ $defaultLogoURL = $image[0];
   </div>
   <div class="splashScreenSection flex-column w40p">
     <img src="<?php echo plugin_dir_url(__DIR__).'/images/general/splash-thumbnail.png';?>" class="promptScreenPreview" />
-    <span class="button previewSplash ">Preview Splash Screen</span>
+    <!-- <span class="button previewSplash ">Preview Splash Screen</span> -->
   </div>
 </section>
 

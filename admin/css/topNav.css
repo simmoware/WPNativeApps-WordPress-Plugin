@@ -7,9 +7,11 @@
 
 }
 img.topNavPageIcon {
-    width: 20px;
-    vertical-align: middle;
-    margin: 5px;
+  width: 20px;
+  vertical-align: middle;
+  height: 20px;
+  object-fit: contain;
+  margin-right: 10px;
 }
 .topNavInput {
     width:100%;

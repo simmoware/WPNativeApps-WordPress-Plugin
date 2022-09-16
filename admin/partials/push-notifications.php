@@ -1,5 +1,7 @@
 <?php
-$pushNotification = $config['pushNotification'];
+$config = $this->wpnativeAppSettings;
+
+$pushNotification = $config['pushNotificationSettings'];
 ?>
 <div class="main" id="pushNotifications">
   <img class='wpna-logo' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/WPNativeApps-Logo-Landscape.png" />

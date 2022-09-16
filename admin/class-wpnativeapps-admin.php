@@ -95,12 +95,12 @@ class Wp_Native_Apps_Admin {
 
 		 $wp_scripts = wp_scripts();
 		 wp_enqueue_style('plugin_name-admin-ui-css',
-		                 'http://ajax.googleapis.com/ajax/libs/jqueryui/' . $wp_scripts->registered['jquery-ui-core']->ver . '/themes/smoothness/jquery-ui.css',
+		                 plugin_dir_url( __FILE__ ) . 'css/jquery-ui.css',
 		                 false,
 		                 $this->version,
 		                 false);
 
-		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wp-native-apps-admin.css', array(), date("YmdHis"), 'all' );
+		wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/wpnativeapps-admin.css', array(), date("YmdHis"), 'all' );
 		wp_enqueue_style( $this->plugin_name.'_introduction_css', plugin_dir_url( __FILE__ ) . 'css/introduction.css', array(), date("YmdHis"), 'all' );
 		wp_enqueue_style( $this->plugin_name.'_general_css', plugin_dir_url( __FILE__ ) . 'css/general.css', array(), date("YmdHis"), 'all' );
 		wp_enqueue_style( $this->plugin_name.'_publish_css', plugin_dir_url( __FILE__ ) . 'css/publish.css', array(), date("YmdHis"), 'all' );
@@ -135,7 +135,7 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_style( 'wp-color-picker' );
 
 		wp_enqueue_script( 'wp-color-picker-alpha', plugin_dir_url( __FILE__ ) . 'js/wp-color-picker-alpha.js', array( 'wp-color-picker' ), date("YmdHis"), false );
-		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wp-native-apps-admin.js', array('jquery', 'jquery-ui-core' , 'jquery-ui-tabs'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/wpnativeapps-admin.js', array('jquery', 'jquery-ui-core' , 'jquery-ui-tabs'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_topNav", plugin_dir_url( __FILE__ ) . 'js/topnav.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_analytics", plugin_dir_url( __FILE__ ) . 'js/analytics.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_pushNotifications", plugin_dir_url( __FILE__ ) . 'js/pushNotifications.js', array('jquery'), date("YmdHis"), false );
@@ -223,9 +223,9 @@ class Wp_Native_Apps_Admin {
 			$name = 				isset($_POST['wpna_app_name']) ? sanitize_text_field($_POST['wpna_app_name']) : '';
 			$headerToHide = isset($_POST['headerToHide']) ? sanitize_text_field($_POST['headerToHide']) : '';
 			$footerToHide = isset($_POST['footerToHide']) ? sanitize_text_field($_POST['footerToHide']) : '';
-			$otherHide = 		isset($_POST['otherHide']) ? $_POST['otherHide'] : null;
-			$currentTab = 		isset($_POST['currentTab']) ? $_POST['currentTab'] : 0;
-			$topNavTabsCurrent = 	isset($_POST['topNavTabsCurrent']) ? $_POST['topNavTabsCurrent'] : 0;
+			$otherHide = 		isset($_POST['otherHide']) ? sanitize_text_field($_POST['otherHide']) : null;
+			$currentTab = 		isset($_POST['currentTab']) ? sanitize_text_field($_POST['currentTab']) : 0;
+			$topNavTabsCurrent = 	isset($_POST['topNavTabsCurrent']) ? sanitize_text_field($_POST['topNavTabsCurrent']) : 0;
 
 
 			$splash_background_color = isset($_POST['splash_backgroundColor']) ? sanitize_text_field($_POST['splash_backgroundColor']) : '';
@@ -255,11 +255,11 @@ class Wp_Native_Apps_Admin {
 				"pages"=> array(),
 			);
 
-			$bottomBarNavPages = $_POST['bottomBarItemText'];
+			$bottomBarNavPages = sanitize_text_field($_POST['bottomBarItemText']);
 				if(!empty($bottomBarNavPages)){
 					$pagecount = 1;
 					foreach($bottomBarNavPages as $page){
-						$pageType = $_POST['bottomBarItemType_'.$pagecount];
+						$pageType = sanitize_text_field($_POST['bottomBarItemType_'.$pagecount]);
 						if($pageType == "page"){
 							$pageUrl = isset($_POST['bottomBarItemUrlInternal_'.$pagecount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pagecount]) : '';
 							if(!empty($pageUrl))
@@ -538,7 +538,7 @@ class Wp_Native_Apps_Admin {
 		  'manage_options',
 		  'wpnativeapps',
 		  array($this, 'wpnativeapps_dashboard'),
-		  'dashicons-dashboard',
+		  plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
 		  30
 		);
 
@@ -596,7 +596,7 @@ class Wp_Native_Apps_Admin {
 	Load Inroroduction Template
 	*/
 	public function wpnativeapps_dashboard(){
-		include_once dirname(__FILE__) . '/partials/wp-native-apps-introduction.php';
+		include_once dirname(__FILE__) . '/partials/wpnativeapps-introduction.php';
 	}
 
 	/*
@@ -641,13 +641,25 @@ class Wp_Native_Apps_Admin {
 						'type'=>'info is-dismissable',
 						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
 						'title'=>'Introduction to WPNativeApps',
-						'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be confirgure craefully in order to acheeve the vest restutl.'
+						'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be configured carefully in order to achieve the best result.'
 						),
 		);
+
+		$configError = get_option('WPNativeAppsConfigMessage');
+		if( !empty($configError) ){
+			$setupNotices[] = array(
+						'type'=>'info is-dismissable',
+						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+						'title'=>'Configuration Error!',
+						'message'=>$configError
+					);
+		}
+
+
 		foreach($setupNotices as $notice){
 			$this->wpna_addAdminNotice($notice);
 		}
-		include_once dirname(__FILE__) . '/partials/wp-native-apps-settings.php';
+		include_once dirname(__FILE__) . '/partials/wpnativeapps-settings.php';
 	}
 
 	/*
@@ -673,8 +685,6 @@ class Wp_Native_Apps_Admin {
 					    <p>%2$s</p>
 					</div>
 				</div>', esc_attr( $class ), esc_html( $message ));
-
-
 			}
 		}
 	}
@@ -684,18 +694,19 @@ class Wp_Native_Apps_Admin {
 	*/
 	public function wpna_get_settings(){
 		$pluginConfiguration = json_decode(file_get_contents(dirname(__FILE__) . '/config.json'), true);
-		foreach ($pluginConfiguration as $ia) {
-			if (!is_array($ia)) {
-				$ia = json_decode($ia, true);
-			}
-		}
+
+		// foreach ($pluginConfiguration as $ia) {
+		// 	if (!is_array($ia)) {
+		// 		$ia = json_decode($ia, true);
+		// 	}
+		// }
 
 		if(empty($pluginConfiguration)){
 			$pluginConfiguration = array(
 				"appId"=> "",
 				"appSecret"=> "",
 				"siteURL"=> get_site_url(),
-				"name"=> get_site_title(),
+				"name"=> get_bloginfo('name'),
 				"headerToHide"=> "",
 				"footerToHide"=> "",
 				"otherHide"=> "",
@@ -720,94 +731,18 @@ class Wp_Native_Apps_Admin {
 				 ],
 					"pages"=> [
 						[
-							"url"=> "",
-							"icon" => "",
-							"name" => "",
+							"url"=> get_site_url(),
+							"icon" => plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
+							"name" => get_bloginfo('name'),
 							"isExternal" =>true,
 							"topNav"=>[
 								"designType"=> "logoOnly",
 								"useLogo" => true,
-								"logo"=> "",
-								"label"=> "",
-								"alignment"=>"",
+								"logo"=> plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
+								"label"=> get_bloginfo('name'),
+								"alignment"=>"left",
 							]
-						],
-						[
-							"url"=> "",
-							"icon" => "",
-							"name" => "",
-							"isExternal" =>true,
-							"topNav"=>[
-								"designType"=> "logoLeftBurgerRight",
-								"useLogo" => false,
-								"logo"=> "",
-								"label"=> "",
-								"hamburger"=> [
-									"backgroundColor"=> "",
-									"menuIcon"=> "",
-									"fontColor"=> "",
-									"hamburgerMenuItems"=> [
-										"isExternal"=> true,
-										"icon"=> "",
-										"title"=> "",
-										"url"=>"",
-									]
-								]
-							]
-						],
-						[
-							"url"=> "",
-							"icon"=> "",
-							"name"=> "",
-							"isExternal"=> true,
-							"topNav"=>[
-								"designType"=> "logoLeftNavRight",
-								"useLogo" => false,
-								"logo"=> "",
-								"label"=> "",
-								"buttons"=> [
-									"isExternal"=> true,
-									"icon"=> "",
-									"url"=> ""
-								]
-							]
-						],
-						[
-							"url"=> "",
-							"icon"=> "",
-							"name"=> "",
-							"isExternal"=> true,
-							"topNav"=>[
-								"designType"=> "logoMidNavBoth",
-								"useLogo" => true,
-								"logo"=> "",
-								"label"=> "TopNav Label for Page 3",
-								"leftButtons"=> [
-									[
-										"isExternal"=>true,
-										"icon"=> "",
-										"url"=> ""
-									],
-								],
-								"rightButtons"=> [
-									[
-										"isExternal"=>true,
-										"icon"=> "",
-										"url"=> "",
-									],
-									[
-										"isExternal"=>true,
-										"icon"=> "",
-										"url"=> "",
-									],
-									[
-										"isExternal"=>true,
-										"icon"=> "",
-										"url"=> "",
-									],
-								]
-							]
-						],
+						]
 					],
 				],
 				"prompts"=>[
@@ -817,7 +752,7 @@ class Wp_Native_Apps_Admin {
 			        "styles"=> [
 			          "backgroundColor"=> "",
 			          "textColor"=> "",
-			          "icon"=> "",
+			          "icon"=> plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
 			          "title"=>"",
 			          "description"=>"",
 			          "acceptButtonText"=>"",
@@ -828,7 +763,7 @@ class Wp_Native_Apps_Admin {
 			        "styles"=> [
 			          "backgroundColor"=> "",
 			          "textColor"=> "",
-			          "icon"=> "",
+			          "icon"=> plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
 			          "title"=>"",
 			          "description"=>"",
 			          "acceptButtonText"=>"",
@@ -850,7 +785,6 @@ class Wp_Native_Apps_Admin {
 	Function to output the Image Uploader Input field
 	*/
 	public function  wpna_image_uploadField($args){
-			ob_start();
 			$default = array(
 														'inputName'=>'wpnaImage'.rand(),
 														'imageUrl'=>'',
@@ -862,20 +796,21 @@ class Wp_Native_Apps_Admin {
 
 			ob_start();
 			?>
-			<div class="wpnaImageUploadSection <?php echo $inputName?>_section">
-				<div class="wpnaImageUploadPreview  <?php echo $inputName;?>_preview" style="background-image: url('<?php echo $imageUrl;?>');"></div>
+			<div class="wpnaImageUploadSection <?php echo esc_html($inputName)?>_section">
+				<div class="wpnaImageUploadPreview  <?php echo esc_html($inputName);?>_preview" style="background-image: url('<?php echo esc_html($imageUrl);?>');"></div>
 				<?php
 					$changeButtonStyle = ($imageUrl !='') ? '': 'display:none' ;
 					$uploadButtonStyle = ($imageUrl !='') ? 'display:none': '' ;
 				?>
-				<a style="<?php echo $changeButtonStyle;?>" href="javascript:void(0)" class="wpna-remove  <?php echo $inputName;?>_remove button">Change Image</a>
-				<a style="<?php echo $uploadButtonStyle;?>" href="#" class="button wpna-upload <?php echo $inputName;?>_upload">Upload image</a>
+				<a style="<?php echo esc_html($changeButtonStyle);?>" href="javascript:void(0)" class="wpna-remove  <?php echo esc_html($inputName);?>_remove button">Change Image</a>
+				<a style="<?php echo esc_html($uploadButtonStyle);?>" href="#" class="button wpna-upload <?php echo esc_html($inputName);?>_upload">Upload image</a>
 
-				<input type="hidden" name="<?php echo $inputName;?>_image_id"  class="wpna_img_id" value="">
-				<input type="hidden" name="<?php echo $inputName;?>_image_url"  class="wpna_img_url" value="<?php echo  $imageUrl  ?>">
+				<input type="hidden" name="<?php echo esc_html($inputName);?>_image_id"  class="wpna_img_id" value="">
+				<input type="hidden" name="<?php echo esc_html($inputName);?>_image_url"  class="wpna_img_url" value="<?php echo esc_html( $imageUrl)  ?>">
 			</div>
 			<?php
-			return ob_get_clean();
+			return wp_kses_post(ob_get_clean());
+			// return ob_get_clean();
 	}
 
 	/*

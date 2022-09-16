@@ -96,7 +96,7 @@
     -webkit-appearance:none;
     border:none;
     margin-right:10px;
-    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-close.png") center right no-repeat;
+    background:transparent url( "../icons/001-close.png" ) center right no-repeat;
     background-size:contain;
     width:20px;
     height:15px;
@@ -115,7 +115,7 @@
     -webkit-appearance:none;
     border:none;
     margin-right:10px;
-    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-forward.png") center center no-repeat;
+    background:transparent url( "../icons/001-forward.png" ) center center no-repeat;
     background-size:contain;
     opacity:0.5;
     width:20px;
@@ -133,7 +133,7 @@
     -webkit-appearance:none;
     border:none;
     background-color:transparent;
-    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-back.png") center center no-repeat;
+    background:transparent url( "../icons/001-back.png" ) center center no-repeat;
     background-size:contain;
     opacity:0.5;
     width:20px;
@@ -202,7 +202,7 @@
 .iFrameEditURLButton {
     display:inline-block;
     margin-left:15px;
-    background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/edit.png") center center no-repeat;
+    background:transparent url( "../icons/edit.png" ) center center no-repeat;
     background-size:15px 15px;
     width:15px;
     height:15px;
@@ -224,7 +224,7 @@
   -webkit-appearance:none;
   border:none;
   margin-right:10px;
-  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-close.png") center right no-repeat;
+  background:transparent url( "../icons/001-close.png" ) center right no-repeat;
   background-size:contain;
   width:20px;
   height:15px;
@@ -246,7 +246,7 @@
   -webkit-appearance:none;
   border:none;
   margin-right:10px;
-  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-forward.png") center center no-repeat;
+  background:transparent url( "../icons/001-forward.png" ) center center no-repeat;
   background-size:contain;
   opacity:0.5;
   width:20px;
@@ -294,7 +294,7 @@
   -webkit-appearance:none;
   border:none;
   background-color:transparent;
-  background:transparent url("/wp-content/plugins/wp-native-apps/admin/icons/001-back.png") center center no-repeat;
+  background:transparent url( "../icons/001-back.png" ) center center no-repeat;
   background-size:contain;
   opacity:0.5;
   width:20px;
@@ -359,26 +359,26 @@
 }
 
 .selectionSelectorPrev {
-    background: #919191 url("/wp-content/plugins/wp-native-apps/admin/icons/arrows/left.png") left center no-repeat !important;
+    background: #919191 url( "../icons/arrows/left.png" ) left center no-repeat !important;
 }
 
 .selectionSelectorNext {
-    background: #919191 url("/wp-content/plugins/wp-native-apps/admin/icons/arrows/right.png") left center no-repeat !important;
+    background: #919191 url( "../icons/arrows/right.png" ) left center no-repeat !important;
 }
 
 .selectionSelectorChild {
-    background: #919191 url("/wp-content/plugins/wp-native-apps/admin/icons/arrows/down.png") left center no-repeat !important;
+    background: #919191 url( "../icons/arrows/down.png" ) left center no-repeat !important;
 }
 
 .selectionSelectorParent {
-    background: #919191 url("/wp-content/plugins/wp-native-apps/admin/icons/arrows/up.png") left center no-repeat !important;
+    background: #919191 url( "../icons/arrows/up.png" ) left center no-repeat !important;
 }
 
 .iFrameiPhoneFrame {
     position:absolute;
     z-index:999999;
     opacity:0;
-    background:transparent url("/wp-content/plugins/wp-native-apps/admin/images/iPhoneFrame.png") center center no-repeat !important;
+    background:transparent url( "../images/iPhoneFrame.png" ) center center no-repeat !important;
     background-size:100% 100% !important;
 }
 

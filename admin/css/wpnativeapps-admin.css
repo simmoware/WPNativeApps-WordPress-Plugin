@@ -1,0 +1,666 @@
+div#wpna_settings_tabs {
+    background-color: #ececec;
+}
+.wp-menu-image img{
+  height: 20px;
+}
+
+#app_preview iframe {
+    width: 350px;
+    margin: 0 auto;
+    display: block;
+}
+#wpnaSettingsForm .wp-picker-container .hidden {
+    /* display: inline-block; */
+}
+.flex-column{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+
+}
+.flex-row{
+  display: flex;
+  flex-direction: row;
+  /* flex-wrap: wrap; */
+
+}
+.wpna_settings_page_left{
+  /* width: 60%
+  padding: 20px 5% */
+  border-right: 1.5px solid #D5D5D5;
+  padding: 50px 20px;
+  flex:2;
+}
+.wpna_settings_page_right{
+  /* width: 40%; */
+  /* padding: 20px 5% */
+  padding: 50px 20px;
+  flex:1;
+}
+
+.wpna_settings_page_wrap.flex{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+}
+.flexitem{
+  /* background-color: red; */
+  /* width: 50vw; */
+}
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  align-self: flex-start;
+}
+
+.wp-color-result-text{
+    padding: 5px 10px;
+    width: 100px;
+    text-align: left;
+}
+
+.wp-picker-container .wp-color-result.button{
+    padding: 0 0 0 40px;
+}
+
+.wp-picker-container .color-alpha{
+    width: 40px !important;
+}
+
+input{
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    height: 44px;
+}
+
+select{
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+    height: 44px;
+}
+
+textarea{
+    border: 1px solid #CCCCCC;
+    border-radius: 4px;
+}
+
+.radioInputs{
+    margin-top: 15px;
+    padding-left: 10px;
+    margin-bottom: 30px;
+}
+
+.radioInputs fieldset label{
+    margin-right: 25px;
+}
+
+h3{
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.6px;
+    line-height: 24px;
+    margin-top: 0;
+    padding-left: 10px;
+}
+
+h2{
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.6px;
+    line-height: 24px;
+    margin: 0;
+}
+
+h4{
+    margin-bottom: 8px;
+    padding-left: 10px;
+}
+
+p{
+    margin: 0;
+    padding-left: 10px;
+}
+
+.iconPickerSection{
+    align-items: center;
+}
+
+.iconPickerSection p {
+    margin-right: 15px;
+}
+
+.iconPickerSection .wpnaImageUploadSection{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.iconPickerSection .wpnaImageUploadPreview{
+    width: 50px;
+    height: 50px;
+    margin-left: 15px;
+}
+
+.iconPickerSection .pushNoti_backgroundImage_remove{
+    padding: 5px 20px;
+}
+
+.iconPickerSectionVertical{
+    align-items: start;
+    flex-direction: column;
+}
+
+.iconPickerSectionVertical .wpnaImageUploadSection{
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.iconPickerSectionVertical .wpnaImageUploadPreview{
+    width: 100px;
+    height: 150px;
+    margin-left: 15px;
+    object-fit: contain;
+}
+
+.iconPickerSectionVertical .pushNoti_backgroundImage_remove{
+    padding: 5px 20px;
+}
+
+.iconPickerSection.reversePicker > div{
+    flex-direction: row;
+}
+
+/*
+================================================================================
+============================ CSS FOR BANNERS STARTS=============================
+*/
+
+.wp-core-ui .notice.is-dismissible{
+    padding: 0;
+}
+
+.notice{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.notice:last-child{
+    margin-bottom: 30px;
+}
+
+
+.notice .pluginIcon{
+    flex-direction: column;
+    padding: 10px;
+    margin-right: 20px;
+}
+
+.notice-info .pluginIcon{
+    background-color: #F4F9FA;
+}
+
+.notice-success .pluginIcon{
+    background-color: #F4F9FA;
+}
+
+.notice-error .pluginIcon{
+    background-color: #FEF0F2;
+}
+
+.notice .pluginIcon .wpnaNoticeIcon{
+    width: 22px;
+}
+
+.notice .bannerContent{
+    width: 80%;
+}
+
+.notice .bannerContent h1{
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: -0.6px;
+    line-height: 24px;
+}
+
+.notice .bannerContent p{
+   font-size: 13px;
+   letter-spacing: -0.43px;
+   line-height: 20px;
+}
+
+
+/*
+==============================CSS FOR BANNERS ENDS==============================
+================================================================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR AUTHENTICATION STARTS======================
+*/
+
+
+.signin-signup-page-choose{
+    margin-bottom: 30px;
+}
+
+.signin-signup-page-choose .authenticationPage{
+    width: 100%;
+}
+
+
+/*
+==============================CSS FOR AUTHENTICATION ENDS=======================
+================================================================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR GENERAL STARTS=============================
+*/
+
+.general_hideElements h2{
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.general_hideElements .textcontent{
+    margin-bottom: 30px;
+}
+
+.choose_button_with_icon a{
+    font-size: 12px;
+    text-decoration: none;
+    color: #2270B1;
+    font-weight: 500;
+}
+
+.selectorInputs > div{
+    align-items: center;
+}
+
+.selectorInputs input{
+    margin-right: 10px;
+}
+
+.addAnotherHideEl{
+    padding-left: 10px;
+    margin-top: 5px;
+    font-size: 12px;
+    font-weight: bold;
+    letter-spacing: -0.4px;
+    line-height: 17px;
+}
+
+.splashScreenSection, .topBarNavSection{
+    margin-top: 50px;
+}
+
+.splashScreenSection h2{
+    margin-bottom: 5px;
+}
+
+.splashScreenSection ul{
+    list-style: disc;
+    margin-left: 25px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/*
+==============================CSS FOR GENERAL ENDS==============================
+================================================================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR PROMPTS STARTS=============================
+*/
+
+.propmt-tab-section{
+    margin-top: 50px;
+}
+
+.promptScreenPreview{
+    width: 150px;
+    align-self: center;
+    margin-bottom: 20px;
+}
+
+.propmt-tab-section .leftColumnContent{
+    width: 90%;
+}
+
+.propmt-tab-section .previewSplash{
+    width: 180px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.propmt-tab-section input{
+    width: 100%;
+}
+
+.propmt-tab-section input[type='radio']{
+    width: auto;
+}
+
+.propmt-tab-section textarea{
+    width: 100%;
+    resize: none;
+}
+
+.propmtTextSections textarea{
+    padding: 12px 10px;
+}
+
+.prompt_tracking{
+    margin-top: 50px;
+}
+
+.propmt-tab-section h3.promptHeadingWithin{
+    margin-top: 30px;
+}
+
+/*
+==============================CSS FOR PROMPTS ENDS==============================
+================================================================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR Tabs STARTS================================
+*/
+.tab-content.inactive{
+  display: none;
+}
+
+#TB_iframeContent #wpadminbar{
+  display: none;
+}
+#general > .flex-wrap{
+  display: flex;
+  flex-wrap: wrap;
+flex-direction: column;
+min-height: 66vh;
+justify-content: flex-start;
+margin: 20px 0;
+}
+#general .flex-wrap > .flex-item{
+  margin:1em 0;
+
+}
+.general_app_col1, .general_hide_header_col1, .general_topbar_navigation_section {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.section_heading {
+    font-size: 18px;
+    font-weight: bold;
+    font-family: sans-serif;
+    margin:15px 0;
+}
+label.inputLabel{
+  font-size: 12px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.itemSelectorWrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.choose_button_with_icon {
+    cursor: pointer;
+    border: 1px solid;
+    height: 2em;
+    padding: 5px 10px;
+    color: #72aee6;
+    background: transparent;
+    border-color: #72aee6;
+    border-radius: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-weight: 500;
+}
+.arrow_north:after {
+    content: '\2197';
+}
+.itemSelectorWrap.topbar_backgroundColorSection {
+    justify-content: space-between;
+    max-width: 270px;
+    flex-wrap: wrap;
+}
+.topbar_backgroundColorSection{
+  min-height: 100px;
+}
+.topbar_statusbar_textColor {
+  /* min-height: 250px; */
+}
+
+.topbar_bannerLogo .wpnaImageUploadPreview {
+    border: 1px solid #ececec;
+    width: 250px;
+    height: 100px;
+    object-fit: contain;
+    margin-left: 0;
+}
+.wpnaImageUploadPreview {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  }
+
+/* Iframe to choose elements to hide (header,footer and other)*/
+iframe.test #wpadminbar{
+  display: none;
+}
+
+/*
+================================================================================
+============================ CSS FOR Tabs ENDS==================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR iFrame BEGINS==================================
+*/
+
+/*
+================================================================================
+============================ CSS FOR iFrame ENDS ==================================
+*/
+
+.splash_screen_backgroundImage_preview{
+  height: 400px;
+  width: 220px;
+}
+.splash_screen_backgroundLogo_preview{
+  height: 250px;
+  width: 250px;
+}
+section.splashScreenSection{
+    width: 50%;
+    align-items: center;
+}
+.w50p{
+  width: 50%;
+}
+.w60p{
+  width:60%;
+}
+.w40p{
+  width:40%;
+}
+form#wpnaSettingsForm > div{
+  width: 96%;
+}
+span.wpnaicon{
+  background:transparent url("/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png") center center no-repeat;
+}
+img.wpnaNoticeIcon{
+  width: 40px;
+  height: auto;
+}
+.ai-fs, .aifs{
+  align-items: flex-start;
+}
+.jc-se{
+  justify-content:space-evenly;
+}
+.jc-fx{
+  justify-content: flex-start;
+}
+.jc-sb {
+    justify-content: space-between;
+    /* align-items: center; */
+}
+.flex-column.generalSettings {
+    justify-content: space-between;
+    height: 1980px;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding: 0 25px;
+}
+.topbarnav-previewsection {
+  /* min-height: 300px; */
+}
+.wpna_settings_page_right h2{
+    text-align: center;
+    margin-bottom: 10px;
+}
+.topbarnav-previewsection .previewImages{
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  height: 100px;
+  width: 85%;
+}
+.width250{
+  width: 250px;
+}
+.topbar_bannerLogo{
+  height: 300px;
+}
+.ai-c {
+    align-items: center;
+}
+.height150{
+  height: 150px;
+}
+.bannerLogoUploadWrap .wpna_bannerLogo{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+.wpna_bannerLogo_section{
+  display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+}
+/*
+.h1{
+  font-size: 22px;
+  font-weight: bold;
+}
+.h2{
+  font-size: 18px;
+  font-weight: bold;
+}
+.h3{
+  font-size: 14px;
+  font-weight: bold;
+} */
+
+.navStructureVisual img {
+    max-width: 320px;
+}
+.topNavPageSettings .wpnaImageUploadPreview {
+    height: 40px;
+    width: 40px;
+}
+.topNavOptionsParent {
+    min-height: 500px;
+}
+.settingParent {
+    padding: 20px 0;
+}
+
+.hide{
+  display: none;
+}
+
+
+#wpna_settings_tabs .ui-tabs-nav{
+    background: none;
+    border: none;
+    box-shadow: none;
+    padding-left: 50px;
+    padding-right: 0;
+    border-bottom: 1.5px solid #979797 /*D5D5D5*/;
+    border-radius: 0;
+    line-height: inherit;
+}
+
+#wpna_settings_tabs ul li a{
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: -0.53px;
+    text-align: center;
+}
+
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button{
+    background: #DCDCDE;
+    border: 1px solid #979797;
+}
+
+
+#wpna_settings_tabs .ui-state-default a{
+    color: rgba(0,0,0,0.5);
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active, .ui-button:active,
+.ui-button.ui-state-active:hover{
+    background: #F1F0F0;
+    color: black;
+}
+
+
+#wpna_settings_tabs .ui-state-active  a{
+    color: black;
+}
+
+
+#wpna_settings_tabs a.ui-tabs-anchor:focus{
+    box-shadow: none;
+}
+
+#wpna_settings_tabs.ui-tabs .ui-tabs-nav li{
+    border-radius: 0;
+    margin-right: 10px;
+    line-height: 20px;
+}

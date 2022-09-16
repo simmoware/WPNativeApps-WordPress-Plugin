@@ -1,35 +1,18 @@
 <?php
 /* GET STATUS OF THE ACCOUNT */
 
-//TODO: this varialbe should be set in wp-native-apps-settings to be passed here
+//TODO: this varialbe should be set in wpnativeapps-settings to be passed here
 $config = $this->wpnativeAppSettings;
 
 $appId = $config['appId'];
 $appSecret = $config['appSecret'];
-
-$curl = curl_init();
-
-curl_setopt_array($curl, array(
-  CURLOPT_URL => 'https://api.staging.wpnativeapps.com/v1/subscription/initialcheck',
-  CURLOPT_RETURNTRANSFER => true,
-  CURLOPT_ENCODING => '',
-  CURLOPT_MAXREDIRS => 10,
-  CURLOPT_TIMEOUT => 0,
-  CURLOPT_FOLLOWLOCATION => true,
-  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-  CURLOPT_CUSTOMREQUEST => 'GET',
-  CURLOPT_HTTPHEADER => array(
-    'WPNativeAppsRequestKey: sO4nl&W5sVTpBOQ#Wo07bJGMdJTZ&isi$HTe#j3x',
-    "WPNativeAppsId:$appId",
-    "WPNativeAppsSecret: $appSecret"
-  ),
-));
-
-$response = curl_exec($curl);
-
-curl_close($curl);
-$response = (array) json_decode($response);
-
+$url = 'https://api.staging.wpnativeapps.com/v1/subscription/initialcheck';
+$header = array(
+  'WPNativeAppsRequestKey: sO4nl&W5sVTpBOQ#Wo07bJGMdJTZ&isi$HTe#j3x',
+  "WPNativeAppsId:$appId",
+  "WPNativeAppsSecret: $appSecret"
+);
+$response = wp_remote_get( $url, array('headers'=> $header) );
 $status = $response['status'];
 
 if($status == false):
@@ -45,10 +28,10 @@ if($status == false):
           </p>
           <div class='price-parent'>
               <h1 align=center>$399<span class='currency'>USD</span></h1>
-              <a 
-                id="wpPayNow" 
-                href='#' 
-                class='publish-pay' 
+              <a
+                id="wpPayNow"
+                href='#'
+                class='publish-pay'
                 data-wpnativeappsid="<?php echo $appId; ?>"
                 data-wpnativeappssecret="<?php echo $appSecret; ?>"
                 data-returnurl="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>"

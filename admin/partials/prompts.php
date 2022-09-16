@@ -96,7 +96,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         placeholder="We use location services to do this that and the other thing. Please allow location services with the button below."
                         rows="3"
                         value="<?php echo $pushNotification['styles']['description'];?>"
-                    ><?php echo $pushNotification['styles']['description'];?></textarea>
+                    ><?php echo esc_textarea($pushNotification['styles']['description']);?></textarea>
                 </div>
                 <h4>Prompt accept button text </h4>
                 <div class="flex-row propmtTextSections">
@@ -104,7 +104,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         type="text"
                         name="promptPushNoti_acceptButtonText"
                         id="promptPushNoti_acceptButtonText"
-                        value="<?php echo $pushNotification['styles']['acceptButtonText'];?>"
+                        value="<?php echo esc_attr($pushNotification['styles']['acceptButtonText']);?>"
                         placeholder="Enable"
                         _not_required
                     />
@@ -118,7 +118,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptPushNoti_acceptButtonColor"
                         id="promptPushNoti_acceptButtonColor"
-                        value="<?php echo $pushNotification['styles']['acceptButtonColor'];?>"
+                        value="<?php echo esc_attr($pushNotification['styles']['acceptButtonColor']);?>"
                         _not_required
                     />
                 </div>

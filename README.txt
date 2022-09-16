@@ -1,10 +1,10 @@
 === WP Native Apps ===
 Contributors: yamuaryal, wpnativeapps
-Donate link: https://wpnativeapps.com/
-Tags: nativeapps, ios, android, app
+Tags: native, ios, android, app, mobile, node, react
+Donate Link: https://wpnativeapps.com/
 Requires at least: 3.0.1
-Tested up to: 3.4
-Stable tag: 4.3
+Tested up to: 6.0
+Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.6.20
@@ -12,13 +12,18 @@ Requires PHP: 5.6.20
 A WordPress plugin that works like magic to turn your website into an iPhone and Android app.
 
 == Description ==
-### WP Native Apps: Make a Native iPhone & Android App For Your Business
+### Convert Your WordPress Website Into a Native App
 
-This is the long description.  No limit, and you can use Markdown (as well as in the following sections).
+This new Wordpress plugin is going to redefine everything you thought you knew about app development. WPNativeApps is a Wordpress plugin that converts your website into a native iPhone and Android application.
+It’s completely free to install and configure. In the plugin settings you’ll see a preview of your app, once you’re happy with it you send it to the WPNativeApps team to publish to the app stores.
 
-For backwards compatibility, if this section is missing, the full length of the short description will be used, and
-Markdown parsed.
+Forget paying $50K+ and spending 6+ months on a development of an app for your business. WPNativeApps has completely changed the game - you can get your app on the Google Play and App Store within a week for just $99/month.
 
+With your new native app you’ll be able to send push notifications to your customers, opening a new marketing channel.
+
+The beauty of having WPNativeApps is that it works off of the same backend as your website meaning whenever you update your website you update your app instantly. Think of the time that is going to save you.
+You’ve spent so much time making an impressive user experience for your customers on your website. Amplify your effort by using your website as your app foundations.
+This has to be the best plugin for Wordpress launched in 2022 that will serve your business for years to come.
 
 
 == Installation ==
@@ -36,7 +41,7 @@ Getting started with WPNative Apps consists of two steps:
 
 ### INSTALL WP Native Apps MANUALLY
 
-1. Upload the ‘wp-native-apps’ folder to the /wp-content/plugins/ directory;
+1. Upload the ‘wpnativeapps’ folder to the /wp-content/plugins/ directory;
 1. Activate the 'WP Native Apps" plugin through the ‘Plugins’ menu in WordPress;
 1. Follow the Plugin Configuration Guide to customize your App.
 
@@ -81,8 +86,11 @@ Watch our video tutorials that show you exactly how to configure our plugin for 
 
 == Screenshots ==
 
-1. Description of screenshot-1
-2. Description of screenshot-2
+1. General Settings
+2. Bottom Navigation Settings: Set upto 5 Bottom Navigation Icons
+3. Top Navigation Settings: Set Top Navigation style for each Landing Page
+4. Authentication Settings: Select Page to Authenticate Users
+5. Publish Settings: Submit your APP to Publish on App Store & Play Store
 
 
 == Changelog ==
@@ -93,7 +101,4 @@ Watch our video tutorials that show you exactly how to configure our plugin for 
 == Upgrade Notice ==
 
 = 1.0 =
-Upgrade notices describe the reason a user should upgrade.  No more than 300 characters.
-
-
-== Arbitrary section ==
+Initial Plugin Release

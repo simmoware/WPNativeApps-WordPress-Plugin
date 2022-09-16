@@ -78,14 +78,14 @@
                 $hamburger_fontColor = $hamburger['fontColor'];
                 $hamburger_menuIcon = $hamburger['menuIcon'];
                 $hamburgerItems = isset($hamburger['hamburgerMenuItems'])? $hamburger['hamburgerMenuItems']: '';
+                $hamburgerItemsData = array();
                 if(!empty($hamburgerItems)){
-                  $hamburgerItemsData = array();
                   foreach($hamburgerItems as $buttonItem){
                     $hamburgerItemsData[] = array(
-                                    "isExternal"=>$buttonItem['isExternal'],
-                                    "icon"=>$buttonItem['icon'],
-                                    "title"=>$buttonItem['title'],
-                                    "url"=>$buttonItem['url']
+                                    "isExternal"=>isset($buttonItem['isExternal']) && $buttonItem['isExternal'],
+                                    "icon"=>isset($buttonItem['icon']) && $buttonItem['icon'],
+                                    "title"=>isset($buttonItem['title']) && $buttonItem['title'],
+                                    "url"=>isset($buttonItem['url']) && $buttonItem['url']
                                     );
                     }
                 }else{
@@ -105,9 +105,9 @@
                   $buttonsData = array();
                   foreach($buttonsSettings as $buttonItem){
                     $buttonsData[] = array(
-                                    "isExternal"=>$buttonItem['isExternal'],
-                                    "icon"=>$buttonItem['icon'],
-                                    "url"=>$buttonItem['url']
+                                    "isExternal"=>isset($buttonItem['isExternal']) && $buttonItem['isExternal'],
+                                    "icon"=>isset($buttonItem['icon']) && $buttonItem['icon'],
+                                    "url"=>isset($buttonItem['url']) && $buttonItem['url']
                                     );
                     }
                   }
@@ -264,7 +264,7 @@
                                                                                                                                                           ));
   echo '<pre>';var_dump($config);
   */
-
+                        if(!empty($hamburgerItemsData)){
                           foreach($hamburgerItemsData as $hamburgerMenuItem){
                             // var_dump($hamburgerMenuItem);die;
                             ?>
@@ -323,7 +323,8 @@
                             </div>
                             <?php
                             $buttonItemCount++;
-                          }?>
+                          }
+                        }?>
 
                           <div class="addNewNavigationIcon">
                             <a href="javascript:void(0)" onclick="addTopNavHamburgerItem(this)">Add another navigation icon</a>
@@ -413,7 +414,7 @@
                   </div>
                 </section>
 
-                <section  data-structure='4'  class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe" style="display:none;">
+                <section  data-structure='4'  class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe">
                   <div class='settingSelect'>
                     <label><input type="radio" name="topNav_<?php echo $topNavTabCount;?>_structure" <?php echo ($designType =='logoMidNavBoth') ? 'checked ' : 'logoMidNavBoth'; ?> value="logoMidNavBoth" /> Logo/Text middle and navigation icons on both left and right  </label>
                   </div>
