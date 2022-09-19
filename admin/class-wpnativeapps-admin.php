@@ -219,11 +219,10 @@ class Wp_Native_Apps_Admin {
 		if( isset( $_POST['wpna_save_settings_nonce'] ) && wp_verify_nonce( $_POST['wpna_save_settings_nonce'], 'wpna_save_settings_form_nonce') ) {
 
 			// echo '<pre>';
-			// var_dump($_POST);die;
 			$name = 				isset($_POST['wpna_app_name']) ? sanitize_text_field($_POST['wpna_app_name']) : '';
 			$headerToHide = isset($_POST['headerToHide']) ? sanitize_text_field($_POST['headerToHide']) : '';
 			$footerToHide = isset($_POST['footerToHide']) ? sanitize_text_field($_POST['footerToHide']) : '';
-			$otherHide = 		isset($_POST['otherHide']) ? sanitize_text_field($_POST['otherHide']) : null;
+			$otherHide = 		isset($_POST['otherHide']) ? $_POST['otherHide'] : null;
 			$currentTab = 		isset($_POST['currentTab']) ? sanitize_text_field($_POST['currentTab']) : 0;
 			$topNavTabsCurrent = 	isset($_POST['topNavTabsCurrent']) ? sanitize_text_field($_POST['topNavTabsCurrent']) : 0;
 
@@ -255,7 +254,7 @@ class Wp_Native_Apps_Admin {
 				"pages"=> array(),
 			);
 
-			$bottomBarNavPages = sanitize_text_field($_POST['bottomBarItemText']);
+			$bottomBarNavPages = $_POST['bottomBarItemText'];
 				if(!empty($bottomBarNavPages)){
 					$pagecount = 1;
 					foreach($bottomBarNavPages as $page){
@@ -270,7 +269,6 @@ class Wp_Native_Apps_Admin {
 							$isExternal = true;
 						}
 						$pageIcon = isset($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) ? sanitize_url($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) : '';
-
 						$designType  = isset($_POST['topNav_'.$pagecount.'_structure']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_structure']) : '';
 						$topNav = null;
 						switch($designType){
@@ -636,24 +634,25 @@ class Wp_Native_Apps_Admin {
 		}
 		global $wpnativeapps;
 		$wpnativeapps = $this->wpnativeapps;
-		$setupNotices = array(
-			array(
-						'type'=>'info is-dismissable',
-						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
-						'title'=>'Introduction to WPNativeApps',
-						'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be configured carefully in order to achieve the best result.'
-						),
-		);
+		$setupNotices = array();
 
 		$configError = get_option('WPNativeAppsConfigMessage');
 		if( !empty($configError) ){
 			$setupNotices[] = array(
-						'type'=>'info is-dismissable',
+						'type'=>'error is-dismissable',
 						'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
 						'title'=>'Configuration Error!',
 						'message'=>$configError
 					);
 		}
+
+		$setupNotices[] = array(
+					'type'=>'info is-dismissable',
+					'icon'=> plugin_dir_url( __FILE__ ).'images/WPNativeApps-Icon.png',
+					'title'=>'Introduction to WPNativeApps',
+					'message'=>'WPNativeApps will help you convert your website into beautiful app. All of the functionality provided must be configured carefully in order to achieve the best result.'
+				);
+
 
 
 		foreach($setupNotices as $notice){
@@ -793,7 +792,6 @@ class Wp_Native_Apps_Admin {
 													);
 		 $args = wp_parse_args( $args, $default );
 			extract($args);
-
 			ob_start();
 			?>
 			<div class="wpnaImageUploadSection <?php echo esc_html($inputName)?>_section">
@@ -802,15 +800,13 @@ class Wp_Native_Apps_Admin {
 					$changeButtonStyle = ($imageUrl !='') ? '': 'display:none' ;
 					$uploadButtonStyle = ($imageUrl !='') ? 'display:none': '' ;
 				?>
-				<a style="<?php echo esc_html($changeButtonStyle);?>" href="javascript:void(0)" class="wpna-remove  <?php echo esc_html($inputName);?>_remove button">Change Image</a>
-				<a style="<?php echo esc_html($uploadButtonStyle);?>" href="#" class="button wpna-upload <?php echo esc_html($inputName);?>_upload">Upload image</a>
-
-				<input type="hidden" name="<?php echo esc_html($inputName);?>_image_id"  class="wpna_img_id" value="">
-				<input type="hidden" name="<?php echo esc_html($inputName);?>_image_url"  class="wpna_img_url" value="<?php echo esc_html( $imageUrl)  ?>">
+				<a style="<?php echo $changeButtonStyle;?>" href="javascript:void(0)" class="wpna-remove  <?php echo ($inputName);?>_remove button">Change Image</a>
+				<a style="<?php echo $uploadButtonStyle;?>" href="#" class="button wpna-upload <?php echo ($inputName);?>_upload">Upload image</a>
+				<input type="hidden" name="<?php echo esc_attr($inputName);?>_image_id"  class="wpna_img_id" value="">
+				<input type="hidden" name="<?php echo esc_attr($inputName);?>_image_url"  class="wpna_img_url" value="<?php echo esc_attr( $imageUrl)  ?>">
 			</div>
 			<?php
-			return wp_kses_post(ob_get_clean());
-			// return ob_get_clean();
+			return ob_get_clean();
 	}
 
 	/*
