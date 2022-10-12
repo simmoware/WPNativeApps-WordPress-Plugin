@@ -127,14 +127,10 @@ class Wp_Native_Apps_Activator {
 			];
 
 			file_put_contents(str_replace("/includes", "/admin", dirname(__FILE__)) . '/config.json', json_encode($config));
-			update_option( 'WPNativeAppsConfigMessage',null, '', 'yes' );
+			delete_option( 'WPNativeAppsConfigMessage');
 		}else{
-			// add_action('admin_notices',array($this,'wpnativeapps_activation_error') );
-			if ( ! get_option('WPNativeAppsConfigMessage') ){
-				update_option( 'WPNativeAppsConfigMessage', "There was error activationg the plugin: ".$response['message'], '', 'yes' );
-			}else{
-				update_option( 'WPNativeAppsConfigMessage', "There was error activationg the plugin: ".$response['message'], '', 'yes' );
-			}
+			// Add option to notify of error.
+			update_option( 'WPNativeAppsConfigMessage', "There was error activationg the plugin: ".$response['message'], '', 'yes' );
 		}
 
 

@@ -30,6 +30,7 @@ class Wp_Native_Apps_Deactivator {
 	 * @since    1.0.0
 	 */
 	public static function deactivate() {
+		delete_option( 'WPNativeAppsConfigMessage');
 
 	}
 

@@ -664,27 +664,28 @@ $config = $this->wpnativeAppSettings;
 
   </form>
 </div>
-
-
-
-
-
   </div>
-  <div class="wpna_settings_page_right sticky">
-    <h2>Preview your app</h2>
-    <div id="app_preview">
+    <div class="wpna_settings_page_right sticky">
+        <h2>Preview your app</h2>
+        <button class='preview-popup-trigger'>Ready to preview your app on your device?</button>
+        <div id="appPreview">
+            <div class='appPreviewPhoneContainer'>
+              <iframe src="/?hidetoolbar=true" class="appPreviewiFrame" onload="appPreviewerDidLoad();"></iframe>
+              <div class="iFrameiPhoneFrame-Previewer"></div>
+            </div>
+        </div>
     </div>
   </div>
+  <div class='popup-bg'>
+      <div class='qr-code-popup'>
+          <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/qrcode.png' class='preview-qr-code' />
+          <h2>Scan your QR code from inside the WPNativeApps app to preview your App on your device</h2>
+          <div class='download-app-inner'>
+              <h4>Download WPNativeApps on the App Store or Google Play Store</h4>
+              <div class='download-app-icons'>
+                  <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/app-store.png' />
+                  <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/play-store.png' />
+              </div>
+          </div>
+      </div>
   </div>
-<script type="text/javascript">
-    jQuery(function($){
-        $(window).bind('load', function()
-        {
-            $("#app_preview").append(`
-                <iframe id="previewAppIframe" src="https://appetize.io/embed/mu7bz2yie6wgfgrtsmg42euhau?device=iphone12promax&osVersion=14.5&scale=75&deviceColor=black&launchUrl=wpnativeapps://?config=<?php
-            echo esc_url( plugins_url( 'config.json', dirname(__FILE__) ) );
-            ?>" width="100%" height="1000px" scrolling="no" ></iframe>
-            `);
-        })
-    })
-</script>

@@ -290,8 +290,9 @@ class Wp_Native_Apps_Admin {
 								$hamburgerMenuItems = array();
 								if(!empty($HBItemSources)){
 									$buttonCount = 1;
-									$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url'] : '';
-									$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title'] : '';
+									$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) : '';
+
+									$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
 									foreach ($HBItemSources as $key=>$value){
 										$hamburgerMenuItems[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
@@ -302,7 +303,6 @@ class Wp_Native_Apps_Admin {
 										$buttonCount++;
 									}
 								}
-
 
 								$topNav = array(
 				            "designType"=> "logoLeftBurgerRight",
@@ -857,6 +857,7 @@ function api_wpna_setup_configuration($request) {
 				{
 					$update = file_put_contents(dirname(__FILE__) . '/config.json', json_encode($newConfig));
 					if($update){
+						delete_option( 'WPNativeAppsConfigMessage');
 						$return['code'] = 200;
 						$return['message'] = "Configuration Updated!";
 					}else{

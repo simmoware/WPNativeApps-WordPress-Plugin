@@ -2,6 +2,12 @@ var topNavTabs = null;
 (function( $ ) {
 	'use strict';
 	 	$(window).load(function(){
+	 	    $(".preview-popup-trigger").on("click", function() {
+	 	       $(".popup-bg").css('display', 'flex');
+	 	    });
+	 	    $(".popup-bg").on("click", function() {
+	 	       $(".popup-bg").css('display', 'none');
+	 	    });
 			$('.color-picker').wpColorPicker();
 			document.currentTabInput = getUrlParameter('section');
 			document.topNavTabsCurrent = getUrlParameter('topnav');
@@ -24,7 +30,7 @@ var topNavTabs = null;
 
       $("#wpPayNow").on("click press", function(){
         $.ajax({
-            url: "http://localhost:8080/v1/subscription/checkout/setup-payment?returnUrl="+$(this).attr("data-returnurl"),
+            url: "https://api.wpnativeapps.com/v1/subscription/checkout/setup-payment?returnUrl="+$(this).attr("data-returnurl"),
             headers: {
                 'WPNativeAppsId': $(this).attr("data-wpnativeappsid"),
                 'WPNativeAppsSecret': $(this).attr("data-wpnativeappssecret"),
@@ -40,9 +46,14 @@ var topNavTabs = null;
       })
 		});
 
-
+        setTimeout(function () {
+            setPreviewFrame();
+            setiPhonePreviewFrame();
+        }, 2000);
 		$(window).resize(function () {
 		   setiPhoneFrame();
+           setPreviewFrame();
+           setiPhonePreviewFrame();
 		});
 
 	$(document).on('change','#accountAddressCountry',function(){
@@ -53,6 +64,184 @@ var topNavTabs = null;
 
 })( jQuery );
 $=jQuery;
+
+function reloadPreviewer() {
+    var iFrame = $(".appPreviewiFrame").get(0);
+    iFrame.contentWindow.location.reload();
+}
+
+function appPreviewerDidLoad() {
+    var iFrame = $(".appPreviewiFrame").get(0);
+    var iDoc = iFrame.contentWindow || iFrame.contentDocument;
+    if (iDoc.document) {
+        iDoc = iDoc.document;
+        // $(iDoc.body).find("*").each(function () {
+        //     $(this).on("click", function (event) {
+        //         event.preventDefault();
+        //         $(".popup-bg").css('display', 'flex');
+        //     });
+        // });
+        setTimeout(function () {
+            var headerPath = $("input[name='headerToHide']").val();
+            var footerPath = $("input[name='footerToHide']").val();
+            var pathsToHide = [headerPath, footerPath];
+            $("input[name='otherHide[]']").each(function () {
+                if ($(this).val().length > 0) {
+                    pathsToHide.push($(this).val());
+                }
+            });
+    
+            for (var p = 0; p < pathsToHide.length; p++) {
+                $(iDoc.body).find(pathsToHide[p]).hide();
+            }
+
+            var topNavType = $("input[name='topNav_1_structure']:checked").val();
+            console.log(topNavType);
+            // logoLeftBurgerRight, logoOnly, logoLeftNavRight, logoMidNavBoth
+
+            var replaceVals = {
+                "BACKGROUND_COLOUR":$("#topbar_navigation_backgroundColor").val(),
+                "LOGO_POSITION":"logo-"+$("input[name='topNav_1_"+topNavType+"_align']:checked").val(),
+                "LOGO_URL":$("input[name='topBarNav_styles_bannerLogo_image_url']").val(),
+                "PAGE_TITLE":$("input[name='topNav_1_text']").val(),
+                "LOGO_OR_TEXT":"show-"+$("input[name='topNav_1_"+topNavType+"_type']:checked").val(),
+                "TEXT_COLOUR":$("input[name='topbar_textColour']:checked").val()
+            };
+
+            var topNavTemplate = "top-nav-logo-only";
+
+            if (topNavType === "logoLeftBurgerRight") {
+                topNavTemplate = "top-nav-logo-left-burger-right";
+                replaceVals['HAMBURGER_ICON'] = $("input[name='topNav_1_logoLeftBurgerRight_HamburgerMenuIcon_image_url']").val();
+            } else if (topNavType === "logoLeftNavRight") {
+                topNavTemplate = "top-nav-logo-left-nav-right";
+                var numTopNavItems = $("#topNavPage_1 section[data-structure=3] .topNavPageIconItem").length;
+                replaceVals['MENU_ITEM_1'] = numTopNavItems > 0 ? "active" : "";
+                replaceVals['MENU_ITEM_1_ICON_URL'] = numTopNavItems > 0 ? $("input[name='topNav_1_logoLeftNavRight_iconImage_1_image_url']").val() : "";
+                replaceVals['MENU_ITEM_2'] = numTopNavItems > 1 ? "active" : "";
+                replaceVals['MENU_ITEM_2_ICON_URL'] = numTopNavItems > 1 ? $("input[name='topNav_1_logoLeftNavRight_iconImage_2_image_url']").val() : "";
+                replaceVals['MENU_ITEM_3'] = numTopNavItems > 2 ? "active" : "";
+                replaceVals['MENU_ITEM_3_ICON_URL'] = numTopNavItems > 2 ? $("input[name='topNav_1_logoLeftNavRight_iconImage_3_image_url']").val() : "";
+            } else if (topNavType === "logoMidNavBoth") {
+                topNavTemplate = "top-nav-logo-middle-nav-both";
+                var numTopNavItems = $("#topNavPage_1 section[data-structure=4] .topNavPageIconItem").length;
+                replaceVals['MENU_ITEM_1'] = numTopNavItems > 0 ? "active" : "";
+                replaceVals['MENU_ITEM_1_ICON_URL'] = numTopNavItems > 0 ? $("input[name='topNav_1_logoMidNavBoth_iconImage_1_image_url']").val() : "";
+                replaceVals['MENU_ITEM_2'] = numTopNavItems > 1 ? "active" : "";
+                replaceVals['MENU_ITEM_2_ICON_URL'] = numTopNavItems > 1 ? $("input[name='topNav_1_logoMidNavBoth_iconImage_2_image_url']").val() : "";
+                replaceVals['MENU_ITEM_3'] = numTopNavItems > 2 ? "active" : "";
+                replaceVals['MENU_ITEM_3_ICON_URL'] = numTopNavItems > 2 ? $("input[name='topNav_1_logoMidNavBoth_iconImage_3_image_url']").val() : "";
+            }
+            //load app header
+            getPreviewTemplate(topNavTemplate, replaceVals, function (data) {
+                $(iDoc.body).prepend("<div class='appHeader'>" + data + "</div>");
+                $(iDoc.body).css({
+                    "padding-top":"50px"
+                })
+                
+            });
+
+            //load app footer
+            var bottomNavTotal = $(".navigationBottomBarItem").length;
+            var bottomNavHtml = "<div class='appFooter'>";
+            var appendedMenuItems = 0;
+
+            const rgb = $("input[name='bottombarNavStyle_activeIconColor']").val().replace("rgb\(", "").replace("\)", "").split(",");
+            
+            if (rgb.length !== 3) {
+            alert('Invalid format!');
+            return;
+            }
+
+            const color = new WPNA_Color(rgb[0], rgb[1], rgb[2]);
+            const solver = new WPNA_Solver(color);
+            const result = solver.solve();
+
+            let lossMsg;
+            if (result.loss < 1) {
+            lossMsg = 'This is a perfect result.';
+            } else if (result.loss < 5) {
+            lossMsg = 'The is close enough.';
+            } else if (result.loss < 15) {
+            lossMsg = 'The color is somewhat off. Consider running it again.';
+            } else {
+            lossMsg = 'The color is extremely off. Run it again!';
+            }
+
+            // $('.realPixel').css('background-color', color.toString());
+            // $('.filterPixel').attr('style', result.filter);
+            // $('.filterDetail').text(result.filter);
+            // $('.lossDetail').html(`Loss: ${result.loss.toFixed(1)}. <b>${lossMsg}</b>`);
+            getPreviewTemplate("bottom-nav", {
+                "BACKGROUND_COLOUR":$("#bottombarNavStyle_backgroundColor").val(),
+                "DEFAULT_COLOUR":$("input[name='bottombarNavStyle_defaultIconColor']").val(),
+                "ACTIVE_COLOUR":$("input[name='bottombarNavStyle_activeIconColor']").val(),
+                "ACTIVE_ICON_CSS":result.filter
+            }, function (data) {
+                bottomNavHtml += data;
+                
+                for (let i = 1; i < bottomNavTotal+1; i++) {
+                    getPreviewTemplate("bottom-nav-menu-item", {
+                        "MENU_ITEM_ICON":$('input[name="bottomBarNavLogo_'+i+'_image_url' + '"]').val(),
+                        "MENU_ITEM_LABEL":$(".bottomBarItemText.item_"+i).val(),
+                        "INDEX":i
+                    }, function (data) {
+                        bottomNavHtml += data;
+                        appendedMenuItems++;
+                    });
+                }
+                
+            });
+            var footerInterval = setInterval(function () {
+                // element.innerHTML += "Hello"
+                if (appendedMenuItems === bottomNavTotal) {
+                    // console.log(bottomNavHtml);
+                    bottomNavHtml += "</div>";
+                    bottomNavHtml += "</div>";
+                    $(iDoc.body).append(bottomNavHtml);
+                    $(iDoc.body).css({"padding-bottom":"80px"});
+                    $(iDoc.body).find("*").each(function () {
+                        $(this).on("click", function (event) {
+                            event.preventDefault();
+                            $(".popup-bg").css('display', 'flex');
+                        });
+                    });
+                    clearInterval(footerInterval);
+                }
+            }, 200);
+            
+            
+        }, 1000);
+    }
+}
+
+function setiPhonePreviewFrame() {
+    var $ = jQuery;
+
+    var iPhoneFrame = $(".iFrameiPhoneFrame-Previewer").get(0);
+    var iframe = $(".appPreviewiFrame").get(0);
+    var iPhoneWidthScale = 1.1143923363;
+    var iPhoneHeightScale = 2.1641025641;
+    $(iPhoneFrame).css({
+       width: $(iframe).innerWidth()*0.9,
+       height: (($(iframe).innerWidth()*0.9*iPhoneHeightScale)-55)
+    });
+    var iFrameWidth = $(iframe).outerWidth();
+    var width = iFrameWidth * iPhoneWidthScale;
+    var height = width*iPhoneHeightScale-55;
+    $(iPhoneFrame).css({
+       width:width,
+       height:height*0.9383155397,
+       opacity:1
+    });
+}
+
+function setPreviewFrame() {
+    var $ = jQuery;
+    var iframe = $("#appPreview iframe").get(0);
+    var width = $(iframe).outerWidth();
+    $(iframe).css("height", (width*2.1641025641)+"px");
+}
 
 var getUrlParameter = function getUrlParameter(sParam) {
     var sPageURL = window.location.search.substring(1),
@@ -128,7 +317,23 @@ function getTemplate(template, params, callback) {
         success: function (data){
             for (var key in params) {
                 var val = params[key];
-                data = data.replace("[[" + key + "]]", val);
+                data = data.replaceAll("[[" + key + "]]", val);
+            }
+            callback(data);
+        }
+    });
+}
+
+function getPreviewTemplate(template, params, callback) {
+    var $ = jQuery;
+    $.ajax({
+        url: WPNativeApps.pluginURL + "preview-templates/" + template + ".html",
+        success: function (data){
+            params["ABSOLUTE_URL_PATH"] = WPNativeApps.pluginURL;
+            params['VERSION_NUMBER'] = Date.now();
+            for (var key in params) {
+                var val = params[key];
+                data = data.replaceAll("[[" + key + "]]", val);
             }
             callback(data);
         }
@@ -547,7 +752,7 @@ function setiPhoneFrame() {
         var iPhoneFrame = $(".iFrameiPhoneFrame").get(0);
         var iframe = $(".iFramePopoverElement").get(0);
         var iPhoneWidthScale = 1.1143923363;
-        var iPhoneHeightScale = 2.1641025641
+        var iPhoneHeightScale = 2.1641025641;
         $(".iFrameContainer iframe").css({
            width: $(".iFrame_Half_Container").innerWidth()*0.9,
            height: $(".iFrame_Half_Container").innerWidth()*0.9*iPhoneHeightScale
@@ -636,6 +841,7 @@ function doneSelection(type) {
         theOther.value = selectedElement;
     }
     jQuery(".iFrameWindow").remove();
+    reloadPreviewer();
 }
 
 function closeiFrameWindow(event) {
@@ -902,7 +1108,8 @@ function addTopNavTabsItem(count){
 
 }
 
-function removeTopNavTabsItem(count){
+function removeTopNavTabsItem(tabIndex){
+	var count = parseInt(tabIndex)+1;
 	var topNavTabs =	this.topNavTabs;
 	// var topNavTabs = $('#topNavTabs').tabs();
 	$('li[aria-controls="topNavPage_'+count+'"]').remove();
@@ -1149,3 +1356,312 @@ function removeTopNavigationIconForPage(el){
 
 	// }
 }
+
+
+'use strict';
+
+class WPNA_Color {
+  constructor(r, g, b) {
+    this.set(r, g, b);
+  }
+  
+  toString() {
+    return `rgb(${Math.round(this.r)}, ${Math.round(this.g)}, ${Math.round(this.b)})`;
+  }
+
+  set(r, g, b) {
+    this.r = this.clamp(r);
+    this.g = this.clamp(g);
+    this.b = this.clamp(b);
+  }
+
+  hueRotate(angle = 0) {
+    angle = angle / 180 * Math.PI;
+    const sin = Math.sin(angle);
+    const cos = Math.cos(angle);
+
+    this.multiply([
+      0.213 + cos * 0.787 - sin * 0.213,
+      0.715 - cos * 0.715 - sin * 0.715,
+      0.072 - cos * 0.072 + sin * 0.928,
+      0.213 - cos * 0.213 + sin * 0.143,
+      0.715 + cos * 0.285 + sin * 0.140,
+      0.072 - cos * 0.072 - sin * 0.283,
+      0.213 - cos * 0.213 - sin * 0.787,
+      0.715 - cos * 0.715 + sin * 0.715,
+      0.072 + cos * 0.928 + sin * 0.072,
+    ]);
+  }
+
+  grayscale(value = 1) {
+    this.multiply([
+      0.2126 + 0.7874 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 + 0.2848 * (1 - value),
+      0.0722 - 0.0722 * (1 - value),
+      0.2126 - 0.2126 * (1 - value),
+      0.7152 - 0.7152 * (1 - value),
+      0.0722 + 0.9278 * (1 - value),
+    ]);
+  }
+
+  sepia(value = 1) {
+    this.multiply([
+      0.393 + 0.607 * (1 - value),
+      0.769 - 0.769 * (1 - value),
+      0.189 - 0.189 * (1 - value),
+      0.349 - 0.349 * (1 - value),
+      0.686 + 0.314 * (1 - value),
+      0.168 - 0.168 * (1 - value),
+      0.272 - 0.272 * (1 - value),
+      0.534 - 0.534 * (1 - value),
+      0.131 + 0.869 * (1 - value),
+    ]);
+  }
+
+  saturate(value = 1) {
+    this.multiply([
+      0.213 + 0.787 * value,
+      0.715 - 0.715 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 + 0.285 * value,
+      0.072 - 0.072 * value,
+      0.213 - 0.213 * value,
+      0.715 - 0.715 * value,
+      0.072 + 0.928 * value,
+    ]);
+  }
+
+  multiply(matrix) {
+    const newR = this.clamp(this.r * matrix[0] + this.g * matrix[1] + this.b * matrix[2]);
+    const newG = this.clamp(this.r * matrix[3] + this.g * matrix[4] + this.b * matrix[5]);
+    const newB = this.clamp(this.r * matrix[6] + this.g * matrix[7] + this.b * matrix[8]);
+    this.r = newR;
+    this.g = newG;
+    this.b = newB;
+  }
+
+  brightness(value = 1) {
+    this.linear(value);
+  }
+  contrast(value = 1) {
+    this.linear(value, -(0.5 * value) + 0.5);
+  }
+
+  linear(slope = 1, intercept = 0) {
+    this.r = this.clamp(this.r * slope + intercept * 255);
+    this.g = this.clamp(this.g * slope + intercept * 255);
+    this.b = this.clamp(this.b * slope + intercept * 255);
+  }
+
+  invert(value = 1) {
+    this.r = this.clamp((value + this.r / 255 * (1 - 2 * value)) * 255);
+    this.g = this.clamp((value + this.g / 255 * (1 - 2 * value)) * 255);
+    this.b = this.clamp((value + this.b / 255 * (1 - 2 * value)) * 255);
+  }
+
+  hsl() {
+    // Code taken from https://stackoverflow.com/a/9493060/2688027, licensed under CC BY-SA.
+    const r = this.r / 255;
+    const g = this.g / 255;
+    const b = this.b / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h, s, l = (max + min) / 2;
+
+    if (max === min) {
+      h = s = 0;
+    } else {
+      const d = max - min;
+      s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+      switch (max) {
+        case r:
+          h = (g - b) / d + (g < b ? 6 : 0);
+          break;
+
+        case g:
+          h = (b - r) / d + 2;
+          break;
+
+        case b:
+          h = (r - g) / d + 4;
+          break;
+      }
+      h /= 6;
+    }
+
+    return {
+      h: h * 100,
+      s: s * 100,
+      l: l * 100,
+    };
+  }
+
+  clamp(value) {
+    if (value > 255) {
+      value = 255;
+    } else if (value < 0) {
+      value = 0;
+    }
+    return value;
+  }
+}
+
+class WPNA_Solver {
+  constructor(target, baseColor) {
+    this.target = target;
+    this.targetHSL = target.hsl();
+    this.reusedColor = new WPNA_Color(0, 0, 0);
+  }
+
+  solve() {
+    const result = this.solveNarrow(this.solveWide());
+    return {
+      values: result.values,
+      loss: result.loss,
+      filter: this.css(result.values),
+    };
+  }
+
+  solveWide() {
+    const A = 5;
+    const c = 15;
+    const a = [60, 180, 18000, 600, 1.2, 1.2];
+
+    let best = { loss: Infinity };
+    for (let i = 0; best.loss > 25 && i < 3; i++) {
+      const initial = [50, 20, 3750, 50, 100, 100];
+      const result = this.spsa(A, a, c, initial, 1000);
+      if (result.loss < best.loss) {
+        best = result;
+      }
+    }
+    return best;
+  }
+
+  solveNarrow(wide) {
+    const A = wide.loss;
+    const c = 2;
+    const A1 = A + 1;
+    const a = [0.25 * A1, 0.25 * A1, A1, 0.25 * A1, 0.2 * A1, 0.2 * A1];
+    return this.spsa(A, a, c, wide.values, 500);
+  }
+
+  spsa(A, a, c, values, iters) {
+    const alpha = 1;
+    const gamma = 0.16666666666666666;
+
+    let best = null;
+    let bestLoss = Infinity;
+    const deltas = new Array(6);
+    const highArgs = new Array(6);
+    const lowArgs = new Array(6);
+
+    for (let k = 0; k < iters; k++) {
+      const ck = c / Math.pow(k + 1, gamma);
+      for (let i = 0; i < 6; i++) {
+        deltas[i] = Math.random() > 0.5 ? 1 : -1;
+        highArgs[i] = values[i] + ck * deltas[i];
+        lowArgs[i] = values[i] - ck * deltas[i];
+      }
+
+      const lossDiff = this.loss(highArgs) - this.loss(lowArgs);
+      for (let i = 0; i < 6; i++) {
+        const g = lossDiff / (2 * ck) * deltas[i];
+        const ak = a[i] / Math.pow(A + k + 1, alpha);
+        values[i] = fix(values[i] - ak * g, i);
+      }
+
+      const loss = this.loss(values);
+      if (loss < bestLoss) {
+        best = values.slice(0);
+        bestLoss = loss;
+      }
+    }
+    return { values: best, loss: bestLoss };
+
+    function fix(value, idx) {
+      let max = 100;
+      if (idx === 2 /* saturate */) {
+        max = 7500;
+      } else if (idx === 4 /* brightness */ || idx === 5 /* contrast */) {
+        max = 200;
+      }
+
+      if (idx === 3 /* hue-rotate */) {
+        if (value > max) {
+          value %= max;
+        } else if (value < 0) {
+          value = max + value % max;
+        }
+      } else if (value < 0) {
+        value = 0;
+      } else if (value > max) {
+        value = max;
+      }
+      return value;
+    }
+  }
+
+  loss(filters) {
+    // Argument is array of percentages.
+    const color = this.reusedColor;
+    color.set(0, 0, 0);
+
+    color.invert(filters[0] / 100);
+    color.sepia(filters[1] / 100);
+    color.saturate(filters[2] / 100);
+    color.hueRotate(filters[3] * 3.6);
+    color.brightness(filters[4] / 100);
+    color.contrast(filters[5] / 100);
+
+    const colorHSL = color.hsl();
+    return (
+      Math.abs(color.r - this.target.r) +
+      Math.abs(color.g - this.target.g) +
+      Math.abs(color.b - this.target.b) +
+      Math.abs(colorHSL.h - this.targetHSL.h) +
+      Math.abs(colorHSL.s - this.targetHSL.s) +
+      Math.abs(colorHSL.l - this.targetHSL.l)
+    );
+  }
+
+  css(filters) {
+    function fmt(idx, multiplier = 1) {
+      return Math.round(filters[idx] * multiplier);
+    }
+    return `filter: invert(${fmt(0)}%) sepia(${fmt(1)}%) saturate(${fmt(2)}%) hue-rotate(${fmt(3, 3.6)}deg) brightness(${fmt(4)}%) contrast(${fmt(5)}%);`;
+  }
+}
+
+function hexToRgb(hex) {
+  // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
+  console.log(hex);
+  const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+  hex = hex.replace(shorthandRegex, (m, r, g, b) => {
+    return r + r + g + g + b + b;
+  });
+
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result
+    ? [
+      parseInt(result[1], 16),
+      parseInt(result[2], 16),
+      parseInt(result[3], 16),
+    ]
+    : null;
+}
+
+function componentToHex(c) {
+    var hex = c.toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
+  }
+  
+  function rgbToHex(r, g, b) {
+    return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
+  }
+  
+//   alert(rgbToHex(0, 51, 255)); // #0033ff

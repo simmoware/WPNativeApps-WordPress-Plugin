@@ -82,10 +82,10 @@
                 if(!empty($hamburgerItems)){
                   foreach($hamburgerItems as $buttonItem){
                     $hamburgerItemsData[] = array(
-                                    "isExternal"=>isset($buttonItem['isExternal']) && $buttonItem['isExternal'],
-                                    "icon"=>isset($buttonItem['icon']) && $buttonItem['icon'],
-                                    "title"=>isset($buttonItem['title']) && $buttonItem['title'],
-                                    "url"=>isset($buttonItem['url']) && $buttonItem['url']
+                                    "isExternal"=>isset($buttonItem['isExternal']) ? $buttonItem['isExternal'] : 'external',
+                                    "icon"=>isset($buttonItem['icon']) ? $buttonItem['icon'] : '',
+                                    "title"=>isset($buttonItem['title']) ? $buttonItem['title'] : '',
+                                    "url"=>isset($buttonItem['url']) ? $buttonItem['url'] : ''
                                     );
                     }
                 }else{
@@ -105,9 +105,9 @@
                   $buttonsData = array();
                   foreach($buttonsSettings as $buttonItem){
                     $buttonsData[] = array(
-                                    "isExternal"=>isset($buttonItem['isExternal']) && $buttonItem['isExternal'],
-                                    "icon"=>isset($buttonItem['icon']) && $buttonItem['icon'],
-                                    "url"=>isset($buttonItem['url']) && $buttonItem['url']
+                                    "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
+                                    "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
+                                    "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
                                     );
                     }
                   }
@@ -121,11 +121,11 @@
                   $leftButtons = array();
                   foreach($leftButtonsSettings as $buttonItem){
                     $leftButtons[] = array(
-                                    "isExternal"=>$buttonItem['isExternal'],
-                                    "icon"=>$buttonItem['icon'],
-                                    "url"=>$buttonItem['url']
+                                      "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
+                                      "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
+                                      "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
                                     );
-                    }
+                                  }
                   }
 
                 // $rightButtons = $navPage['rightButtons'];
@@ -134,9 +134,9 @@
                   $rightButtons = array();
                   foreach($rightButtonsSettings as $buttonItem){
                     $rightButtons[] = array(
-                                    "isExternal"=>$buttonItem['isExternal'],
-                                    "icon"=>$buttonItem['icon'],
-                                    "url"=>$buttonItem['url']
+                                    "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
+                                    "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
+                                    "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
                                     );
                     }
                   }

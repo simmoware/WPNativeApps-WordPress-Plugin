@@ -1,0 +1,51 @@
+.logo-left {
+    justify-content: start;
+    padding-left:20px;
+}
+
+.logo-right {
+    justify-content: end;
+    padding-right:20px;
+}
+
+.logo-middle {
+    justify-content: center;
+}
+
+.logo {
+    width:auto;
+    height:auto;
+    max-height:30px;
+    max-width:180px;
+}
+
+.top-nav {
+    height:50px;
+    padding:0px 20px;
+}
+
+.top-nav.show-logo .title {
+    display:none;
+}
+
+.top-nav.show-text .logo {
+    display:none;
+}
+
+.title {
+    font-size:18px !important;
+    font-weight:700 !important;
+    margin:0;
+}
+
+.top-menu-icon {
+    height:auto;
+    width:auto;
+    max-width:18px;
+    max-height:18px;
+    display:none;
+}
+
+.top-menu-icon.active {
+    display:block;
+}
