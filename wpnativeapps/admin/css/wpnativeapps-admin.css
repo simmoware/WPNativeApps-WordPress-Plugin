@@ -514,7 +514,7 @@ form#wpnaSettingsForm > div{
   width: 96%;
 }
 span.wpnaicon{
-  background:transparent url("/wp-content/plugins/wp-native-apps/admin/images/WPNativeApps-Icon.png") center center no-repeat;
+  background:transparent url("../images/WPNativeApps-Icon.png") center center no-repeat;
 }
 img.wpnaNoticeIcon{
   width: 40px;
