@@ -1,0 +1,58 @@
+#wpNativeAppsAnalytics .wpna-logo {
+    width:240px;
+    height:auto;
+    display:block;
+    margin:0 auto;
+}
+
+#wpNativeAppsAnalytics {
+    margin:0 auto;
+    display:block;
+    width:800px;
+    max-width:100%;
+    margin-top:50px;
+}
+
+
+#wpNativeAppsAnalytics h1 {
+    width:100%;
+    font-size:36px;
+}
+
+#wpNativeAppsAnalytics h2 {
+    width:100%;
+    font-size:30px;
+}
+
+#wpNativeAppsAnalytics p, #wpNativeAppsAnalytics h2 {
+    text-align:center;
+}
+
+#wpNativeAppsAnalytics p a {
+    font-weight:bold;
+    text-decoration:underline;
+}
+
+
+#wpNativeAppsAnalytics .analytics-row {
+    gap:50px;
+    margin-top:50px;
+    
+}
+
+#wpNativeAppsAnalytics .analytics-parent {
+    width:33.33%;
+    padding:30px;
+    background-color:#fff;
+    border:1px solid #cccccc;
+    justify-content: center;
+}
+
+#wpNativeAppsAnalytics .long {
+    width:50%;
+}
+
+#wpNativeAppsAnalytics .analytics-parent p {
+    margin-top:10px;
+}
+
