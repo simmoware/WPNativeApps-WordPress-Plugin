@@ -678,16 +678,16 @@ $config = $this->wpnativeAppSettings;
   </div>
   <div class='popup-bg'>
       <div class='qr-code-popup'>
-          <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/qrcode.png' class='preview-qr-code' />
+          <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/qrcode.png' class='preview-qr-code' />
           <h2>Scan your QR code from inside the WPNativeApps app to preview your App on your device</h2>
           <div class='download-app-inner'>
               <h4>Download WPNativeApps on the App Store or Google Play Store</h4>
               <div class='download-app-icons'>
                   <a href="https://androidpreviewerapp.wpnativeapps.com">
-                    <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/app-store.png' />
+                    <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/app-store.png' />
                   </a>
                   <a href="https://iospreviewerapp.wpnativeapps.com">
-                    <img src='https://wpnativeapps.com/wp-content/plugins/wpnativeapps/admin/images/general/play-store.png' />
+                    <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/play-store.png' />
                   </a>
               </div>
           </div>

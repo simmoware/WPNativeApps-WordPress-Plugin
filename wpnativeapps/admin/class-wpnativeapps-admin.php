@@ -222,7 +222,7 @@ class Wp_Native_Apps_Admin {
 			$name = 				isset($_POST['wpna_app_name']) ? sanitize_text_field($_POST['wpna_app_name']) : '';
 			$headerToHide = isset($_POST['headerToHide']) ? sanitize_text_field($_POST['headerToHide']) : '';
 			$footerToHide = isset($_POST['footerToHide']) ? sanitize_text_field($_POST['footerToHide']) : '';
-			$otherHide = 		isset($_POST['otherHide']) ? $_POST['otherHide'] : null;
+			$otherHide = 	isset($_POST['otherHide']) ? $this->sanitizeMultipleInputs($_POST['otherHide']) : null;
 			$currentTab = 		isset($_POST['currentTab']) ? sanitize_text_field($_POST['currentTab']) : 0;
 			$topNavTabsCurrent = 	isset($_POST['topNavTabsCurrent']) ? sanitize_text_field($_POST['topNavTabsCurrent']) : 0;
 
@@ -253,6 +253,9 @@ class Wp_Native_Apps_Admin {
 			 ),
 				"pages"=> array(),
 			);
+
+
+			// var_dump($_POST['bottomBarItemText']);die;
 
 			$bottomBarNavPages = $_POST['bottomBarItemText'];
 				if(!empty($bottomBarNavPages)){
@@ -321,8 +324,8 @@ class Wp_Native_Apps_Admin {
 							case 'logoLeftNavRight':{
 
 								$navSources = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_Source'];
-								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_internalURL'];
-								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_externalURL'];
+								$navInternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftNavRight_internalURL']);
+								$navExternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftNavRight_externalURL']);
 
 
 								$buttons = array();
@@ -353,7 +356,7 @@ class Wp_Native_Apps_Admin {
 							case 'logoMidNavBoth':{
 
 
-								$navSources = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source'];
+								$navSources = sanitize_text_field($_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source']);
 								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_internalURL'];
 								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_externalURL'];
 
@@ -363,9 +366,10 @@ class Wp_Native_Apps_Admin {
 								if(!empty($navSources)){
 									$buttonCount = 1;
 									foreach ($navSources as $key=>$value){
+										$_iconUrl = isset($_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']) : '';
 										$temp = array(
 											"isExternal"=> $value == 'external' ? true : false,
-											"icon"=> isset($_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url'])? $_POST['topNav_'.$pagecount.'_logoMidNavBoth_iconImage_'.$buttonCount.'_image_url']: '',
+											"icon"=> $_iconUrl,
 											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? get_permalink($this->getIDfromGUID($navInternalUrls[$key])) : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
 										);
 										if($buttonCount == 1){
@@ -883,6 +887,23 @@ function api_wpna_setup_configuration($request) {
 
 }
 
-
+function sanitizeMultipleInputs($input){
+	$new_input = array();
+	// Loop through the input and sanitize each of the values
+	foreach ( $input as $key => $val ) {
+		if (filter_var($val, FILTER_VALIDATE_EMAIL)) {
+			$new_input[ $key ] = sanitize_email( $val );
+		}elseif (filter_var($val, FILTER_VALIDATE_URL)) {
+			$new_input[ $key ] = sanitize_url( $val );
+		}elseif ($val != strip_tags($val)) {
+			$new_input[ $key ] = wp_kses_post( $val );
+		}elseif ((preg_match('/[^a-zA-Z]+/', $val, $matches))) {
+			$new_input[ $key ] = filter_var($val,FILTER_SANITIZE_SPECIAL_CHARS);
+		}else{
+			$new_input[ $key ] = sanitize_text_field( $val );
+		}
+	}
+	return $new_input;
+}
 
 }

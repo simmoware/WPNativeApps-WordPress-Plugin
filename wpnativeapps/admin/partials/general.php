@@ -31,7 +31,7 @@ $defaultLogoURL = $image[0];
                     <input
                         type="text"
                         name="headerToHide"
-                        value="<?php echo isset($config['headerToHide']) ? sanitize_text_field($config['headerToHide']) :''; ?>"
+                        value="<?php echo isset($config['headerToHide']) ? esc_html($config['headerToHide']) :''; ?>"
                         id="headerToHide"
                         _not_required
                     />
@@ -138,9 +138,9 @@ $defaultLogoURL = $image[0];
                 </div>
                 ';
             }
-        echo $otherToHideHtml;
+        echo html_entity_decode(esc_html($otherToHideHtml));
       }else{
-        echo $otherToHideHtmlDefault;
+        echo html_entity_decode(esc_html($otherToHideHtmlDefault));
       }
       ?>
       <a class="addAnotherHideEl" href="javascript:void(0)" onclick="add_element_to_hide(this)">Add another element to hide</a>
