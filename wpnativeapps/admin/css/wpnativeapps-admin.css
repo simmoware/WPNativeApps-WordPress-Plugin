@@ -25,18 +25,32 @@ div#wpna_settings_tabs {
   /* flex-wrap: wrap; */
 
 }
+
+section{
+    max-width:100%;
+}
 .wpna_settings_page_left{
   /* width: 60%
   padding: 20px 5% */
   border-right: 1.5px solid #D5D5D5;
   padding: 50px 20px;
-  flex:2;
+  width:60%;
+  /* flex:2; */
 }
 .wpna_settings_page_right{
-  /* width: 40%; */
-  /* padding: 20px 5% */
-  padding: 50px 20px;
-  flex:1;
+  padding: 10px;
+  /* flex:1; */
+  width:40%;
+}
+
+@media (max-width:1150px) {
+    .wpna_settings_page_right {
+        width:30%;
+    }
+    .wpna_settings_page_left{
+        width:70%;
+    }
+
 }
 
 .wpna_settings_page_wrap.flex{
@@ -510,9 +524,6 @@ section.splashScreenSection{
 .w40p{
   width:40%;
 }
-form#wpnaSettingsForm > div{
-  width: 96%;
-}
 span.wpnaicon{
   background:transparent url("../images/WPNativeApps-Icon.png") center center no-repeat;
 }
@@ -659,8 +670,52 @@ a.ui-button:active, .ui-button:active,
     box-shadow: none;
 }
 
+@media (max-width:1150px) {
+    #wpna_settings_tabs a.ui-tabs-anchor{
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    #wpna_settings_tabs .ui-tabs-nav{ 
+        padding-left:20px;
+    }
+}
+
 #wpna_settings_tabs.ui-tabs .ui-tabs-nav li{
     border-radius: 0;
     margin-right: 10px;
     line-height: 20px;
+}
+
+@media (min-width:1150px) and (max-width:1300px) {
+    .wpna_settings_page_right {
+        width:35%;
+    }
+    .wpna_settings_page_left {
+        width:65%;
+    }
+}
+
+@media (max-width:1000px) {
+    .settings-page-parent {
+        flex-direction:column;
+    }
+    .wpna_settings_page_left, .wpna_settings_page_right {
+        width:100%;
+    }
+
+    .wpna_settings_page_right {
+        border-top:1px solid #CCCCCC;
+    }
+    .wpna_settings_page_left {
+        border-right:none;
+    }
+}
+
+.mt30 {
+    margin-top:30px;
+}
+
+.alignmentOptions {
+    gap:10px;
 }

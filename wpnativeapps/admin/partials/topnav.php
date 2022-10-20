@@ -10,7 +10,7 @@
         echo '<ul id="topNavTabsControl">';
         $liCount = 1;
         foreach($bottomNavPages as $ulItem){
-          echo '<li class="topNavTabs"><a href="#topNavPage_'.$liCount.'"><img src="'.$ulItem["icon"].'" class="topNavPageIcon">'.$ulItem["name"].'</li></a>';
+          echo '<li class="topNavTabs"><a href="#topNavPage_'.$liCount.'"><img src="'.esc_url($ulItem["icon"]).'" class="topNavPageIcon">'.esc_attr($ulItem["name"]).'</li></a>';
           $liCount++;
         }
         echo '</ul>';
@@ -58,34 +58,34 @@
 
           if($navPage !== null){
 
-            $designType = $navPage['designType'];
+            $designType = esc_attr($navPage['designType']);
             // var_dump($navPage);die;
-            $topNav_logo = $navPage['logo'];
-            $topNav_label = sanitize_text_field($navPage['label']);
-            $useLogo = $navPage['useLogo'];
+            $topNav_logo = esc_url($navPage['logo']);
+            $topNav_label = esc_html($navPage['label']);
+            $useLogo = isset($navPage['useLogo']) ? true: false;
 
 
 
 
             switch($designType){
               case 'logoOnly':{
-                $logoAlignment = sanitize_text_field($navPage['alignment']);
+                $logoAlignment = esc_attr($navPage['alignment']);
                 break;
               }
               case 'logoLeftBurgerRight':{
                 $hamburger = $navPage['hamburger'];
                 $hamburger_backgroundColor = $hamburger['backgroundColor'];
                 $hamburger_fontColor = $hamburger['fontColor'];
-                $hamburger_menuIcon = $hamburger['menuIcon'];
+                $hamburger_menuIcon = esc_url($hamburger['menuIcon']);
                 $hamburgerItems = isset($hamburger['hamburgerMenuItems'])? $hamburger['hamburgerMenuItems']: '';
                 $hamburgerItemsData = array();
                 if(!empty($hamburgerItems)){
                   foreach($hamburgerItems as $buttonItem){
                     $hamburgerItemsData[] = array(
-                                    "isExternal"=>isset($buttonItem['isExternal']) ? $buttonItem['isExternal'] : 'external',
-                                    "icon"=>isset($buttonItem['icon']) ? $buttonItem['icon'] : '',
-                                    "title"=>isset($buttonItem['title']) ? $buttonItem['title'] : '',
-                                    "url"=>isset($buttonItem['url']) ? $buttonItem['url'] : ''
+                                    "isExternal"=>isset($buttonItem['isExternal']) ? esc_attr($buttonItem['isExternal']) : 'external',
+                                    "icon"=>isset($buttonItem['icon']) ? esc_url($buttonItem['icon']) : '',
+                                    "title"=>isset($buttonItem['title']) ? esc_html($buttonItem['title']) : '',
+                                    "url"=>isset($buttonItem['url']) ? esc_url($buttonItem['url']) : ''
                                     );
                     }
                 }else{
@@ -106,8 +106,8 @@
                   foreach($buttonsSettings as $buttonItem){
                     $buttonsData[] = array(
                                     "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
-                                    "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
-                                    "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
+                                    "icon"=>isset($buttonItem['icon']) ?  esc_url($buttonItem['icon']) : '',
+                                    "url"=>isset($buttonItem['url']) ?  esc_url($buttonItem['url']) : ''
                                     );
                     }
                   }
@@ -122,8 +122,8 @@
                   foreach($leftButtonsSettings as $buttonItem){
                     $leftButtons[] = array(
                                       "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
-                                      "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
-                                      "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
+                                      "icon"=>isset($buttonItem['icon']) ?  esc_url($buttonItem['icon']) : '',
+                                      "url"=>isset($buttonItem['url']) ?  esc_url($buttonItem['url']) : ''
                                     );
                                   }
                   }
@@ -135,8 +135,8 @@
                   foreach($rightButtonsSettings as $buttonItem){
                     $rightButtons[] = array(
                                     "isExternal"=>isset($buttonItem['isExternal']) ?  $buttonItem['isExternal'] : 'external',
-                                    "icon"=>isset($buttonItem['icon']) ?  $buttonItem['icon'] : '',
-                                    "url"=>isset($buttonItem['url']) ?  $buttonItem['url'] : ''
+                                    "icon"=>isset($buttonItem['icon']) ?  esc_url($buttonItem['icon']) : '',
+                                    "url"=>isset($buttonItem['url']) ?  esc_url($buttonItem['url']) : ''
                                     );
                     }
                   }
@@ -150,7 +150,7 @@
           ?>
 
           <div id="topNavPage_<?php echo $topNavTabCount;?>" data-pagecount="<?php echo $topNavTabCount;?>" class="topNavPageSettings flex-column">
-              <input type="hidden" id="topNavTabsCurrent" name="topNavTabsCurrent" value="<?php echo isset($_GET['topnav']) ? $_GET['topnav'] : 0;?>" />
+              <input type="hidden" id="topNavTabsCurrent" name="topNavTabsCurrent" value="<?php echo isset($_GET['topnav']) ? esc_attr($_GET['topnav']) : 0;?>" />
               <h3>Upload a logo for the nav bar or enter text</h3>
                 <p>The logo and text uploaded in this section will be used in the nav configuration you choose below.</p>
                 <div class="topNavLogoAndText">
@@ -164,8 +164,8 @@
                         );
                     echo $this->wpna_image_uploadField($args); ?>
                     <h4>Top bar text</h4>
-                    <p>By default we’ll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
-                    <input class='topNavInput' type="text" name="topNav_<?php echo $topNavTabCount;?>_text" value="<?php echo $topNav_label;?>" />
+                    <p>By default we'll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
+                    <input class='topNavInput' type="text" name="topNav_<?php echo esc_attr($topNavTabCount);?>_text" value="<?php echo esc_attr($topNav_label);?>" />
                 </div>
               <h2 class='structureLabel'>How would you like your top bar navigation to be structured?</h2>
               <div class="topNavOptionsParent">
@@ -235,7 +235,7 @@
                         <label>Hamburger Menu Font color</label>
                         <input
                               type="text"
-                              value="<?php echo isset($hamburger_fontColor) ? $hamburger_fontColor :"rgba(0,0,0,0.85)"  ;?>"
+                              value="<?php echo isset($hamburger_fontColor) ? esc_attr($hamburger_fontColor) :"rgba(0,0,0,0.85)"  ;?>"
                               data-alpha-enabled="true"
                               data-default-color="rgba(0,0,0,0.85)"
                               class="color-picker"
@@ -281,12 +281,12 @@
                                   $ddClass = $hamburgerMenuItem['isExternal'] ? 'hide' : '';
                                   wp_dropdown_pages(
                                                                 [
-                                                                  'name'=>'topNav_'.$topNavTabCount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL[]',
-                                                                  'id'=>'topNav_'.$topNavTabCount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL_'.$buttonItemCount,
+                                                                  'name'=>'topNav_'.esc_attr($topNavTabCount).'_logoLeftBurgerRight_hamburgerNavItem_internalURL[]',
+                                                                  'id'=>'topNav_'.esc_attr($topNavTabCount).'_logoLeftBurgerRight_hamburgerNavItem_internalURL_'.$buttonItemCount,
                                                                   'class'=>$ddClass.' topNavItemUrlInternal',
                                                                   'echo'=>'1',
                                                                   'value_field'=>'guid',
-                                                                  'selected'=>$this->getIDfromURL($hamburgerMenuItem['url'])
+                                                                  'selected'=>$this->getIDfromURL(esc_url($hamburgerMenuItem['url']))
                                                                 ]
                                                               );?>
                                   <input
@@ -294,7 +294,7 @@
                                         class="topNavItemUrlExternal <?php echo $hamburgerMenuItem['isExternal'] ? '' : 'hide' ?>"
                                         name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_hamburgerNavItem_externalURL[]"
                                         placeholder="Enter External URL"
-                                        value="<?php echo sanitize_text_field($hamburgerMenuItem['url']);?>"
+                                        value="<?php echo esc_url($hamburgerMenuItem['url']);?>"
                                         />
 
                                 </div>
@@ -304,7 +304,7 @@
                                       class="topNavItemLabel"
                                       name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_hamburgerNavItem_title[]"
                                       placeholder="Title"
-                                      value="<?php echo sanitize_text_field($hamburgerMenuItem['title']);?>"
+                                      value="<?php echo esc_html($hamburgerMenuItem['title']);?>"
                                       />
                                 </div>
 
@@ -316,7 +316,8 @@
                                         'uploadText'=>'Upload Icon',
                                         'changeText'=>'Change Icon'
                                       );
-                              echo $this->wpna_image_uploadField($args); ?>
+                                      echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
+                                       ?>
                                 </div>
 
                               </div>
@@ -387,7 +388,7 @@
                                       class="topNavItemUrlExternal <?php echo $buttonSettings['isExternal'] ? '' : 'hide' ?>"
                                       name="topNav_<?php echo $topNavTabCount;?>_logoLeftNavRight_externalURL[]"
                                       placeholder="Enter External URL"
-                                      value="<?php echo sanitize_text_field($buttonSettings['url']);?>"
+                                      value="<?php echo esc_url($buttonSettings['url']);?>"
                                       />
                               </div>
                             </div>
@@ -468,7 +469,7 @@
                                     class="topNavItemUrlExternal <?php echo $buttonSettings['isExternal'] ? '' : 'hide' ?>"
                                     name="topNav_<?php echo $topNavTabCount;?>_logoMidNavBoth_externalURL[]"
                                     placeholder="Enter External URL"
-                                    value="<?php echo sanitize_text_field($buttonSettings['url']);?>"
+                                    value="<?php echo esc_url($buttonSettings['url']);?>"
                                     />
                             </div>
                           </div>
@@ -476,8 +477,8 @@
                             <?php
                             // print_r($buttonSettings);die;
                             $args = array(
-                                    'inputName'=>'topNav_'.$topNavTabCount.'_logoMidNavBoth_iconImage_'.$buttonItemCount,
-                                    'imageUrl'=>isset($buttonSettings['icon']) ? $buttonSettings['icon'] : '',
+                                    'inputName'=>'topNav_'.esc_attr($topNavTabCount).'_logoMidNavBoth_iconImage_'.esc_attr($buttonItemCount),
+                                    'imageUrl'=>isset($buttonSettings['icon']) ? esc_url($buttonSettings['icon']) : '',
                                     'uploadText'=>'Upload Icon',
                                     'changeText'=>'Change Icon'
                                   );

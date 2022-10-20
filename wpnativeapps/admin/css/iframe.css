@@ -393,11 +393,19 @@
   width:100%;
   max-width:320px;
   display:block;
-  margin:20px auto;
+  margin:15px auto;
   position: relative;
   z-index:9999999;
   border-radius: 40px;
   border: 10px solid #3c3c3c;
+  max-height:78vh;
+}
+
+@media (max-width:1150px) {
+  .appPreviewiFrame {
+    width:90%;
+    max-height:unset;
+  }
 }
 
 .selectionDone {

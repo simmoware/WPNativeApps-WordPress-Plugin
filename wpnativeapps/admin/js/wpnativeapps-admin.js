@@ -3,7 +3,7 @@ var topNavTabs = null;
 	'use strict';
 	 	$(window).load(function(){
 	 	    $(".preview-popup-trigger").on("click", function() {
-	 	       $(".popup-bg").css('display', 'flex');
+	 	        showQRCodePopup();
 	 	    });
 	 	    $(".popup-bg").on("click", function() {
 	 	       $(".popup-bg").css('display', 'none');
@@ -203,7 +203,7 @@ function appPreviewerDidLoad() {
                     $(iDoc.body).find("*").each(function () {
                         $(this).on("click", function (event) {
                             event.preventDefault();
-                            $(".popup-bg").css('display', 'flex');
+                            showQRCodePopup()
                         });
                     });
                     clearInterval(footerInterval);
@@ -213,6 +213,21 @@ function appPreviewerDidLoad() {
             
         }, 1000);
     }
+}
+
+function showQRCodePopup(){
+    var $ = jQuery;
+    $('#qrcode').empty();
+    const qrcode = new QRCode(document.getElementById('qrcode'), {
+      text: `${WPNativeApps.pluginURL}config.json`,
+      width: 240,
+      height: 240,
+      colorDark : '#000',
+      colorLight : '#fff',
+      correctLevel : QRCode.CorrectLevel.H
+    });
+    
+    $(".popup-bg").css('display', 'flex');
 }
 
 function setiPhonePreviewFrame() {

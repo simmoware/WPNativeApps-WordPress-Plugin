@@ -5,7 +5,7 @@ $defaultLogoURL = $image[0];
 ?>
 <div class="flex-column">
     <section class="general_appName flex-row jc-fs">
-        <div class="flex-column w60p">
+        <div class="flex-column">
           <h4 class=" ">App Name</h4>
           <input
                 type="text"
@@ -14,17 +14,16 @@ $defaultLogoURL = $image[0];
                 id="wpna_app_name"
                 _not_required
                 />
+          <h2 class="mt30">Hide web elements to make your website more app friendly</h2>
+          <p class="textcontent">
+            We'll need to remove your website's header and footers.
+            Our inspector tool below will open a popover that will allow you to select them on your website.
+          </p>
         </div>
+        
     </section>
     <section class="general_hideElements flex-row jc-sb">
         <div class="flex-column w60p">
-            <h2 class=" ">
-                Hide web elements to make your website more app friendly
-            </h2>
-            <p class="textcontent">
-                We'll need to remove your website's header and footers.
-                Our inspector tool below will open a popover that will allow you to select them on your website.
-            </p>
             <h4 class=" ">Header Selector</h4>
             <div class="flex-row jc-sb ai-fe selectorInputs">
                 <div class="flex-row">
@@ -150,7 +149,7 @@ $defaultLogoURL = $image[0];
     </div>
   </section>
 
-<section class="flex-row jc-sb">
+<section class="flex-row jc-sb splash-parent">
   <?php $splash = $config['splash'];?>
   <div class="splashScreenSection w60p">
     <h1 class=" ">
@@ -193,7 +192,7 @@ $defaultLogoURL = $image[0];
             <?php
                 $args = array(
                   'inputName'=>'splash_backgroundImage',
-                  'imageUrl'=>isset($config['splash']['backgroundImage']) ? sanitize_text_field($config['splash']['backgroundImage']) : '',
+                  'imageUrl'=>isset($config['splash']['backgroundImage']) ? sanitize_url($config['splash']['backgroundImage']) : '',
                   'uploadText'=>'Upload Background Image',
                   'changeText'=>'Change Background Image'
                 );
@@ -297,7 +296,7 @@ $defaultLogoURL = $image[0];
             <?php
                 $args = array(
                   'inputName'=>'topBarNav_styles_bannerLogo',
-                  'imageUrl'=>isset($config['topBarNav']['styles']['bannerLogo']) ? sanitize_text_field($config['topBarNav']['styles']['bannerLogo'])  : $defaultLogoURL,
+                  'imageUrl'=>isset($config['topBarNav']['styles']['bannerLogo']) ? sanitize_url($config['topBarNav']['styles']['bannerLogo'])  : $defaultLogoURL,
                   'uploadText'=>'Upload Banner Image',
                   'changeText'=>'Change Banner Image'
                 );

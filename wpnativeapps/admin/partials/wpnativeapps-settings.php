@@ -25,7 +25,7 @@ $config = $this->wpnativeAppSettings;
                 'uploadText'=>'Upload Icon',
                 'changeText'=>'Change Icon'
               );
-      echo $this->wpna_image_uploadField($args); ?>
+      echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
       <h3>Top bar text</h3>
       <p>By default we’ll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
       <input type="text" name="topNav_{{bottomBarpagecount}}_text" value="" />
@@ -84,7 +84,7 @@ $config = $this->wpnativeAppSettings;
                       'uploadText'=>'Select Icon',
                       'changeText'=>'Change Icon'
                     );
-              echo $this->wpna_image_uploadField($args);
+              echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
               ?>
             </div>
           </div>
@@ -141,7 +141,7 @@ $config = $this->wpnativeAppSettings;
                 'uploadText'=>'Upload Icon',
                 'changeText'=>'Change Icon'
               );
-      echo $this->wpna_image_uploadField($args); ?>
+      echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
       </div>
     </div>
     <div class="addNewNavigationIcon">
@@ -201,7 +201,7 @@ $config = $this->wpnativeAppSettings;
                     'uploadText'=>'Upload Icon',
                     'changeText'=>'Change Icon'
                   );
-          echo $this->wpna_image_uploadField($args); ?>
+          echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
           </div>
 
         </div>
@@ -225,7 +225,7 @@ $config = $this->wpnativeAppSettings;
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
           );
-      echo $this->wpna_image_uploadField($args); ?>
+      echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
       <h4>Top bar text</h4>
       <p>By default we’ll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
       <input class='topNavInput' type="text" name="topNav_{{bottomBarpagecount}}_text" value="" />
@@ -313,7 +313,7 @@ $config = $this->wpnativeAppSettings;
                     'uploadText'=>'Select Icon',
                     'changeText'=>'Change Icon'
                   );
-            echo $this->wpna_image_uploadField($args);
+            echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
             ?>
               <label class="inputLabel">Hamburger Menu Items</label>
                 <div class="flex-column topNavPageIconItem">
@@ -353,7 +353,7 @@ $config = $this->wpnativeAppSettings;
                             'uploadText'=>'Upload Icon',
                             'changeText'=>'Change Icon'
                           );
-                  echo $this->wpna_image_uploadField($args); ?>
+                  echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
                   </div>
                 </div>
 
@@ -416,7 +416,7 @@ $config = $this->wpnativeAppSettings;
               'uploadText'=>'Upload Icon',
               'changeText'=>'Change Icon'
             );
-    echo $this->wpna_image_uploadField($args); ?>
+            echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
     </div>
   </div>
   <div class="addNewNavigationIcon">
@@ -477,7 +477,7 @@ $config = $this->wpnativeAppSettings;
                   'uploadText'=>'Upload Icon',
                   'changeText'=>'Change Icon'
                 );
-        echo $this->wpna_image_uploadField($args); ?>
+        echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
         </div>
 
       </div>
@@ -530,7 +530,7 @@ $config = $this->wpnativeAppSettings;
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
           );
-  echo $this->wpna_image_uploadField($args); ?>
+  echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
   </div>
 </div>
 <!-- ============================================================================================================================-->
@@ -576,7 +576,7 @@ $config = $this->wpnativeAppSettings;
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
           );
-  echo $this->wpna_image_uploadField($args); ?>
+  echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
   </div>
 </div>
 <!-- ============================================================================================================================-->
@@ -614,7 +614,7 @@ $config = $this->wpnativeAppSettings;
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
           );
-    echo $this->wpna_image_uploadField($args); ?>
+    echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
   </div>
 </div>
 
@@ -626,8 +626,8 @@ $config = $this->wpnativeAppSettings;
 <!-- ============================================================================================================================-->
 
 
-<div class="flex-row">
-  <div class="flexitem wpna_settings_page_left w60p ">
+<div class="flex-row settings-page-parent">
+  <div class="flexitem wpna_settings_page_left">
     <div class="topPageSection">
         <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo get_admin_page_title(); ?></h1>
         <?php $this->admin_notices(); ?>
@@ -666,19 +666,19 @@ $config = $this->wpnativeAppSettings;
 </div>
   </div>
     <div class="wpna_settings_page_right sticky">
-        <h2>Preview your app</h2>
-        <button class='preview-popup-trigger'>Ready to preview your app on your device?</button>
+        <h2 style='margin-bottom:0px;'>Preview your app</h2>
         <div id="appPreview">
             <div class='appPreviewPhoneContainer'>
               <iframe src="/?hidetoolbar=true" class="appPreviewiFrame" onload="appPreviewerDidLoad();"></iframe>
               <div class="iFrameiPhoneFrame-Previewer"></div>
             </div>
         </div>
+        <button class='preview-popup-trigger'>Ready to preview your app on your device?</button>
     </div>
   </div>
   <div class='popup-bg'>
       <div class='qr-code-popup'>
-          <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/qrcode.png' class='preview-qr-code' />
+          <div id="qrcode" class='preview-qr-code'></div>
           <h2>Scan your QR code from inside the WPNativeApps app to preview your App on your device</h2>
           <div class='download-app-inner'>
               <h4>Download WPNativeApps on the App Store or Google Play Store</h4>

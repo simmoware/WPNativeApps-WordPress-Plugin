@@ -139,7 +139,7 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_script( $this->plugin_name."_topNav", plugin_dir_url( __FILE__ ) . 'js/topnav.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_analytics", plugin_dir_url( __FILE__ ) . 'js/analytics.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_pushNotifications", plugin_dir_url( __FILE__ ) . 'js/pushNotifications.js', array('jquery'), date("YmdHis"), false );
-
+        wp_enqueue_script( $this->plugin_name."_qrCodeJs", plugin_dir_url( __FILE__ ) . 'js/qrCodeGenerator.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_previewJs", plugin_dir_url( __FILE__ ) . 'js/iframePreview.js', array('jquery'), date("YmdHis"), false );
 		wp_localize_script( $this->plugin_name, 'WPNativeApps',
 		        array(
@@ -278,7 +278,7 @@ class Wp_Native_Apps_Admin {
 							case 'logoOnly':{
 								$topNav = array(
 				              "designType"=> "logoOnly",
-											"useLogo" => $_POST['topNav_'.$pagecount.'_logoOnly_type'] == 'logo'? true : false,
+							  "useLogo" => sanitize_text_field($_POST['topNav_'.$pagecount.'_logoOnly_type']) == 'logo'? true : false,
 				              "logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
 				              "label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 				              "alignment"=> isset($_POST['topNav_'.$pagecount.'_logoOnly_align']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoOnly_align']) : '',
@@ -294,8 +294,7 @@ class Wp_Native_Apps_Admin {
 								if(!empty($HBItemSources)){
 									$buttonCount = 1;
 									$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) : '';
-
-									$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
+									$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
 									foreach ($HBItemSources as $key=>$value){
 										$hamburgerMenuItems[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
@@ -323,7 +322,7 @@ class Wp_Native_Apps_Admin {
 							}
 							case 'logoLeftNavRight':{
 
-								$navSources = $_POST['topNav_'.$pagecount.'_logoLeftNavRight_Source'];
+								$navSources = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftNavRight_Source']);								
 								$navInternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftNavRight_internalURL']);
 								$navExternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftNavRight_externalURL']);
 
@@ -332,7 +331,7 @@ class Wp_Native_Apps_Admin {
 								if(!empty($navSources)){
 									$buttonCount = 1;
 									foreach ($navSources as $key=>$value){
-										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']) ? $_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url'] : '';
+										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftNavRight_iconImage_'.$buttonCount.'_image_url']) : '';
 
 										$buttons[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
@@ -357,8 +356,8 @@ class Wp_Native_Apps_Admin {
 
 
 								$navSources = sanitize_text_field($_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source']);
-								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_internalURL'];
-								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoMidNavBoth_externalURL'];
+								$navInternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoMidNavBoth_internalURL']);
+								$navExternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoMidNavBoth_externalURL']);
 
 								$leftButtons = array();
 								$rightButtons = array();
@@ -392,12 +391,12 @@ class Wp_Native_Apps_Admin {
 							}
 						}
 						$bottomBarNav["pages"][] = array(
-																					"url"=> $pageUrl,
-																					"icon" => $pageIcon,
-																					"name" => $page,
-																					"isExternal" => $isExternal,
-																					"topNav" => $topNav
-																				);
+														"url"=> $pageUrl,
+														"icon" => $pageIcon,
+														"name" => $page,
+														"isExternal" => $isExternal,
+														"topNav" => $topNav
+													);
 						$pagecount++;
 					}
 				}
@@ -798,8 +797,8 @@ class Wp_Native_Apps_Admin {
 			extract($args);
 			ob_start();
 			?>
-			<div class="wpnaImageUploadSection <?php echo esc_html($inputName)?>_section">
-				<div class="wpnaImageUploadPreview  <?php echo esc_html($inputName);?>_preview" style="background-image: url('<?php echo esc_html($imageUrl);?>');"></div>
+			<div class="wpnaImageUploadSection <?php echo esc_attr($inputName)?>_section">
+				<div class="wpnaImageUploadPreview  <?php echo esc_attr($inputName);?>_preview" style="background-image: url('<?php echo esc_url($imageUrl);?>');"></div>
 				<?php
 					$changeButtonStyle = ($imageUrl !='') ? '': 'display:none' ;
 					$uploadButtonStyle = ($imageUrl !='') ? 'display:none': '' ;
@@ -843,7 +842,7 @@ function wpna_register_configuration_route() {
 
 function api_wpna_setup_configuration($request) {
 	// 630d5713fcc2c297d90f2171
-		$method = $_SERVER['REQUEST_METHOD'];
+		$method =  isset( $_SERVER['REQUEST_METHOD'] )? sanitize_text_field($_SERVER['REQUEST_METHOD']) :'';
 		$return = array();
 
     // rest_ensure_response() wraps the data we want to return into a WP_REST_Response, and ensures it will be properly returned.
@@ -888,19 +887,34 @@ function api_wpna_setup_configuration($request) {
 }
 
 function sanitizeMultipleInputs($input){
-	$new_input = array();
-	// Loop through the input and sanitize each of the values
-	foreach ( $input as $key => $val ) {
-		if (filter_var($val, FILTER_VALIDATE_EMAIL)) {
-			$new_input[ $key ] = sanitize_email( $val );
-		}elseif (filter_var($val, FILTER_VALIDATE_URL)) {
-			$new_input[ $key ] = sanitize_url( $val );
-		}elseif ($val != strip_tags($val)) {
-			$new_input[ $key ] = wp_kses_post( $val );
-		}elseif ((preg_match('/[^a-zA-Z]+/', $val, $matches))) {
-			$new_input[ $key ] = filter_var($val,FILTER_SANITIZE_SPECIAL_CHARS);
+	$new_input = null;
+	if(is_array($input)){
+		$new_input = array();
+		// Loop through the input and sanitize each of the values
+		foreach ( $input as $key => $val ) {
+			if (filter_var($val, FILTER_VALIDATE_EMAIL)) {
+				$new_input[ $key ] = sanitize_email( $val );
+			}elseif (filter_var($val, FILTER_VALIDATE_URL)) {
+				$new_input[ $key ] = sanitize_url( $val );
+			}elseif ($val != strip_tags($val)) {
+				$new_input[ $key ] = wp_kses_post( $val );
+			}elseif ((preg_match('/[^a-zA-Z]+/', $val, $matches))) {
+				$new_input[ $key ] = filter_var($val,FILTER_SANITIZE_SPECIAL_CHARS);
+			}else{
+				$new_input[ $key ] = sanitize_text_field( $val );
+			}
+		}
+	}else{
+		if (filter_var($input, FILTER_VALIDATE_EMAIL)) {
+			$new_input = sanitize_email( $input );
+		}elseif (filter_var($input, FILTER_VALIDATE_URL)) {
+			$new_input = sanitize_url( $input );
+		}elseif ($input != strip_tags($input)) {
+			$new_input = wp_kses_post( $input );
+		}elseif ((preg_match('/[^a-zA-Z]+/', $input, $matches))) {
+			$new_input = filter_var($input,FILTER_SANITIZE_SPECIAL_CHARS);
 		}else{
-			$new_input[ $key ] = sanitize_text_field( $val );
+			$new_input = sanitize_text_field( $input );
 		}
 	}
 	return $new_input;

@@ -32,9 +32,9 @@ if($status == false):
                 id="wpPayNow"
                 href='#'
                 class='publish-pay'
-                data-wpnativeappsid="<?php echo $appId; ?>"
-                data-wpnativeappssecret="<?php echo $appSecret; ?>"
-                data-returnurl="<?php echo 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; ?>"
+                data-wpnativeappsid="<?php esc_attr_e($appId); ?>"
+                data-wpnativeappssecret="<?php esc_attr_e($appSecret); ?>"
+                data-returnurl="<?php echo esc_url($_SERVER['HTTP_HOST']) . esc_url($_SERVER['REQUEST_URI']); ?>"
               >
                 Pay Now
               </a>

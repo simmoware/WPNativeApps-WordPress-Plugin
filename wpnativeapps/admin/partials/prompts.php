@@ -45,7 +45,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptPushNoti_backgroundColor"
                         id="promptPushNoti_backgroundColor"
-                        value="<?php echo $pushNotification['styles']['backgroundColor'];?>"
+                        value="<?php echo esc_attr($pushNotification['styles']['backgroundColor']);?>"
                         _not_required
                     />
                 </div>
@@ -58,7 +58,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptPushNoti_textColor"
                         id="promptPushNoti_textColor"
-                        value="<?php echo $pushNotification['styles']['textColor'];?>"
+                        value="<?php echo esc_html($pushNotification['styles']['textColor']);?>"
                         _not_required
                     />
                 </div>
@@ -68,7 +68,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                     <?php
                         $args = array(
                               'inputName'=>'promptPushNoti_icon',
-                              'imageUrl'=>$pushNotification['styles']['icon'],
+                              'imageUrl'=>esc_url($pushNotification['styles']['icon']),
                               'uploadText'=>'Upload Background Image',
                               'changeText'=>'Change Background Image'
                             );
@@ -83,7 +83,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         type="text"
                         name="promptPushNoti_titleText"
                         id="promptPushNoti_titleText"
-                        value="<?php echo $pushNotification['styles']['title'];?>"
+                        value="<?php echo esc_attr($pushNotification['styles']['title']);?>"
                         placeholder="Enable Push Notifications"
                         _not_required
                     />
@@ -145,7 +145,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptTracking_backgroundColor"
                         id="promptTracking_backgroundColor"
-                        value="<?php echo $trackingService['styles']['backgroundColor'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['backgroundColor']);?>"
                         _not_required
                     />
                 </div>
@@ -158,7 +158,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptTracking_textColor"
                         id="promptTracking_textColor"
-                        value="<?php echo $trackingService['styles']['textColor'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['textColor']);?>"
                         _not_required
                     />
                 </div>
@@ -168,7 +168,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                     <?php
                         $args = array(
                               'inputName'=>'promptTracking_icon',
-                              'imageUrl'=>$trackingService['styles']['icon'],
+                              'imageUrl'=>esc_url($trackingService['styles']['icon']),
                               'uploadText'=>'Upload Background Image',
                               'changeText'=>'Change Background Image'
                             );
@@ -183,7 +183,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         type="text"
                         name="promptTracking_titleText"
                         id="promptTracking_titleText"
-                        value="<?php echo $trackingService['styles']['title'];?>"
+                        value="<?php echo esc_$trackingService['styles']['title'];?>"
                         placeholder="Enable Push Notifications"
                         _not_required
                     />

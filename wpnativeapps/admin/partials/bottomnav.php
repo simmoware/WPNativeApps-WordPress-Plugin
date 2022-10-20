@@ -18,9 +18,9 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
       if(!empty($bottomBarNavs)){
         foreach($bottomBarNavs as $bottomNav){
           $isExternal = $bottomNav['isExternal'];
-          $url = $bottomNav['url'];
-          $icon = isset($bottomNav['icon']) ? $bottomNav['icon'] : '';
-          $name = $bottomNav['name'];
+          $url = esc_url($bottomNav['url']);
+          $icon = isset($bottomNav['icon']) ? esc_url($bottomNav['icon']) : '';
+          $name = esc_html($bottomNav['name']);
           $selectedPage = ($isExternal) ? 0 : $this->getIDfromURL($url);
           $args = array(
             'inputName'=>'bottomBarNavLogo_'.$count,
@@ -60,7 +60,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">
-                <?php echo $pageDDHTML; ?>
+                <?php echo html_entity_decode(esc_html($pageDDHTML)); ?>
               </div>
               <?php
               if( $count == count($bottomBarNavs) && $count > 3 ){
@@ -103,11 +103,11 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                   <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL"  />
                 </div>
                 <div class="bottomBarItemText">
-                  <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label"/>
+                  <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo esc_attr($name);?>" placeholder="Enter Label"/>
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">
-                <?php echo $pageDDHTML; ?>
+                <?php echo html_entity_decode(esc_html($pageDDHTML)); ?>
               </div>
             </div>
           <?php
