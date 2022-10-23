@@ -21,7 +21,7 @@ $pushNotification = $config['pushNotificationSettings'];
                 <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                   <?php $add_push_notification_nonce = wp_create_nonce( 'add_push_notification_submit_nonce' ); ?>
                   <input type="hidden" name="action" value="send_push_notification">
-                  <input type="hidden" name="add_push_notification_nonce" value="<?php echo $add_push_notification_nonce ?>" />
+                  <input type="hidden" name="add_push_notification_nonce" value="<?php esc_attr_e($add_push_notification_nonce); ?>" />
 
 
                 <section>

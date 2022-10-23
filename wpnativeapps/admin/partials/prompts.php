@@ -74,7 +74,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                             );
 
 
-                        echo $this->wpna_image_uploadField($args);
+                            echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
                      ?>
                 </div>
                 <h4>Prompt title text </h4>
@@ -95,7 +95,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptPushNoti_descText"
                         placeholder="We use location services to do this that and the other thing. Please allow location services with the button below."
                         rows="3"
-                        value="<?php echo $pushNotification['styles']['description'];?>"
+                        value="<?php echo esc_attr($pushNotification['styles']['description']);?>"
                     ><?php echo esc_textarea($pushNotification['styles']['description']);?></textarea>
                 </div>
                 <h4>Prompt accept button text </h4>
@@ -174,7 +174,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                             );
 
 
-                        echo $this->wpna_image_uploadField($args);
+                            echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));;
                      ?>
                 </div>
                 <h4>Prompt title text </h4>
@@ -183,7 +183,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         type="text"
                         name="promptTracking_titleText"
                         id="promptTracking_titleText"
-                        value="<?php echo esc_$trackingService['styles']['title'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['title']);?>"
                         placeholder="Enable Push Notifications"
                         _not_required
                     />
@@ -195,7 +195,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         id="promptTracking_descText"
                         placeholder="We use location services to do this that and the other thing. Please allow location services with the button below."
                         rows="3"
-                        value="<?php echo $trackingService['styles']['description'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['description']);?>"
                     ><?php echo $trackingService['styles']['description'];?></textarea>
                 </div>
                 <h4>Prompt accept button text </h4>
@@ -204,7 +204,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         type="text"
                         name="promptTracking_acceptButtonText"
                         id="promptTracking_acceptButtonText"
-                        value="<?php echo $trackingService['styles']['acceptButtonText'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['acceptButtonText']);?>"
                         placeholder="Enable"
                         _not_required
                     />
@@ -218,7 +218,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         class="color-picker"
                         name="promptTracking_acceptButtonColor"
                         id="promptTracking_acceptButtonColor"
-                        value="<?php echo $trackingService['styles']['acceptButtonColor'];?>"
+                        value="<?php echo esc_attr($trackingService['styles']['acceptButtonColor']);?>"
                         _not_required
                     />
                 </div>

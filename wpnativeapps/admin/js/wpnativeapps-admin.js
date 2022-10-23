@@ -1312,7 +1312,7 @@ function handleTopNavLinkTypeChange(el){
 	}
 }
 
-function addTopNavNavigationIcon(el){
+function addTopNavNavigationIcon(el,designType = 'logoLeftNavRight'){
 
 			var section = $(el).parents('section.navStructureRow');
 			var pagecount = $(el).parents('.topNavPageSettings').attr('data-pagecount');
@@ -1320,14 +1320,11 @@ function addTopNavNavigationIcon(el){
 			var navItemsCount = parseInt($(section).find('.topNavPageIconItem').length);
 
 
-
-
-
 			// var count = document.querySelectorAll('navigation_bottomBar_section .navigationBottomBarItem').length;
 			// var count = parseInt(iconCount +1);
 			if (navItemsCount <= 2 ){
 				var newIconHtml = $('#topNavNaviagionIconGeneric').html();
-				newIconHtml = newIconHtml.replaceAll('{{iconCount}}',navItemsCount+1).replaceAll('{{topNavTabCount}}',pagecount).replaceAll('{{structureCount}}',structureCount);
+				newIconHtml = newIconHtml.replaceAll('{{iconCount}}',navItemsCount+1).replaceAll('{{topNavTabCount}}',pagecount).replaceAll('{{structureCount}}',structureCount).replaceAll('{{designType}}',designType);
 				if(navItemsCount >=1){
 					var removeIcon = '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForPage(this);">Remove</span>';
 				}else{

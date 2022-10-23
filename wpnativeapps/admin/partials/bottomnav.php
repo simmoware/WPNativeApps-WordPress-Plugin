@@ -53,10 +53,10 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                                                   'selected' => $selectedPage
                                                 ]
                                               );?>
-                  <input type="text" class="bottomBarItemUrlExternal <?php echo ($isExternal)? '' : 'hide';?>" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
+                  <input type="text" class="bottomBarItemUrlExternal <?php echo ($isExternal)? '' : 'hide';?>" value="<?php echo esc_url($url);?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL" />
                 </div>
                 <div class="bottomBarItemText">
-                  <input type="text" data-itemcount = "<?php echo $count;?>" class="bottomBarItemText item_<?php echo $count;?>" name="bottomBarItemText[]" value="<?php echo $name;?>" placeholder="Enter Label" onchange="updateTopNavTabName(this)"/>
+                  <input type="text" data-itemcount = "<?php echo $count;?>" class="bottomBarItemText item_<?php echo $count;?>" name="bottomBarItemText[]" value="<?php echo esc_attr($name);?>" placeholder="Enter Label" onchange="updateTopNavTabName(this)"/>
                 </div>
               </div>
               <div class="flex-row flex-start bottomBarItemWrapBottom">
@@ -100,7 +100,7 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
                                                   'selected' => $selectedPage
                                                 ]
                                               );?>
-                  <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo $url;?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL"  />
+                  <input type="text" class="bottomBarItemUrlExternal hide" value="<?php echo esc_url($url);?>" name="bottomBarItemUrlExternal_<?php echo $count;?>" placeholder="Enter External URL"  />
                 </div>
                 <div class="bottomBarItemText">
                   <input type="text" class="bottomBarItemText" name="bottomBarItemText[]" value="<?php echo esc_attr($name);?>" placeholder="Enter Label"/>

@@ -62,10 +62,8 @@
             // var_dump($navPage);die;
             $topNav_logo = esc_url($navPage['logo']);
             $topNav_label = esc_html($navPage['label']);
-            $useLogo = isset($navPage['useLogo']) ? true: false;
 
-
-
+            $useLogo = isset($navPage['useLogo']) ? $navPage['useLogo'] ===true?'checked ' : '' : '';
 
             switch($designType){
               case 'logoOnly':{
@@ -149,7 +147,7 @@
 
           ?>
 
-          <div id="topNavPage_<?php echo $topNavTabCount;?>" data-pagecount="<?php echo $topNavTabCount;?>" class="topNavPageSettings flex-column">
+          <div id="topNavPage_<?php esc_attr_e($topNavTabCount);?>" data-pagecount="<?php echo esc_attr($topNavTabCount);?>" class="topNavPageSettings flex-column">
               <input type="hidden" id="topNavTabsCurrent" name="topNavTabsCurrent" value="<?php echo isset($_GET['topnav']) ? esc_attr($_GET['topnav']) : 0;?>" />
               <h3>Upload a logo for the nav bar or enter text</h3>
                 <p>The logo and text uploaded in this section will be used in the nav configuration you choose below.</p>
@@ -162,7 +160,9 @@
                           'uploadText'=>'Upload Icon',
                           'changeText'=>'Change Icon'
                         );
-                    echo $this->wpna_image_uploadField($args); ?>
+                        echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
+                        
+                    ?>
                     <h4>Top bar text</h4>
                     <p>By default we'll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
                     <input class='topNavInput' type="text" name="topNav_<?php echo esc_attr($topNavTabCount);?>_text" value="<?php echo esc_attr($topNav_label);?>" />
@@ -180,7 +180,7 @@
                       <div data-id="1" class="optionParent">
                         <div class="optionRadio">
                           <label>
-                            <input type="radio" class="conditional" <?php echo $useLogo ? 'checked  ' :''; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="logo"> Logo
+                            <input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked  ' :''; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="logo"> Logo
                           </label>
                         </div>
                         <div class="conditionalSettings hide">
@@ -190,7 +190,7 @@
                       <div data-id="2" class="optionParent">
                         <div class="optionRadio">
                           <label>
-                            <input type="radio" class="conditional" <?php echo $useLogo ? ' ' :'checked  '; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="text"> Text
+                            <input type="radio" class="conditional" <?php echo ($useLogo) ? ' ' :'checked  '; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="text"> Text
                           </label>
                         </div>
                         <div class="conditionalSettings hide">
@@ -212,12 +212,12 @@
                   <div class="settingParent <?php echo $designType == 'logoLeftBurgerRight' ? '':'hide'?>">
                     <div class='settingOption'>
                       <div data-id="1" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo $useLogo ? 'checked ' :''; ?>name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="logo"> Logo </label></div>
+                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked ' :''; ?>name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="logo"> Logo </label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
                       <div data-id="2" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="text"> Text</label></div>
+                        <div class="optionRadio"><label> <input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="text"> Text</label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
@@ -225,7 +225,7 @@
                         <label>Hamburger Menu background color</label>
                         <input
                               type="text"
-                              value="<?php echo isset($hamburger_backgroundColor) ? $hamburger_backgroundColor :"rgba(0,0,0,0.85)"  ;?>"
+                              value="<?php echo isset($hamburger_backgroundColor) ? esc_attr($hamburger_backgroundColor) :"rgba(0,0,0,0.85)"  ;?>"
                               data-alpha-enabled="true"
                               data-default-color="rgba(0,0,0,0.85)"
                               class="color-picker"
@@ -250,7 +250,7 @@
                                 'uploadText'=>'Select Icon',
                                 'changeText'=>'Change Icon'
                               );
-                        echo $this->wpna_image_uploadField($args);
+                              echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
                         ?>
                           <label class="inputLabel">Hamburger Menu Items</label>
                           <?php
@@ -299,20 +299,20 @@
 
                                 </div>
                                 <div class="flex-column">
-                                  <input
+                                  <!-- <input
                                       type="text"
                                       class="topNavItemLabel"
-                                      name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_hamburgerNavItem_title[]"
+                                      name="topNav_<?php esc_attr_e( $topNavTabCount);?>_logoLeftBurgerRight_hamburgerNavItem_title[]"
                                       placeholder="Title"
                                       value="<?php echo esc_html($hamburgerMenuItem['title']);?>"
-                                      />
+                                      /> -->
                                 </div>
 
                                 <div class="flex-column">
                                   <?php
                                 $args = array(
                                         'inputName'=>'topNav_'.$topNavTabCount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonItemCount,
-                                        'imageUrl'=>$hamburgerMenuItem['icon'],
+                                        'imageUrl'=>esc_url($hamburgerMenuItem['icon']),
                                         'uploadText'=>'Upload Icon',
                                         'changeText'=>'Change Icon'
                                       );
@@ -326,7 +326,11 @@
                             $buttonItemCount++;
                           }
                         }?>
-
+                      <?php 
+                        if($buttonItemCount > 1){
+                          echo '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForHamburger(this);">Remove</span>';
+                        }
+                      ?>
                           <div class="addNewNavigationIcon">
                             <a href="javascript:void(0)" onclick="addTopNavHamburgerItem(this)">Add another navigation icon</a>
                           </div>
@@ -396,21 +400,25 @@
                               <?php
                               $args = array(
                                       'inputName'=>'topNav_'.$topNavTabCount.'_logoLeftNavRight_iconImage_'.$buttonItemCount,
-                                      'imageUrl'=>$buttonSettings['icon'],
+                                      'imageUrl'=>esc_url($buttonSettings['icon']),
                                       'uploadText'=>'Upload Icon',
                                       'changeText'=>'Change Icon'
                                     );
-                            echo $this->wpna_image_uploadField($args); ?>
+                                    echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
                             </div>
                           </div>
                           <?php
                           $buttonItemCount++;
                         }
                       ?>
-
+                    <?php 
+                    if($buttonItemCount > 1){
+                      echo '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForHamburger(this);">Remove</span>';
+                    }
+                    ?>
 
                   <div class="addNewNavigationIcon <?php echo ($buttonItemCount > 3) ? 'hide' : ''; ?>">
-                    <a href="javascript:void(0)" onclick="addTopNavNavigationIcon(this)">Add another navigation icon</a>
+                    <a href="javascript:void(0)" onclick="addTopNavNavigationIcon(this, 'logoLeftNavRight')">Add another navigation icon</a>
                   </div>
                   </div>
                 </section>
@@ -461,7 +469,7 @@
                                                               'class'=>$ddClass.' topNavItemUrlInternal',
                                                               'echo'=>'1',
                                                               'value_field'=>'guid',
-                                                              'selected'=>$this->getIDfromURL($buttonSettings['url'])
+                                                              'selected'=>$this->getIDfromURL(esc_url($buttonSettings['url']))
                                                             ]
                                                           );?>
                               <input
@@ -482,7 +490,7 @@
                                     'uploadText'=>'Upload Icon',
                                     'changeText'=>'Change Icon'
                                   );
-                          echo $this->wpna_image_uploadField($args); ?>
+                                  echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
                           </div>
                         </div>
 
@@ -495,10 +503,13 @@
                     ?>
 
 
-
-
+                  <?php 
+                    if($buttonItemCount > 1){
+                      echo '<span class="button removeNavigationIconRow" onclick="removeTopNavigationIconForHamburger(this);">Remove</span>';
+                    }
+                  ?>
                   <div class="addNewNavigationIcon <?php echo ($buttonItemCount > 3) ? 'hide' : ''; ?>">
-                    <a href="javascript:void(0)" onclick="addTopNavNavigationIcon(this)">Add another navigation icon</a>
+                    <a href="javascript:void(0)" onclick="addTopNavNavigationIcon(this, 'logoMidNavBoth')">Add another navigation icon</a>
                   </div>
                   </div>
                 </section>

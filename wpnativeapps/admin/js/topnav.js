@@ -12,14 +12,17 @@ function addTopNavHamburgerItem(el){
 			}else{
 				var removeIcon = '';
 			}
-
-
-			$(section).find('span.removeNavigationIconRow').remove();
-
-			$(el).parent().before('<div class="flex-column topNavPageIconItem">'+newIconHtml+'</div>'+removeIcon);
-
-
-				$(section).find('.addNewNavigationIcon').removeClass('hide');
+			
+			if(navItemsCount < 3){
+				$(section).find('span.removeNavigationIconRow').remove();
+				$(el).parent().before('<div class="flex-column topNavPageIconItem">'+newIconHtml+'</div>'+removeIcon);
+			}
+			
+			if(navItemsCount < 2){
+				$(section).find('div.addNewNavigationIcon').removeClass('hide');
+			}else{
+				$(section).find('div.addNewNavigationIcon').addClass('hide');
+			}
 
 
 

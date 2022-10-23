@@ -496,7 +496,7 @@ $config = $this->wpnativeAppSettings;
 <div class="hide flex-column  topNavPageIconItem"  id="topNavNaviagionIconGeneric">
   <div class="flex-row bottomBarItemWrapTop">
     <div class="bottomBarItemType">
-      <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_{{topNavTabCount}}_logoLeftNavRight_Source[]">
+      <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_{{topNavTabCount}}_{{designType}}_Source[]">
         <option value="page">Page</option>
         <option value="external">External</option>
       </select>
@@ -505,8 +505,8 @@ $config = $this->wpnativeAppSettings;
       <?php
       wp_dropdown_pages(
                                     [
-                                      'name'=>'topNav_{{topNavTabCount}}_logoLeftNavRight_internalURL[]',
-                                      'id'=>'topNav_{{topNavTabCount}}_logoLeftNavRight_internalURL_{{iconCount}}',
+                                      'name'=>'topNav_{{topNavTabCount}}_{{designType}}_internalURL[]',
+                                      'id'=>'topNav_{{topNavTabCount}}_{{designType}}_internalURL_{{iconCount}}',
                                       'class'=>'topNavItemUrlInternal',
                                       'echo'=>'1',
                                       'value_field'=>'guid',
@@ -516,7 +516,7 @@ $config = $this->wpnativeAppSettings;
       <input
             type="text"
             class="topNavItemUrlExternal hide"
-            name="topNav_{{topNavTabCount}}_logoLeftNavRight_externalURL[]"
+            name="topNav_{{topNavTabCount}}_{{designType}}_externalURL[]"
             placeholder="Enter External URL"
             value=""
             />
@@ -525,7 +525,7 @@ $config = $this->wpnativeAppSettings;
   <div class="flex-row flex-start bottomBarItemWrapBottom">
     <?php
     $args = array(
-            'inputName'=>'topNav_{{topNavTabCount}}_logoLeftNavRight_iconImage_{{iconCount}}',
+            'inputName'=>'topNav_{{topNavTabCount}}_{{designType}}_iconImage_{{iconCount}}',
             'imageUrl'=>'',
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
@@ -644,7 +644,7 @@ $config = $this->wpnativeAppSettings;
   </ul>
   <?php $wpna_save_settings_nonce = wp_create_nonce( 'wpna_save_settings_form_nonce' ); ?>
   <form id="wpnaSettingsForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
-    <input type="hidden" id="currentTabInput" name="currentTab" value="<?php echo isset($_GET['section']) ? $_GET['section'] : 0;?>" />
+    <input type="hidden" id="currentTabInput" name="currentTab" value="<?php echo isset($_GET['section']) ? esc_attr($_GET['section']) : 0;?>" />
     <input type="hidden" name="action" value="handle_wpna_settings_submit">
     <input type="hidden" name="wpna_save_settings_nonce" value="<?php echo $wpna_save_settings_nonce ?>" />
     <div id="general" class="tab-content generalSettings">

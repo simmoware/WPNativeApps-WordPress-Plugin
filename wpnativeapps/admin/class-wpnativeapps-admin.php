@@ -257,11 +257,14 @@ class Wp_Native_Apps_Admin {
 
 			// var_dump($_POST['bottomBarItemText']);die;
 
-			$bottomBarNavPages = $_POST['bottomBarItemText'];
+			$bottomBarNavPages = isset($_POST['bottomBarItemText']) ? $this->sanitizeMultipleInputs($_POST['bottomBarItemText']) : null;
+			// var_dump($bottomBarNavPages);
+			// var_dump($this->sanitizeMultipleInputs($bottomBarNavPages));
+			// die;
 				if(!empty($bottomBarNavPages)){
 					$pagecount = 1;
 					foreach($bottomBarNavPages as $page){
-						$pageType = sanitize_text_field($_POST['bottomBarItemType_'.$pagecount]);
+						$pageType = isset($_POST['bottomBarItemType_'.$pagecount]) ? sanitize_text_field($_POST['bottomBarItemType_'.$pagecount]) : null ;
 						if($pageType == "page"){
 							$pageUrl = isset($_POST['bottomBarItemUrlInternal_'.$pagecount]) ? sanitize_url($_POST['bottomBarItemUrlInternal_'.$pagecount]) : '';
 							if(!empty($pageUrl))
@@ -286,16 +289,15 @@ class Wp_Native_Apps_Admin {
 								break;
 							}
 							case 'logoLeftBurgerRight':{
-
-								$HBItemSources = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemSource'];
-								$navInternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL'];
-								$navExternalUrls = $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_externalURL'];
+								$HBItemSources = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemSource'])  ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemSource']) : null;
+								$navInternalUrls = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_internalURL']) : null;
+								$navExternalUrls = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_externalURL']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_externalURL']) : null;
 								$hamburgerMenuItems = array();
 								if(!empty($HBItemSources)){
 									$buttonCount = 1;
-									$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) : '';
-									$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
 									foreach ($HBItemSources as $key=>$value){
+										$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
+										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) : '';
 										$hamburgerMenuItems[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
 											"icon"=> $navIcon,
@@ -308,9 +310,9 @@ class Wp_Native_Apps_Admin {
 
 								$topNav = array(
 				            "designType"=> "logoLeftBurgerRight",
-										"useLogo" => $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_type'] == 'logo'? true : false,
-										"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
-										"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
+							"useLogo" => sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_type']) == 'logo'? true : false,
+							"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
+							"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 				            "hamburger"=> [
 				              "backgroundColor"=> isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuBgColor']) : '',
 				              "menuIcon"=> isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_HamburgerMenuIcon_image_url']) : '',
@@ -344,7 +346,7 @@ class Wp_Native_Apps_Admin {
 
 								$topNav = array(
 				            "designType"=> "logoLeftNavRight",
-										"useLogo" => $_POST['topNav_'.$pagecount.'_logoLeftNavRight_type'] == 'logo'? true : false,
+										"useLogo" => sanitize_text_field($_POST['topNav_'.$pagecount.'_logoLeftNavRight_type']) == 'logo'? true : false,
 										"logo"=> isset($_POST['topNav_'.$pagecount.'_logo_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logo_image_url']) : '',
 										"label"=> isset($_POST['topNav_'.$pagecount.'_text']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_text']) : '',
 										"buttons"=> $buttons
@@ -355,7 +357,7 @@ class Wp_Native_Apps_Admin {
 							case 'logoMidNavBoth':{
 
 
-								$navSources = sanitize_text_field($_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source']);
+								$navSources = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoMidNavBoth_Source']);
 								$navInternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoMidNavBoth_internalURL']);
 								$navExternalUrls = $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoMidNavBoth_externalURL']);
 
@@ -457,7 +459,6 @@ class Wp_Native_Apps_Admin {
 									"prompts"=>$prompts,
 									"authenticationSettings"=>$authentication
 							);
-
 						file_put_contents(dirname(__FILE__) . '/config.json', json_encode($configSaved));
 
 					// add the admin notice

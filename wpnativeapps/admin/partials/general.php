@@ -10,7 +10,7 @@ $defaultLogoURL = $image[0];
           <input
                 type="text"
                 name="wpna_app_name"
-                value="<?php echo isset($config['name']) ? sanitize_text_field($config['name']) :''; ?>"
+                value="<?php echo isset($config['name']) ? esc_html($config['name']) :''; ?>"
                 id="wpna_app_name"
                 _not_required
                 />
@@ -52,7 +52,7 @@ $defaultLogoURL = $image[0];
                         type="text"
                         name="footerToHide"
                         id="footerToHide"
-                        value="<?php echo isset($config['footerToHide']) ? sanitize_text_field($config['footerToHide']) :''; ?>"
+                        value="<?php echo isset($config['footerToHide']) ? esc_html($config['footerToHide']) :''; ?>"
                         _not_required
                     />
                     <div class="choose_button_with_icon" onclick="buildFooteriFrame();">
@@ -167,7 +167,7 @@ $defaultLogoURL = $image[0];
             class="color-picker"
             name="splash_backgroundColor"
             id="splash_backgroundColor"
-            value="<?php echo isset($config['splash']['backgroundColor']) ? sanitize_text_field($config['splash']['backgroundColor']) :''; ?>"
+            value="<?php echo isset($config['splash']['backgroundColor']) ? esc_html($config['splash']['backgroundColor']) :''; ?>"
             _not_required
             />
     </div>
@@ -197,7 +197,7 @@ $defaultLogoURL = $image[0];
                   'changeText'=>'Change Background Image'
                 );
 
-                echo $this->wpna_image_uploadField($args);
+                echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
             ?>
         </div>
     </div>
@@ -224,7 +224,7 @@ $defaultLogoURL = $image[0];
                             );
 
 
-        echo $this->wpna_image_uploadField($args);
+        echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
         ?>
     </div>
     -->
@@ -253,7 +253,7 @@ $defaultLogoURL = $image[0];
               class="color-picker"
               name="topBarNav_backgroundColor"
               id="topbar_navigation_backgroundColor"
-              value="<?php echo isset($config['topBarNav']['styles']['backgroundColor']) ? sanitize_text_field($config['topBarNav']['styles']['backgroundColor']) : '';?>"
+              value="<?php echo isset($config['topBarNav']['styles']['backgroundColor']) ? esc_html($config['topBarNav']['styles']['backgroundColor']) : '';?>"
               _not_required
             />
       </div>
@@ -301,7 +301,7 @@ $defaultLogoURL = $image[0];
                   'changeText'=>'Change Banner Image'
                 );
 
-                echo $this->wpna_image_uploadField($args);
+                echo html_entity_decode(esc_html($this->wpna_image_uploadField($args)));
             ?>
         </div>
     </div>
