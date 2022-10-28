@@ -1,7 +1,7 @@
 <div id="wpNativeAppsAnalytics">
     <div class='flex-column'>
         <div class='flex-row'>
-            <img class='wpna-logo' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/WPNativeApps-Logo-Landscape.png" />    
+            <img class='wpna-logo' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/WPNativeApps-Logo-Landscape.png" />    
         </div>
         <div class='flex-row'>
             <h1 align='center'>Your App Analytics</h1>

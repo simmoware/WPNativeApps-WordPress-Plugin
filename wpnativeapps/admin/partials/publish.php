@@ -20,8 +20,8 @@ if($status == false):
 <div id="wpNativeAppsPublish">
     <div id="publish">
       <div class="flex-column">
-          <img class='wpna-logo' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/WPNativeApps-Logo-Landscape.png" />
-          <img class='processing-graphic' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/market-launch-bro.jpg" />
+          <img class='wpna-logo' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/WPNativeApps-Logo-Landscape.png" />
+          <img class='processing-graphic' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/market-launch-bro.jpg" />
           <h2><?php _e('Ready to publish your app to the Google &amp; Apple App Store?', 'wpnativeapps');?></h2>
           <p>
             <?php _e('It costs $399USD to have us publish your app. The setup includes time with our design and development team to make sure that your app has a great user experience and is perfectly configured to meet the app store requirements.','wpnativeapps');?>
@@ -46,8 +46,8 @@ if($status == false):
 <div id="wpNativeAppsPublish">
   <div id="processing">
     <div class="flex-column">
-      <img class='wpna-logo' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/WPNativeApps-Logo-Landscape.png" />
-      <img class='processing-graphic' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/Task-bro.jpg" />
+      <img class='wpna-logo' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/WPNativeApps-Logo-Landscape.png" />
+      <img class='processing-graphic' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/Task-bro.jpg" />
       <h2><?php _e('We\'re working on getting your app onto the app stores', 'wpnativeapps');?></h2>
       <p>
         <?php _e('We’ll be in touch via email as we make progress. If you have any questions in the meantime please contact us at <a href="mailto:support@wpnativeapps.com">support@wpnativeapps.com</a>','wpnativeapps');?>

@@ -96,7 +96,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         placeholder="We use location services to do this that and the other thing. Please allow location services with the button below."
                         rows="3"
                         value="<?php echo esc_attr($pushNotification['styles']['description']);?>"
-                    ><?php echo esc_textarea($pushNotification['styles']['description']);?></textarea>
+                    ><?php echo esc_html($pushNotification['styles']['description']);?></textarea>
                 </div>
                 <h4>Prompt accept button text </h4>
                 <div class="flex-row propmtTextSections">
@@ -125,7 +125,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
             </div>
         </div>
         <div class="flex-column w40p">
-            <img src="<?php echo plugin_dir_url(__DIR__).'images/prompts/prompt-1.png';?>" class="promptScreenPreview" />
+            <img src="<?php echo esc_url(plugin_dir_url(__DIR__)).'images/prompts/prompt-1.png';?>" class="promptScreenPreview" />
             <span class="button previewSplash">Preview This Prompt</span>
         </div>
     </section>
@@ -196,7 +196,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
                         placeholder="We use location services to do this that and the other thing. Please allow location services with the button below."
                         rows="3"
                         value="<?php echo esc_attr($trackingService['styles']['description']);?>"
-                    ><?php echo $trackingService['styles']['description'];?></textarea>
+                    ><?php echo esc_html($trackingService['styles']['description']);?></textarea>
                 </div>
                 <h4>Prompt accept button text </h4>
                 <div class="flex-row propmtTextSections">
@@ -238,7 +238,7 @@ $trackingService = $promptSettings['promptItems']['trackingService'];
             </div>
         </div>
         <div class="flex-column w40p">
-            <img src="<?php echo plugin_dir_url(__DIR__).'images/prompts/prompt-2.png';?>" class="promptScreenPreview" />
+            <img src="<?php echo esc_url(plugin_dir_url(__DIR__)).'images/prompts/prompt-2.png';?>" class="promptScreenPreview" />
             <span class="button previewSplash">Preview This Prompt</span>
         </div>
     </section>

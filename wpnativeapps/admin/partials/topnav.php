@@ -10,10 +10,10 @@
         echo '<ul id="topNavTabsControl">';
         $liCount = 1;
         foreach($bottomNavPages as $ulItem){
-          echo '<li class="topNavTabs"><a href="#topNavPage_'.$liCount.'"><img src="'.esc_url($ulItem["icon"]).'" class="topNavPageIcon">'.esc_attr($ulItem["name"]).'</li></a>';
+          printf( '<li class="topNavTabs"> <a href="#topNavPage_%1$d"> <img src="%2$s" class="topNavPageIcon">%3$s</a></li>',esc_attr($liCount), esc_url($ulItem["icon"]),esc_attr($ulItem["name"]));
           $liCount++;
         }
-        echo '</ul>';
+        printf('</ul>');
         $topNavTabCount = 1;
         foreach ($bottomNavPages as $bottomNavPage){
 
@@ -147,7 +147,7 @@
 
           ?>
 
-          <div id="topNavPage_<?php esc_attr_e($topNavTabCount);?>" data-pagecount="<?php echo esc_attr($topNavTabCount);?>" class="topNavPageSettings flex-column">
+          <div id="topNavPage_<?php esc_attr_e($topNavTabCount);?>" data-pagecount="<?php esc_attr_e($topNavTabCount);?>" class="topNavPageSettings flex-column">
               <input type="hidden" id="topNavTabsCurrent" name="topNavTabsCurrent" value="<?php echo isset($_GET['topnav']) ? esc_attr($_GET['topnav']) : 0;?>" />
               <h3>Upload a logo for the nav bar or enter text</h3>
                 <p>The logo and text uploaded in this section will be used in the nav configuration you choose below.</p>
@@ -165,14 +165,14 @@
                     ?>
                     <h4>Top bar text</h4>
                     <p>By default we'll load in the page title. You can edit the text to be anything you would like within 10 characters.</p>
-                    <input class='topNavInput' type="text" name="topNav_<?php echo esc_attr($topNavTabCount);?>_text" value="<?php echo esc_attr($topNav_label);?>" />
+                    <input class='topNavInput' type="text" name="topNav_<?php esc_attr_e($topNavTabCount);?>_text" value="<?php esc_attr_e($topNav_label);?>" />
                 </div>
               <h2 class='structureLabel'>How would you like your top bar navigation to be structured?</h2>
               <div class="topNavOptionsParent">
 
                 <section data-structure='1' class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe">
                   <div class='settingSelect'>
-                    <label><input type="radio" name="topNav_<?php echo $topNavTabCount;?>_structure" <?php echo ($designType =='logoOnly') ? 'checked ' : ''; ?> value="logoOnly" /> Logo/Text aligned left,middle or right</label>
+                    <label><input type="radio" name="topNav_<?php esc_attr_e($topNavTabCount);?>_structure" <?php echo ($designType =='logoOnly') ? 'checked ' : ''; ?> value="logoOnly" /> Logo/Text aligned left,middle or right</label>
                   </div>
                   <div class="settingParent <?php echo $designType == 'logoOnly' ? '':'hide'?>">
                     <h4 class='question'>Logo or Text?</h4>
@@ -180,7 +180,7 @@
                       <div data-id="1" class="optionParent">
                         <div class="optionRadio">
                           <label>
-                            <input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked  ' :''; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="logo"> Logo
+                            <input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked  ' :''; ?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoOnly_type" value="logo"> Logo
                           </label>
                         </div>
                         <div class="conditionalSettings hide">
@@ -190,7 +190,7 @@
                       <div data-id="2" class="optionParent">
                         <div class="optionRadio">
                           <label>
-                            <input type="radio" class="conditional" <?php echo ($useLogo) ? ' ' :'checked  '; ?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_type" value="text"> Text
+                            <input type="radio" class="conditional" <?php echo ($useLogo) ? ' ' :'checked  '; ?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoOnly_type" value="text"> Text
                           </label>
                         </div>
                         <div class="conditionalSettings hide">
@@ -199,25 +199,25 @@
                     </div>
                     <h4>Select the Logo Alignment</h4>
                     <div class="alignmentOptions flex-row">
-                      <label><input type="radio" class="" <?php echo $logoAlignment =="left" ? "checked  " : "";?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_align" value="left" /> Left</label>
-                      <label><input type="radio" class="" <?php echo $logoAlignment =="middle" ? "checked " : "";?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_align" value="middle" /> Middle</label>
-                      <label><input type="radio" class="" <?php echo $logoAlignment =="right" ? "checked " : "";?> name="topNav_<?php echo $topNavTabCount;?>_logoOnly_align" value="right" /> Right</label>
+                      <label><input type="radio" class="" <?php echo $logoAlignment =="left" ? "checked  " : "";?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoOnly_align" value="left" /> Left</label>
+                      <label><input type="radio" class="" <?php echo $logoAlignment =="middle" ? "checked " : "";?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoOnly_align" value="middle" /> Middle</label>
+                      <label><input type="radio" class="" <?php echo $logoAlignment =="right" ? "checked " : "";?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoOnly_align" value="right" /> Right</label>
                     </div>
                   </div>
                 </section>
                 <section  data-structure='2'  class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe">
                   <div class='settingSelect'>
-                    <label><input type="radio" name="topNav_<?php echo $topNavTabCount;?>_structure" <?php echo ($designType =='logoLeftBurgerRight') ? 'checked ' : 'logoLeftBurgerRight'; ?> value="logoLeftBurgerRight" /> Logo/Text on the left and hamburger menu icon on the right</label>
+                    <label><input type="radio" name="topNav_<?php esc_attr_e($topNavTabCount);?>_structure" <?php echo ($designType =='logoLeftBurgerRight') ? 'checked ' : 'logoLeftBurgerRight'; ?> value="logoLeftBurgerRight" /> Logo/Text on the left and hamburger menu icon on the right</label>
                   </div>
                   <div class="settingParent <?php echo $designType == 'logoLeftBurgerRight' ? '':'hide'?>">
                     <div class='settingOption'>
                       <div data-id="1" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked ' :''; ?>name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="logo"> Logo </label></div>
+                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo ($useLogo) ? 'checked ' :''; ?>name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_type" value="logo"> Logo </label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
                       <div data-id="2" class="optionParent">
-                        <div class="optionRadio"><label> <input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_type" value="text"> Text</label></div>
+                        <div class="optionRadio"><label> <input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_type" value="text"> Text</label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
@@ -229,7 +229,7 @@
                               data-alpha-enabled="true"
                               data-default-color="rgba(0,0,0,0.85)"
                               class="color-picker"
-                              name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_HamburgerMenuBgColor"
+                              name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_HamburgerMenuBgColor"
                               _not_required
                                />
                         <label>Hamburger Menu Font color</label>
@@ -239,7 +239,7 @@
                               data-alpha-enabled="true"
                               data-default-color="rgba(0,0,0,0.85)"
                               class="color-picker"
-                              name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_HamburgerMenuFontColor"
+                              name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_HamburgerMenuFontColor"
                               _not_required
                                />
                         <label class="inputLabel">Hamburger Menu Icon</label>
@@ -271,7 +271,7 @@
                             <div class="flex-column topNavPageIconItem">
                               <div class="flex-row bottomBarItemWrapTop">
                                 <div class="bottomBarItemType">
-                                  <select onchange="handleHamburgerMenuLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_hamburgerNavItemSource[]">
+                                  <select onchange="handleHamburgerMenuLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hamburgerNavItemSource[]">
                                     <option value="page" <?php echo $hamburgerMenuItem['isExternal'] ? '' : 'selected';?>>Page</option>
                                     <option value="external" <?php echo $hamburgerMenuItem['isExternal'] ? 'selected' : '';?>>External</option>
                                   </select>
@@ -292,20 +292,20 @@
                                   <input
                                         type="text"
                                         class="topNavItemUrlExternal <?php echo $hamburgerMenuItem['isExternal'] ? '' : 'hide' ?>"
-                                        name="topNav_<?php echo $topNavTabCount;?>_logoLeftBurgerRight_hamburgerNavItem_externalURL[]"
+                                        name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hamburgerNavItem_externalURL[]"
                                         placeholder="Enter External URL"
                                         value="<?php echo esc_url($hamburgerMenuItem['url']);?>"
                                         />
 
                                 </div>
                                 <div class="flex-column">
-                                  <!-- <input
+                                  <input
                                       type="text"
                                       class="topNavItemLabel"
                                       name="topNav_<?php esc_attr_e( $topNavTabCount);?>_logoLeftBurgerRight_hamburgerNavItem_title[]"
                                       placeholder="Title"
                                       value="<?php echo esc_html($hamburgerMenuItem['title']);?>"
-                                      /> -->
+                                      />
                                 </div>
 
                                 <div class="flex-column">
@@ -341,19 +341,19 @@
                 </section>
                 <section  data-structure='3'  class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe">
                   <div class='settingSelect'>
-                    <label><input type="radio" name="topNav_<?php echo $topNavTabCount;?>_structure" <?php echo ($designType =='logoLeftNavRight') ? 'checked ' : 'logoLeftNavRight'; ?> value="logoLeftNavRight" /> Logo/Text on the left and navigation icons on the right      </label>
+                    <label><input type="radio" name="topNav_<?php esc_attr_e($topNavTabCount);?>_structure" <?php echo ($designType =='logoLeftNavRight') ? 'checked ' : 'logoLeftNavRight'; ?> value="logoLeftNavRight" /> Logo/Text on the left and navigation icons on the right      </label>
                   </div>
                   <div class="settingParent <?php echo $designType == 'logoLeftNavRight' ? '':'hide'?>">
                     <h3>Logo or text in top bar</h3>
                     <p>Would you like your logo or text displayed in the top bar?</p>
                     <div class='settingOption'>
                       <div data-id="1" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo $useLogo ? 'checked ' :''; ?>name="topNav_<?php echo $topNavTabCount;?>_logoLeftNavRight_type" value="logo"> Logo </label></div>
+                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo $useLogo ? 'checked ' :''; ?>name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftNavRight_type" value="logo"> Logo </label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
                       <div data-id="2" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php echo $topNavTabCount;?>_logoLeftNavRight_type" value="text"> Text</label></div>
+                        <div class="optionRadio"><label><input type="radio" <?php echo ($useLogo) ? '' : 'checked ';?> class="conditional" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftNavRight_type" value="text"> Text</label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
@@ -369,7 +369,7 @@
                           <div class="flex-column topNavPageIconItem">
                             <div class="flex-row bottomBarItemWrapTop">
                               <div class="bottomBarItemType">
-                                <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php echo $topNavTabCount;?>_logoLeftNavRight_Source[]">
+                                <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftNavRight_Source[]">
                                   <option value="page" <?php echo $buttonSettings['isExternal'] ? '' : 'selected';?>>Page</option>
                                   <option value="external" <?php echo $buttonSettings['isExternal'] ? 'selected' : '';?>>External</option>
                                 </select>
@@ -390,7 +390,7 @@
                                 <input
                                       type="text"
                                       class="topNavItemUrlExternal <?php echo $buttonSettings['isExternal'] ? '' : 'hide' ?>"
-                                      name="topNav_<?php echo $topNavTabCount;?>_logoLeftNavRight_externalURL[]"
+                                      name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftNavRight_externalURL[]"
                                       placeholder="Enter External URL"
                                       value="<?php echo esc_url($buttonSettings['url']);?>"
                                       />
@@ -425,19 +425,19 @@
 
                 <section  data-structure='4'  class="topNav_optionParent navStructureRow flex-column jc-sb ai-fe">
                   <div class='settingSelect'>
-                    <label><input type="radio" name="topNav_<?php echo $topNavTabCount;?>_structure" <?php echo ($designType =='logoMidNavBoth') ? 'checked ' : 'logoMidNavBoth'; ?> value="logoMidNavBoth" /> Logo/Text middle and navigation icons on both left and right  </label>
+                    <label><input type="radio" name="topNav_<?php esc_attr_e($topNavTabCount);?>_structure" <?php echo ($designType =='logoMidNavBoth') ? 'checked ' : 'logoMidNavBoth'; ?> value="logoMidNavBoth" /> Logo/Text middle and navigation icons on both left and right  </label>
                   </div>
                   <div class="settingParent <?php echo $designType == 'logoMidNavBoth' ? '':'hide'?>">
                     <h3>Logo or text in top bar?</h3>
                     <p>Would you like your logo or text displayed in the top bar?</p>
                     <div class='settingOption'>
                       <div data-id="1" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo $useLogo ? 'checked ' :''; ?>  name="topNav_<?php echo $topNavTabCount;?>_logoMidNavBoth_type" value="logo"> Logo </label></div>
+                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo $useLogo ? 'checked ' :''; ?>  name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoMidNavBoth_type" value="logo"> Logo </label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
                       <div data-id="2" class="optionParent">
-                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo ($useLogo) ? '' : 'checked ';?> name="topNav_<?php echo $topNavTabCount;?>_logoMidNavBoth_type" value="text"> Text</label></div>
+                        <div class="optionRadio"><label><input type="radio" class="conditional" <?php echo ($useLogo) ? '' : 'checked ';?> name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoMidNavBoth_type" value="text"> Text</label></div>
                         <div class="conditionalSettings hide">
                         </div>
                       </div>
@@ -454,7 +454,7 @@
                         <div class="flex-column topNavPageIconItem">
                           <div class="flex-row bottomBarItemWrapTop">
                             <div class="bottomBarItemType">
-                              <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php echo $topNavTabCount;?>_logoMidNavBoth_Source[]">
+                              <select onchange="handleTopNavLinkTypeChange(this)"  _not_required class="bottomBarItemType" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoMidNavBoth_Source[]">
                                 <option value="page" <?php echo $buttonSettings['isExternal'] ? '' : 'selected';?>>Page</option>
                                 <option value="external" <?php echo $buttonSettings['isExternal'] ? 'selected' : '';?>>External</option>
                               </select>
@@ -475,7 +475,7 @@
                               <input
                                     type="text"
                                     class="topNavItemUrlExternal <?php echo $buttonSettings['isExternal'] ? '' : 'hide' ?>"
-                                    name="topNav_<?php echo $topNavTabCount;?>_logoMidNavBoth_externalURL[]"
+                                    name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoMidNavBoth_externalURL[]"
                                     placeholder="Enter External URL"
                                     value="<?php echo esc_url($buttonSettings['url']);?>"
                                     />

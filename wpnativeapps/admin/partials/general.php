@@ -10,7 +10,7 @@ $defaultLogoURL = $image[0];
           <input
                 type="text"
                 name="wpna_app_name"
-                value="<?php echo isset($config['name']) ? esc_html($config['name']) :''; ?>"
+                value="<?php echo isset($config['name']) ? esc_attr($config['name']) :''; ?>"
                 id="wpna_app_name"
                 _not_required
                 />
@@ -231,7 +231,7 @@ $defaultLogoURL = $image[0];
 
   </div>
   <div class="splashScreenSection flex-column w40p">
-    <img src="<?php echo plugin_dir_url(__DIR__).'/images/general/splash-thumbnail.png';?>" class="promptScreenPreview" />
+    <img src="<?php echo esc_url(plugin_dir_url(__DIR__)).'/images/general/splash-thumbnail.png';?>" class="promptScreenPreview" />
     <!-- <span class="button previewSplash ">Preview Splash Screen</span> -->
   </div>
 </section>
@@ -279,7 +279,7 @@ $defaultLogoURL = $image[0];
         </div>
     </div>
     <div class="topbarnav-previewsection flex-column jc-se w40p">
-        <div class="previewImages" style="background-image: url('<?php echo plugin_dir_url(__DIR__);?>/images/general/status-bar-thumbnail.jpg');"></div>
+        <div class="previewImages" style="background-image: url('<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/general/status-bar-thumbnail.jpg');"></div>
     </div>
 </div>
 
@@ -327,7 +327,7 @@ $defaultLogoURL = $image[0];
       </div>
 
       <div class="topbarnav-previewsection flex-column jc-se w40p">
-        <div class="previewImages" style="background-image: url('<?php echo plugin_dir_url(__DIR__);?>/images/general/top-bar-thumbnail.jpg');"></div>
+        <div class="previewImages" style="background-image: url('<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/general/top-bar-thumbnail.jpg');"></div>
       </div>
     </div>
 
@@ -384,7 +384,7 @@ $defaultLogoURL = $image[0];
               class="color-picker"
               name="bottombarNavStyle_backgroundColor"
               id="bottombarNavStyle_backgroundColor"
-              value="<?php echo isset($bottombarNavStyle['backgroundColor']) ? sanitize_text_field($bottombarNavStyle['backgroundColor']) : '';?>"
+              value="<?php echo isset($bottombarNavStyle['backgroundColor']) ? esc_html($bottombarNavStyle['backgroundColor']) : '';?>"
               _not_required
                />
         <!-- </div> -->
@@ -397,7 +397,7 @@ $defaultLogoURL = $image[0];
               class="color-picker"
               name="bottombarNavStyle_defaultIconColor"
               id="bottombarNavStyle_defaultIconColor"
-              value="<?php echo isset($bottombarNavStyle['defaultIconColor']) ? sanitize_text_field($bottombarNavStyle['defaultIconColor']) : '';?>"
+              value="<?php echo isset($bottombarNavStyle['defaultIconColor']) ? esc_html($bottombarNavStyle['defaultIconColor']) : '';?>"
               _not_required
                />
 
@@ -410,7 +410,7 @@ $defaultLogoURL = $image[0];
               class="color-picker"
               name="bottombarNavStyle_activeIconColor"
               id="bottombarNavStyle_activeIconColor"
-              value="<?php echo isset($bottombarNavStyle['activeIconColor']) ? sanitize_text_field($bottombarNavStyle['activeIconColor']) : '';?>"
+              value="<?php echo isset($bottombarNavStyle['activeIconColor']) ? esc_html($bottombarNavStyle['activeIconColor']) : '';?>"
               _not_required
                />
 

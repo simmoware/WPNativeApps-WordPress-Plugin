@@ -4,7 +4,7 @@ $config = $this->wpnativeAppSettings;
 $pushNotification = $config['pushNotificationSettings'];
 ?>
 <div class="main" id="pushNotifications">
-  <img class='wpna-logo' src="<?php echo plugin_dir_url(__DIR__);?>/images/publish/WPNativeApps-Logo-Landscape.png" />
+  <img class='wpna-logo' src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/publish/WPNativeApps-Logo-Landscape.png" />
   <h1 class='page-header'>Push Notifications</h1>
   <div id="wpna_settings_tabs">
         <ul class="tabs">
@@ -14,7 +14,7 @@ $pushNotification = $config['pushNotificationSettings'];
         </ul>
 
     <div id="send">
-        <img src='<?php echo plugin_dir_url(__DIR__);?>/images/push-note-example.jpg' id='example-push' />
+        <img src='<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/push-note-example.jpg' id='example-push' />
         <div class='send-form-parent'>
           <div class="flex-row">
               <div class="left flex-column">
@@ -100,7 +100,7 @@ $pushNotification = $config['pushNotificationSettings'];
         <section>
             <div class="notice notice-info is-dismissible">
                 <div class="pluginIcon">
-                    <img class="wpnaNoticeIcon" src="<?php echo plugin_dir_url(__DIR__);?>/images/WPNativeApps-Icon.png" />
+                    <img class="wpnaNoticeIcon" src="<?php echo esc_url(plugin_dir_url(__DIR__));?>/images/WPNativeApps-Icon.png" />
                 </div>
                 <div class="bannerContent">
                   <h1>Introducing Subscription Groups</h1>
@@ -116,7 +116,7 @@ $pushNotification = $config['pushNotificationSettings'];
                   <form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
                     <?php $addSubscriptionGroup_nonce = wp_create_nonce( 'wpna_addSubscriptionGroup_nonce' ); ?>
                     <input type="hidden" name="action" value="add_notification_group">
-                    <input type="hidden" name="addSubscriptionGroup_nonce" value="<?php echo $addSubscriptionGroup_nonce ?>" />
+                    <input type="hidden" name="addSubscriptionGroup_nonce" value="<?php esc_attr_e($addSubscriptionGroup_nonce) ?>" />
 
                     <h2>Create a subscription group</h2>
                     <h3>Subscription Group Name</h3>

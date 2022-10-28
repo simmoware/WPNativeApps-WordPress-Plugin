@@ -567,6 +567,15 @@ $config = $this->wpnativeAppSettings;
             value=""
             />
     </div>
+    <div class="flex-column">
+      <input
+          type="text"
+          class="topNavItemLabel"
+          name="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hamburgerNavItem_title[]"
+          placeholder="Title"
+          value=""
+          />
+    </div>
   </div>
   <div class="flex-row flex-start bottomBarItemWrapBottom">
     <?php
@@ -629,7 +638,7 @@ $config = $this->wpnativeAppSettings;
 <div class="flex-row settings-page-parent">
   <div class="flexitem wpna_settings_page_left">
     <div class="topPageSection">
-        <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo get_admin_page_title(); ?></h1>
+        <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo esc_url(get_admin_page_title()); ?></h1>
         <?php $this->admin_notices(); ?>
     </div>
 
@@ -646,7 +655,7 @@ $config = $this->wpnativeAppSettings;
   <form id="wpnaSettingsForm" method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
     <input type="hidden" id="currentTabInput" name="currentTab" value="<?php echo isset($_GET['section']) ? esc_attr($_GET['section']) : 0;?>" />
     <input type="hidden" name="action" value="handle_wpna_settings_submit">
-    <input type="hidden" name="wpna_save_settings_nonce" value="<?php echo $wpna_save_settings_nonce ?>" />
+    <input type="hidden" name="wpna_save_settings_nonce" value="<?php echo esc_attr($wpna_save_settings_nonce); ?>" />
     <div id="general" class="tab-content generalSettings">
       <?php include_once dirname(__FILE__) . '/general.php';?>
     </div>
@@ -684,10 +693,10 @@ $config = $this->wpnativeAppSettings;
               <h4>Download WPNativeApps on the App Store or Google Play Store</h4>
               <div class='download-app-icons'>
                   <a href="https://androidpreviewerapp.wpnativeapps.com">
-                    <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/app-store.png' />
+                    <img src='<?php echo esc_url(plugin_dir_url( __DIR__ ));?>/images/general/app-store.png' />
                   </a>
                   <a href="https://iospreviewerapp.wpnativeapps.com">
-                    <img src='<?php echo plugin_dir_url( __DIR__ );?>/images/general/play-store.png' />
+                    <img src='<?php echo esc_url(plugin_dir_url( __DIR__ ));?>/images/general/play-store.png' />
                   </a>
               </div>
           </div>
