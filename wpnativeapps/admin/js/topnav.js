@@ -1,4 +1,5 @@
 function addTopNavHamburgerItem(el){
+	var maxitem = 20;
 
 			var section = $(el).parents('section.navStructureRow');
 			var pagecount = $(el).parents('.topNavPageSettings').attr('data-pagecount');
@@ -13,12 +14,12 @@ function addTopNavHamburgerItem(el){
 				var removeIcon = '';
 			}
 			
-			if(navItemsCount < 3){
+			if(navItemsCount < maxitem){
 				$(section).find('span.removeNavigationIconRow').remove();
 				$(el).parent().before('<div class="flex-column topNavPageIconItem">'+newIconHtml+'</div>'+removeIcon);
 			}
 			
-			if(navItemsCount < 2){
+			if(navItemsCount < (maxitem-1) ){
 				$(section).find('div.addNewNavigationIcon').removeClass('hide');
 			}else{
 				$(section).find('div.addNewNavigationIcon').addClass('hide');

@@ -7,31 +7,31 @@ body {
 
 /* TEXT */
 
-.center {
+.wpna-center {
     text-align:center;
 }
 
 /* GENERAL RESPONSIVE */
 
 @media (max-width:768px) {
-    .desktop-only {
+    .wpna-desktop-only {
         display:none !important;
     }
 }
 
 @media (min-width:768px) {
-    .mobile-only {
+    .wpna-mobile-only {
         display:none !important;
     }
 }
 
-.hide {
+.wpna-hide {
     display:none;
 }
 
 /* Centerd Content CSS For All Pages */
 
-.centered-content {
+.wpna-centered-content {
     width:100%;
     max-width:1366px;
     margin:0 auto;
@@ -40,119 +40,111 @@ body {
 }
 
 @media (max-width:1366px) {
-    .centered-content {
+    .wpna-centered-content {
         padding:0px 50px;
     }
 }
 
 @media (max-width:1166px) {
-    .centered-content {
+    .wpna-centered-content {
         padding:0px 30px;
     }
 }
 
 @media (max-width:1000px) {
-    .centered-content {
+    .wpna-centered-content {
         padding:0px 20px;
     }
 }
 
 @media (max-width:768px) {
-    .centered-content {
+    .wpna-centered-content {
         padding:0px 15px;
     }
 }
 
 /* Centered Cards */
 
-.center1000 {
+.wpna-center1000 {
     max-width:1000px;
     margin:0 auto;
 }
 
-.center900 {
+.wpna-center900 {
     max-width:900px;
     margin:0 auto;
 }
 
-.center800 {
+.wpna-center800 {
     max-width:800px;
     margin:0 auto;
 }
 
-.center700 {
+.wpna-center700 {
     max-width:700px;
     margin:0 auto;
 }
 
-.center600 {
+.wpna-center600 {
     max-width:600px;
     margin:0 auto;
 }
 
-.center500 {
+.wpna-center500 {
     max-width:600px;
     margin:0 auto;
 }
 
-.center400 {
+.wpna-center400 {
     max-width:400px;
     margin:0 auto;
 }
 
 
-
-/* breadcrumbs */
-
-.sectorBreadcrumbs {
-    display:none;
-}
-
-
 /* Flex Display Classes */
 
-.flex-row {
+.wpna-flex-row {
     display:flex;
     flex-direction: row;
 }
 
-.flex-column {
+.wpna-flex-column {
     display: flex;
     flex-direction: column;
 }
 
-.jcc {
+.wpna-jcc {
     justify-content: center;
 }
 
-.aic {
+.wpna-aic {
     align-items: center;
 }
 
-.ais {
+.wpna-ais {
     align-items: start;
 }
 
-.jcsb {
+.wpna-jcsb {
     justify-content: space-between;
 }
 
-.jcsa {
+.wpna-jcsa {
     justify-content: space-around;
 }
 
-.flex-grow {
+.wpna-flex-grow {
     flex-grow:1;
 }
 
-.g5 {
+.wpna-g5 {
     gap:5px;
 }
 
-.g10 {
+.wpna-g10 {
     gap:10px;
 }
 
-.g20 {
+.wpna-g20 {
     gap:20px;
 }

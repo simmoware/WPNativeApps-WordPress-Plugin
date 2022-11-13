@@ -585,15 +585,63 @@ $config = $this->wpnativeAppSettings;
             'uploadText'=>'Upload Icon',
             'changeText'=>'Change Icon'
           );
-  echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
+    echo html_entity_decode(esc_html($this->wpna_image_uploadField($args))); ?>
   </div>
+  <div class="endOfJourneyPageSelectionWrap radioInputs">
+    <fieldset class="flex-column mb10">
+      <div class="flex-column mb10">
+        <h4>Will this page have end of Journey Page?</h4>
+        <div class="">
+          <input type="radio" class="hasEndJourneyPage" name="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPage_{{iconCount}}" id="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPageNo_{{iconCount}}" value="no" checked><label for="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPage_{{iconCount}}No" class="inputLabel">No</label>
+          <input type="radio" class="hasEndJourneyPage" name="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPage_{{iconCount}}" id="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPageYes_{{iconCount}}" value="yes"><label for="topNav_{{topNavTabCount}}_logoLeftBurgerRight_hasEndJourneyPageYes_{{iconCount}}" class="inputLabel">Yes</label>
+      </div>
+    </div>
+    <div class=" hide endFlowUrl">
+      <h4>Select Page</h4>
+      <?php wp_dropdown_pages(
+                                    [
+                                      'name'=>'topNav_{{topNavTabCount}}_logoLeftBurgerRight_hamburgerNavItem_{{iconCount}}_endFlowUrl',
+                                      'id'=>'topNav_{{topNavTabCount}}_logoLeftBurgerRight_hamburgerNavItem_{{iconCount}}_endFlowUrl',
+                                      'class'=>'bottomBarEndFlowUrl',
+                                      'echo'=>'1',
+                                      'value_field'=>'guid'
+                                    ]
+                                  );?>
+    </div>
+  </fieldset>
+</div>
 </div>
 <!-- ============================================================================================================================-->
 <!-- ============================================================================================================================-->
 <div class="flex-column hide" id="navigationBottomBarItemGeneric">
+  <div class="endOfJourneyPageSelectionWrap radioInputs">
+    <fieldset class="flex-column mb10">
+      <div class="flex-column mb10">
+        <h4>Will this page have end of Journey Page?</h4>
+        <div class="">
+          <input type="radio" class="hasEndJourneyPage" name="bottomBar_{{iconcount}}_hasEndJourneyPage" id="bottomBar_{{iconcount}}_hasEndJourneyPageNo" value="no" checked><label for="bottomBar_{{iconcount}}_hasEndJourneyPageNo" class="inputLabel">No</label>
+          <input type="radio" class="hasEndJourneyPage" name="bottomBar_{{iconcount}}_hasEndJourneyPage" id="bottomBar_{{iconcount}}_hasEndJourneyPageYes" value="yes"><label for="bottomBar_{{iconcount}}_hasEndJourneyPageYes" class="inputLabel">Yes</label>
+        </div>
+      </div>
+      <div class=" hide endFlowUrl">
+        <h4>Select Page</h4>
+        <?php wp_dropdown_pages(
+                                      [
+                                        'name'=>'bottomBarEndFlowUrl_{{iconcount}}',
+                                        'id'=>'bottomBarEndFlowUrl_{{iconcount}}',
+                                        'class'=>'bottomBarEndFlowUrl',
+                                        'echo'=>'1',
+                                        'value_field'=>'guid'
+                                      ]
+                                    );?>
+      </div>
+      
+    </fieldset>
+  </div>
   <div class="flex-row bottomBarItemWrapTop">
+
     <div class="bottomBarItemType">
-      <select onchange="handleBottomBarLinkTypeChange(this)" _not_required class="bottomBarItemType" name="bottomBarItemType_1">
+      <select onchange="handleBottomBarLinkTypeChange(this)" _not_required class="bottomBarItemType" name="bottomBarItemType_{{iconcount}}">
         <!-- <option disabled selected>Select a Link Type</option> -->
         <option value="page">Page</option>
         <option value="external">External</option>
@@ -638,7 +686,8 @@ $config = $this->wpnativeAppSettings;
 <div class="flex-row settings-page-parent">
   <div class="flexitem wpna_settings_page_left">
     <div class="topPageSection">
-        <h1 class="wp-heading-inline"><span class="wpna-icon"></span><?php echo esc_url(get_admin_page_title()); ?></h1>
+        <h1 class="wp-heading-inline"><span class="wpna-icon"></span>
+        <?php echo esc_html(get_admin_page_title()); ?></h1>
         <?php $this->admin_notices(); ?>
     </div>
 
@@ -676,9 +725,27 @@ $config = $this->wpnativeAppSettings;
   </div>
     <div class="wpna_settings_page_right sticky">
         <h2 style='margin-bottom:0px;'>Preview your app</h2>
-        <div id="appPreview">
+        <div id="appPreview"> 
             <div class='appPreviewPhoneContainer'>
-              <iframe src="/?hidetoolbar=true" class="appPreviewiFrame" onload="appPreviewerDidLoad();"></iframe>
+              <div class="overlay loader">
+                <div class="lds-spinner">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+              </div> 
+              <iframe src="/?hidetoolbar=true" class="appPreviewiFrame" onload="appPreviewerDidLoad();">
+                
+              </iframe>
               <div class="iFrameiPhoneFrame-Previewer"></div>
             </div>
         </div>

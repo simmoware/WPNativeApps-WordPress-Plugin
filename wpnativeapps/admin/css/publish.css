@@ -30,7 +30,7 @@
     text-decoration:underline;
 }
 
-#processing, #publish {
+#wpNativeAppsPublish #processing, #wpNativeAppsPublish #publish {
     background-color:#fff;
     padding:40px 50px;
     margin:0 auto;

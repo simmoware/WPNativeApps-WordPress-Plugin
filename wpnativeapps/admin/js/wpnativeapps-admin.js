@@ -2,6 +2,18 @@ var topNavTabs = null;
 (function( $ ) {
 	'use strict';
 	 	$(window).load(function(){
+            // was trying to get the loading gif to be added into the iframe
+            // var iFrame = $(".appPreviewiFrame").get(0);
+            // $(iFrame).ready(function() {
+            //     var iDoc = iFrame.contentWindow || iFrame.contentDocument;
+            //     console.log($(".overlay.loader").parent().html());
+            //     $(iDoc.body).prepend($(".overlay.loader").parent().html());
+            //     $(iDoc.body).find(".overlay.loader").fadeIn();
+            // });
+
+            $(".overlay.loader").fadeIn();
+
+        
 	 	    $(".preview-popup-trigger").on("click", function() {
 	 	        showQRCodePopup();
 	 	    });
@@ -19,7 +31,6 @@ var topNavTabs = null;
 			this.topNavTabs = $('#topNavTabs').tabs({active :  document.topNavTabsCurrent });
 
 			$('a.tabcontrol').click(function(event){
-				console.log('test');
 				// event.preventDefault();
 				var context = $('.wpna_tabs_wrap');
 				$('a.tabcontrol', context).removeClass('nav-tab-active');
@@ -40,7 +51,7 @@ var topNavTabs = null;
             if(result.success){
                     window.location.href = result.checkout.url;
             }
-            console.log("Result from AJAX: ", result)
+            // console.log("Result from AJAX: ", result)
             }
         });
       })
@@ -58,8 +69,8 @@ var topNavTabs = null;
 
 	$(document).on('change','#accountAddressCountry',function(){
 		var country = $(this).val();
-		console.log(country);
-		console.log('Render State here...');
+		// console.log(country);
+		// console.log('Render State here...');
 	});
 
 })( jQuery );
@@ -69,7 +80,10 @@ function reloadPreviewer() {
     var iFrame = $(".appPreviewiFrame").get(0);
     iFrame.contentWindow.location.reload();
 }
-
+function injectIframeCss(){
+    var $head = $("iframe").contents().find("head");                
+    $head.append('<style type="text/css">body::-webkit-scrollbar{display:none;} body{-ms-overflow-style: none;scrollbar-width: none;}</style>');
+}
 function appPreviewerDidLoad() {
     var iFrame = $(".appPreviewiFrame").get(0);
     var iDoc = iFrame.contentWindow || iFrame.contentDocument;
@@ -96,7 +110,7 @@ function appPreviewerDidLoad() {
             }
 
             var topNavType = $("input[name='topNav_1_structure']:checked").val();
-            console.log(topNavType);
+            // console.log(topNavType);
             // logoLeftBurgerRight, logoOnly, logoLeftNavRight, logoMidNavBoth
 
             var replaceVals = {
@@ -134,22 +148,23 @@ function appPreviewerDidLoad() {
             }
             //load app header
             getPreviewTemplate(topNavTemplate, replaceVals, function (data) {
-                $(iDoc.body).prepend("<div class='appHeader'>" + data + "</div>");
+                $(iDoc.body).prepend("<div class='wpna-appHeader'>" + data + "</div>");
                 $(iDoc.body).css({
                     "padding-top":"50px"
                 })
                 
             });
+            $(".overlay.loader").fadeOut(); 
 
             //load app footer
             var bottomNavTotal = $(".navigationBottomBarItem").length;
-            var bottomNavHtml = "<div class='appFooter'>";
+            var bottomNavHtml = "<div class='wpna-appFooter'>";
             var appendedMenuItems = 0;
 
             const rgb = $("input[name='bottombarNavStyle_activeIconColor']").val().replace("rgb\(", "").replace("\)", "").split(",");
             
             if (rgb.length !== 3) {
-            alert('Invalid format!');
+            // alert('Invalid format!');
             return;
             }
 
@@ -213,13 +228,14 @@ function appPreviewerDidLoad() {
             
         }, 1000);
     }
+    injectIframeCss();
 }
 
 function showQRCodePopup(){
     var $ = jQuery;
     $('#qrcode').empty();
     const qrcode = new QRCode(document.getElementById('qrcode'), {
-      text: `${WPNativeApps.pluginURL}config.json`,
+      text: `${WPNativeApps.WPNA_CONFIG_PATH}`,
       width: 240,
       height: 240,
       colorDark : '#000',
@@ -317,7 +333,7 @@ function removeHideItem(el){
 	var elementCount = $(el).parents('.general_hideElements').find('.otherHideElement').length;
 	$(el).parents('.hideOtherItemWrap').remove();
 	var count = parseInt(elementCount) - 1;
-	console.log(count);
+	// console.log(count);
 	if(count > 1){
 		// $('.hideOtherItemWrap:last').append('Hello world');
 		$('.hideOtherItemWrap:last').find('.removeIcon').html('<a id="removeHideItem" class="button trash" href="javascript:void(0);" onclick="removeHideItem(this)"> Remove </a>');
@@ -487,7 +503,7 @@ function handleHeaderFooterClick(event, type, iDoc) {
         }
     } else {
         if (path !== selectedElement) {
-            console.log("true");
+            // console.log("true");
             $(iDoc.body).find(selectedElement).css({
                 outline: "0px"
             });
@@ -499,7 +515,7 @@ function handleHeaderFooterClick(event, type, iDoc) {
             selectedElement = path;
             setElementInput();
         } else {
-            console.log("false");
+            // console.log("false");
         }
     }
 }
@@ -851,7 +867,7 @@ function doneSelection(type) {
         jQuery("#footerToHide").val(selectedFooter);
     } else {
         var others = jQuery(".otherHideElement").toArray();
-        console.log(others);
+        // console.log(others);
         var theOther = others[elementSelectioniFrameIndex-1];
         theOther.value = selectedElement;
     }
@@ -960,17 +976,17 @@ function handleHamburgerMenuLinkTypeChange(el){
 
 // When Page is slected from dropdown, copy the page name to Label input.
 	$(document).on('change','select.bottomBarItemUrlInternal',function(){
-		var pageName = $(this).find(":selected").text();
+		var pageName = $(this).find(":selected").text().trim();
 		const section = $(this).parents('.navigationBottomBarItem');
 		section.find('input.bottomBarItemText').val(pageName);
 
 		// Update the Tab name in Top Nav Tab as well when Page Name Changes Here
 		var name = $(this).attr('name');
-		console.log(name);
+		// console.log(name);
 		var count = parseInt(name.replace(/[^0-9.]/g, ""));
-		console.log(count);
+		// console.log(count);
 		var iconUrl = $(this).parents('.navigationBottomBarItem').find('input.wpna_img_url').val();
-		console.log(iconUrl);
+		// console.log(iconUrl);
 		$('ul#topNavTabsControl li:nth-child('+count+') a').html('<img src="'+iconUrl+'" class="topNavPageIcon">'+pageName);
 		updateTopNavNameIcon(count,iconUrl,pageName)
 	});
@@ -982,9 +998,9 @@ function updateTopNavTabName(el){
 	var pageName = $(el).val();
 	var iconUrl = $(el).parents('.navigationBottomBarItem').find('input.wpna_img_url').val();
 	var count = parseInt($(el).attr('data-itemcount'));
-	console.log(count)
-	console.log(iconUrl)
-	console.log(navTitle)
+	// console.log(count)
+	// console.log(iconUrl)
+	// console.log(navTitle)
 	updateTopNavNameIcon(count,iconUrl,pageName)
 }
 function updateTopNavNameIcon(count=1,iconUrl='',pageName='Home'){
@@ -1035,8 +1051,8 @@ function addBottomBarNavigationIcon(el){
 		if (count <= 4 ){
 			var newIconHtml = $('#navigationBottomBarItemGeneric').html();
 			newIconHtml = newIconHtml.replaceAll('{{iconcount}}',count+1);
-			console.log(count);
-			if(count >= 1 ){
+			// console.log(count);
+			if(count >= 3 ){
 				var removeIcon = '<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>';
 			}else{
 				var removeIcon = '';
@@ -1076,7 +1092,7 @@ function removeBottomBarNavigationIcon(el){
 			$(section).find('.navigationBottomBarItem:nth('+count+')').remove();
 			removeTopNavTabsItem(count);
 			$('#addBottomNavigationIcon').removeClass('hide');
-			if(count > 1){
+			if(count > 3){
 				$(section).find('.navigationBottomBarItem').last().append('<span id="removeBottomBarNavigationIcon" class="button" onclick="removeBottomBarNavigationIcon(this);">Remove</span>');
 				// $('span#removeBottomBarNavigationIcon').remove();
 			}
@@ -1093,9 +1109,9 @@ function addTopNavTabsItem(count){
 
 	var count = count+1;
 	var topNavTabs = this.topNavTabs;
-	console.log(topNavTabs);
+	// console.log(topNavTabs);
 	var topNavTabs = $('#topNavTabs').tabs();
-	console.log(topNavTabs);
+	// console.log(topNavTabs);
 
 	var label = $('input.bottomBarItemText.item_'+count).val() || 'Page';
 	var icon = $('input[name="bottomBarItemIcon_'+count+'_image_url"]').val();
@@ -1182,7 +1198,7 @@ jQuery(document).ready(function($){
 		if (count <= 4 ){
 			var newIconHtml = $('#navigationHamburgerItemGeneric').html();
 			newIconHtml = newIconHtml.replaceAll('{{iconcount}}',count+1);
-			console.log(count);
+			// console.log(count);
 			if(count >2){
 				var removeIcon = '<span id="removeHamburgerNavigationIcon" class="button" onclick="javascript:removeHamburgerNavigationIcon();">Remove</span>';
 			}else{
@@ -1287,8 +1303,8 @@ function handleTopNavLinkTypeChange(el){
 	$=jQuery;
 	var type = $(el).val();
 	const section = $(el).parents('.topNavPageIconItem');
-	console.log(type);
-	console.log(section);
+	// console.log(type);
+	// console.log(section);
 	switch (type){
 		case 'page':
 		{
@@ -1360,7 +1376,7 @@ function removeTopNavigationIconForPage(el){
 			$(section).find('.topNavPageIconItem:nth('+(count-1)+')').remove()
 			// $(removeel).remove();
 			$(section).find('.addNewNavigationIcon').removeClass('hide');
-			console.log(count);
+			// console.log(count);
 			if(count == 2){
 					$(section).find('span.removeNavigationIconRow').remove();
 			}
@@ -1651,7 +1667,7 @@ class WPNA_Solver {
 
 function hexToRgb(hex) {
   // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-  console.log(hex);
+//   console.log(hex);
   const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
   hex = hex.replace(shorthandRegex, (m, r, g, b) => {
     return r + r + g + g + b + b;
@@ -1677,3 +1693,17 @@ function componentToHex(c) {
   }
   
 //   alert(rgbToHex(0, 51, 255)); // #0033ff
+
+
+// Script to show/hide the end of journey page selector 
+$(document).on('change', '.hasEndJourneyPage',function(){
+    if($(this).val() == 'yes'){
+        $(this).parents('fieldset').find('div.endFlowUrl').removeClass('hide');
+    }else{
+        $(this).parents('fieldset').find('div.endFlowUrl').addClass('hide');
+    }
+});
+
+$(document).ready(function() {
+    $('.select2').select2({placeholder: 'Select an option'});
+});

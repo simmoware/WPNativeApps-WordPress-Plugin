@@ -1,37 +1,37 @@
-.logo-left {
+.wpna-logo-left {
     justify-content: start;
     padding-left:20px;
 }
 
-.logo-right {
+.wpna-logo-right {
     justify-content: end;
     padding-right:20px;
 }
 
-.logo-middle {
+.wpna-logo-middle {
     justify-content: center;
 }
 
-.logo {
+.wpna-logo {
     width:auto;
     height:auto;
     max-height:30px;
     max-width:180px;
 }
 
-.top-nav {
+.wpna-top-nav {
     height:50px;
 }
 
-.top-nav.show-logo .title {
+.wpna-top-nav.wpna-show-logo .wpna-title {
     display:none;
 }
 
-.top-nav.show-text .logo {
+.wpna-top-nav.wpna-show-text .wpna-logo {
     display:none;
 }
 
-.title {
+.wpna-title {
     font-size:18px !important;
     font-weight:700 !important;
     margin:0;

@@ -79,11 +79,20 @@
                 $hamburgerItemsData = array();
                 if(!empty($hamburgerItems)){
                   foreach($hamburgerItems as $buttonItem){
+                    $endFlowPageIds = array();
+                    $endFlowurls = isset($buttonItem['endFlowUrl']) ? $buttonItem['endFlowUrl'] : null;
+                    if(!empty($endFlowurls) ){
+                      foreach($endFlowurls as $url){
+                        $endFlowPageIds[] = $this->getIDfromURL($url);
+                      }
+                    }
+
                     $hamburgerItemsData[] = array(
                                     "isExternal"=>isset($buttonItem['isExternal']) ? esc_attr($buttonItem['isExternal']) : 'external',
                                     "icon"=>isset($buttonItem['icon']) ? esc_url($buttonItem['icon']) : '',
                                     "title"=>isset($buttonItem['title']) ? esc_html($buttonItem['title']) : '',
-                                    "url"=>isset($buttonItem['url']) ? esc_url($buttonItem['url']) : ''
+                                    "url"=>isset($buttonItem['url']) ? esc_url($buttonItem['url']) : '',
+                                    "endFlowPageIds"=>$endFlowPageIds,
                                     );
                     }
                 }else{
@@ -91,7 +100,8 @@
                                   "isExternal"=>true,
                                   "title"=>'',
                                   "icon"=>'',
-                                  "url"=>''
+                                  "url"=>'',
+                                  'endFlowPageIds'=>null,
                                   )
                                 );
                 }
@@ -266,7 +276,7 @@
   */
                         if(!empty($hamburgerItemsData)){
                           foreach($hamburgerItemsData as $hamburgerMenuItem){
-                            // var_dump($hamburgerMenuItem);die;
+                            $endFlowPageIds = !empty($hamburgerMenuItem['endFlowPageIds']) ? $hamburgerMenuItem['endFlowPageIds'] : null;
                             ?>
                             <div class="flex-column topNavPageIconItem">
                               <div class="flex-row bottomBarItemWrapTop">
@@ -321,6 +331,36 @@
                                 </div>
 
                               </div>
+                              
+                          <div class="endOfJourneyPageSelectionWrap radioInputs">
+                            <fieldset class="flex-column mb10">
+                              <div class="flex-column mb10">
+                                <h4>Will this page have end of Journey Page?</h4>
+                                <div class="">
+                                  <input type="radio" class="hasEndJourneyPage" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPage_<?php esc_attr_e($buttonItemCount);?>" id="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPageNo_<?php esc_attr_e($buttonItemCount);?>" value="no" <?php echo empty($endFlowPageIds) ? 'checked':''?>><label for="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPageNo_<?php esc_attr_e($buttonItemCount);?>" class="inputLabel">No</label>
+                                  <input type="radio" class="hasEndJourneyPage" name="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPage_<?php esc_attr_e($buttonItemCount);?>" id="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPageYes_<?php esc_attr_e($buttonItemCount);?>" value="yes" <?php echo empty($endFlowPageIds) ? '':'checked'?> ><label for="topNav_<?php esc_attr_e($topNavTabCount);?>_logoLeftBurgerRight_hasEndJourneyPageYes_<?php esc_attr_e($buttonItemCount);?>" class="inputLabel">Yes</label>
+                                </div>
+                              </div>
+                              <div class="endFlowUrl <?php echo empty($endFlowPageIds) ? 'hide': ''; ?>">
+                                <h4>Select Page</h4>
+                                <?php 
+                                $pagesDropdownHtml = $this->wpna_dropdown_pages_multiple(
+                                  [
+                                  'name'=>'topNav_'.esc_attr($topNavTabCount).'_logoLeftBurgerRight_hamburgerNavItem_'.esc_attr($buttonItemCount).'_endFlowUrl[]',
+                                  'id'=>'topNav_'.esc_attr($topNavTabCount).'_logoLeftBurgerRight_hamburgerNavItem_'.esc_attr($buttonItemCount).'_endFlowUrl',
+                                  'class'=>'bottomBarEndFlowUrl wpna_multiselect select2',
+                                  'echo'=>'0',
+                                  'value_field'=>'guid',
+                                  'selected' => $endFlowPageIds,
+                                  'multiselect'=>true
+                                  ]
+                                  );
+                                  echo html_entity_decode(esc_html($pagesDropdownHtml));
+                                  ?>
+                              </div>
+                            </fieldset>
+                          </div>
+
                             </div>
                             <?php
                             $buttonItemCount++;

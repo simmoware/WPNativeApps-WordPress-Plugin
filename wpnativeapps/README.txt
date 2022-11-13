@@ -3,8 +3,8 @@ Contributors: yamuaryal, wpnativeapps
 Tags: native, ios, android, app, mobile, node, react
 Donate Link: https://wpnativeapps.com/
 Requires at least: 3.0.1
-Tested up to: 6.0
-Stable tag: 1.0.0
+Tested up to: 6.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Requires PHP: 5.6.20
@@ -95,10 +95,15 @@ Watch our video tutorials that show you exactly how to configure our plugin for 
 
 == Changelog ==
 
-= 1.0 =
+= 1.0.0 =
 * Initial Plugin Release
 
 == Upgrade Notice ==
 
-= 1.0 =
-Initial Plugin Release
+= 1.0.1 =
+Config file stored outside the plugin so that it does not get overwritten on plugin update/replace.
+
+= 1.0.2 =
+Added the feature to select the End of Journey Pages for Bottom Nav and Hamburger Menu Items.
+Added Select2 for multiple Select option for endFlow Page Selection
+

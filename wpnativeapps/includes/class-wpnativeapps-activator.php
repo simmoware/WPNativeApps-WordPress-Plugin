@@ -30,13 +30,27 @@ class Wp_Native_Apps_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
+
+		$configPath = pathinfo(WPNA_CONFIG_PATH);
+		//Create the directory to store the config file if it does not already exists
+		if (!file_exists($configPath['dirname'])) {
+			mkdir($configPath['dirname'], 0755, true);
+			$f = fopen(WPNA_CONFIG_PATH, 'wa+');
+			if (!$f) {
+				die('Error creating the file ');
+			}
+			fclose($f);
+		}
+
+
+
 		$url = 'https://api.staging.wpnativeapps.com/v1/account';
 		$args = array(
 									'method'=>'POST',
 									'headers'=>array(
 										'wpnativeappsrequestkey'=> 'sO4nl&W5sVTpBOQ#Wo07bJGMdJTZ&isi$HTe#j3x'
 									),
-									'body'=>array('domain' => str_replace(array("http://","https://"), array(""), get_site_url())),
+									'body'=>array('timezone'=>wp_timezone_string(),'domain' => str_replace(array("http://","https://"), array(""), get_site_url())),
 								);
 
 		$request = wp_remote_post($url,$args);
@@ -126,7 +140,7 @@ class Wp_Native_Apps_Activator {
 				]
 			];
 
-			file_put_contents(str_replace("/includes", "/admin", dirname(__FILE__)) . '/config.json', json_encode($config));
+			file_put_contents(WPNA_CONFIG_PATH, json_encode($config));
 			delete_option( 'WPNativeAppsConfigMessage');
 		}else{
 			// Add option to notify of error.

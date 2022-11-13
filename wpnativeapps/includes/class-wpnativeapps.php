@@ -172,6 +172,9 @@ class Wp_Native_Apps {
 
 		$this->loader->add_action ('rest_api_init', $plugin_admin, 'wpna_register_configuration_route');
 
+		// $this->loader->add_filter( 'wp_dropdown_pages', $plugin_admin, 'wpna_dropdown_pages_multiple', 10,3);
+
+
 	}
 
 	/**

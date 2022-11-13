@@ -71,7 +71,24 @@ class Wp_Native_Apps_Admin {
 		$this->version = $version;
 		$this->admin_notices = null;
 		$this->wpnativeAppSettings = $this->wpna_get_settings();
+		$this->copyConfigifExist();
 
+	}
+
+	/*
+	Backward compatibility, will be removed later 
+	@ function to copy the existing config file to the new location if does not exist.
+	*/
+	public function copyConfigifExist(){
+		$configPath = pathinfo(WPNA_CONFIG_PATH);
+		//Create the directory to store the config file if it does not already exists
+		if (!file_exists($configPath['dirname'])) {
+			mkdir($configPath['dirname'], 0755, true);
+			if(file_exists(dirname(__FILE__) . '/config.json')){
+				copy(dirname(__FILE__) . '/config.json', WPNA_CONFIG_PATH);
+				unlink(dirname(__FILE__) . '/config.json');
+			}			
+		}
 	}
 
 	public function wpna_addAdminNotice($notice){
@@ -112,6 +129,7 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_style( $this->plugin_name.'_authentication_css', plugin_dir_url( __FILE__ ) . 'css/authentication.css', array(), date("YmdHis"), 'all' );
 		wp_enqueue_style( $this->plugin_name.'_analytics_css', plugin_dir_url( __FILE__ ) . 'css/analytics.css', array(), date("YmdHis"), 'all' );
 		wp_enqueue_style( $this->plugin_name.'_iframe_css', plugin_dir_url( __FILE__ ) . 'css/iframe.css', array(), date("YmdHis"), 'all' );
+		wp_enqueue_style( $this->plugin_name.'_select2_css', plugin_dir_url( __FILE__ ) . 'css/select2.css', array(), date("YmdHis"), 'all' );
 
 	}
 
@@ -141,10 +159,12 @@ class Wp_Native_Apps_Admin {
 		wp_enqueue_script( $this->plugin_name."_pushNotifications", plugin_dir_url( __FILE__ ) . 'js/pushNotifications.js', array('jquery'), date("YmdHis"), false );
         wp_enqueue_script( $this->plugin_name."_qrCodeJs", plugin_dir_url( __FILE__ ) . 'js/qrCodeGenerator.js', array('jquery'), date("YmdHis"), false );
 		wp_enqueue_script( $this->plugin_name."_previewJs", plugin_dir_url( __FILE__ ) . 'js/iframePreview.js', array('jquery'), date("YmdHis"), false );
+		wp_enqueue_script( $this->plugin_name."_select2Js", plugin_dir_url( __FILE__ ) . 'js/select2.js', array('jquery'), date("YmdHis"), false );
 		wp_localize_script( $this->plugin_name, 'WPNativeApps',
 		        array(
 		            'pluginURL' => plugin_dir_url( __FILE__ ),
 		            'homeURL' => get_home_url(),
+					'WPNA_CONFIG_PATH' => WPNA_CONFIG_PATH,
 		        )
 		    );
 
@@ -274,6 +294,16 @@ class Wp_Native_Apps_Admin {
 							$pageUrl = isset($_POST['bottomBarItemUrlExternal_'.$pagecount]) ? sanitize_url($_POST['bottomBarItemUrlExternal_'.$pagecount]) : '';
 							$isExternal = true;
 						}
+						if(isset($_POST['bottomBar_'.$pagecount.'_hasEndJourneyPage']) && $_POST['bottomBar_'.$pagecount.'_hasEndJourneyPage'] == 'yes'){
+							$endFlowPageIds = 	isset($_POST['bottomBarEndFlowUrl_'.$pagecount]) ? $this->sanitizeMultipleInputs($_POST['bottomBarEndFlowUrl_'.$pagecount]) : null;
+							$endFlowUrl = array();
+							foreach($endFlowPageIds as $PID){
+								$endFlowUrl[] = get_permalink(intval($PID));
+							}
+							
+						}else{
+							$endFlowUrl = null;
+						}
 						$pageIcon = isset($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) ? sanitize_url($_POST['bottomBarNavLogo_'.$pagecount.'_image_url']) : '';
 						$designType  = isset($_POST['topNav_'.$pagecount.'_structure']) ? sanitize_text_field($_POST['topNav_'.$pagecount.'_structure']) : '';
 						$topNav = null;
@@ -298,11 +328,19 @@ class Wp_Native_Apps_Admin {
 									foreach ($HBItemSources as $key=>$value){
 										$title = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_title']) : '';
 										$navIcon = isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) ? sanitize_url($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItemIcon_'.$buttonCount.'_image_url']) : '';
+										$hamburgerEndFlowUrl = null;
+										if(isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hasEndJourneyPage_'.$buttonCount]) && $_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hasEndJourneyPage_'.$buttonCount] == 'yes'){
+											$hamburgerEndFlowPageIds =  isset($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_'.$buttonCount.'_endFlowUrl']) ? $this->sanitizeMultipleInputs($_POST['topNav_'.$pagecount.'_logoLeftBurgerRight_hamburgerNavItem_'.$buttonCount.'_endFlowUrl']) : null ;
+											foreach($hamburgerEndFlowPageIds as $PID){
+												$hamburgerEndFlowUrl[] = get_permalink($PID);
+											}
+										}
 										$hamburgerMenuItems[] = array(
 											"isExternal"=> $value == 'external' ? true : false,
 											"icon"=> $navIcon,
 											"title"=> $title[$key],
 											"url"=> $value == 'page' ? ( isset($navInternalUrls[$key]) ? get_permalink($this->getIDfromGUID($navInternalUrls[$key])) : '') : ( isset($navExternalUrls[$key]) ? $navExternalUrls[$key] : ''),
+											"endFlowUrl" => $hamburgerEndFlowUrl
 										);
 										$buttonCount++;
 									}
@@ -397,6 +435,7 @@ class Wp_Native_Apps_Admin {
 														"icon" => $pageIcon,
 														"name" => $page,
 														"isExternal" => $isExternal,
+														"endFlowUrl" => $endFlowUrl,
 														"topNav" => $topNav
 													);
 						$pagecount++;
@@ -439,7 +478,8 @@ class Wp_Native_Apps_Admin {
 												);
 
 						// Reading the config and storing the Licence Keys
-						$existingConfig = json_decode(file_get_contents(dirname(__FILE__) . '/config.json'), true);
+						$existingConfig = json_decode(file_get_contents(WPNA_CONFIG_PATH), true);
+
 						$appId = isset($existingConfig['appId']) ? $existingConfig['appId'] : '';
 						$appSecret = isset($existingConfig['appSecret']) ? $existingConfig['appSecret'] : '';
 						$siteURL = get_site_url();
@@ -459,7 +499,7 @@ class Wp_Native_Apps_Admin {
 									"prompts"=>$prompts,
 									"authenticationSettings"=>$authentication
 							);
-						file_put_contents(dirname(__FILE__) . '/config.json', json_encode($configSaved));
+						file_put_contents(WPNA_CONFIG_PATH, json_encode($configSaved));
 
 					// add the admin notice
 					$notice = array(
@@ -696,7 +736,7 @@ class Wp_Native_Apps_Admin {
 	Function to fetch the configurations from saved config file, if config file is empty, create and return defatult settings
 	*/
 	public function wpna_get_settings(){
-		$pluginConfiguration = json_decode(file_get_contents(dirname(__FILE__) . '/config.json'), true);
+		$pluginConfiguration = json_decode(file_get_contents(WPNA_CONFIG_PATH), true);
 
 		// foreach ($pluginConfiguration as $ia) {
 		// 	if (!is_array($ia)) {
@@ -738,6 +778,7 @@ class Wp_Native_Apps_Admin {
 							"icon" => plugin_dir_url(__FILE__)."/images/WPNativeApps-Icon.png",
 							"name" => get_bloginfo('name'),
 							"isExternal" =>true,
+							"endFlowUrl" =>null,
 							"topNav"=>[
 								"designType"=> "logoOnly",
 								"useLogo" => true,
@@ -776,7 +817,7 @@ class Wp_Native_Apps_Admin {
 			    ]
 			  ],
 			  "authenticationSettings"=>[
-			    "accountRequired"=>true,
+			    "accountRequired"=>false,
 			    "authenticationPage"=>""
 			  ]
 			);
@@ -812,6 +853,8 @@ class Wp_Native_Apps_Admin {
 			<?php
 			return ob_get_clean();
 	}
+
+	
 
 	/*
 	Function to fetch the ID of the Page from GUID
@@ -859,7 +902,7 @@ function api_wpna_setup_configuration($request) {
 			switch($method){
 				case 'POST':
 				{
-					$update = file_put_contents(dirname(__FILE__) . '/config.json', json_encode($newConfig));
+					$update = file_put_contents(WPNA_CONFIG_PATH, json_encode($newConfig));
 					if($update){
 						delete_option( 'WPNativeAppsConfigMessage');
 						$return['code'] = 200;
@@ -921,4 +964,60 @@ function sanitizeMultipleInputs($input){
 	return $new_input;
 }
 
+// function wpna_dropdown_pages_multiple($output, $pargsed_args, $pages){
+// 	if(isset($pargsed_args['multiselect']) && $pargsed_args['multiselect'] == true ){
+// 		print_r($pargsed_args);
+// 		return str_replace( '<select ', '<select multiple="multiple" ', $output );
+// 	}else{
+// 		return $output;
+// 	}
+// }
+
+function wpna_dropdown_pages_multiple($args){
+
+	if(isset($args['multiselect']) && $args['multiselect'] == true ){
+		$args['echo'] = 0;
+		$args['walker'] = new Walker_PageDropdown_Multiple();
+		$output = wp_dropdown_pages( $args );
+		return str_replace( '<select ', '<select multiple="multiple" ', $output );
+	}else{
+		wp_dropdown_pages( $args );
+	}
+
 }
+
+}
+
+if ( !class_exists( 'Walker_PageDropdown_Multiple' ) ) {
+	/**
+	 * Create HTML dropdown list of pages.
+	 *
+	 * @package WordPress
+	 * @since 2.1.0
+	 * @uses Walker
+	 */
+	class Walker_PageDropdown_Multiple extends Walker_PageDropdown {
+	  /**
+	   * @see Walker::start_el()
+	   * @since 2.1.0
+	   *
+	   * @param string $output Passed by reference. Used to append additional content.
+	   * @param object $page Page data object.
+	   * @param int $depth Depth of page in reference to parent pages. Used for padding.
+	   * @param array $args Uses 'selected' argument for selected page to set selected HTML attribute for option element.
+	   * @param int $id
+	   */
+	  function start_el(&$output, $page, $depth = 0, $args = array(), $id = 0){
+		$pad = str_repeat( isset( $args['pad'] ) ? $args['pad'] : '--', $depth );
+   
+		$output .= "\t<option class=\"level-$depth\" value=\"$page->ID\"";
+		if ( in_array( $page->ID, (array) $args['selected'] ) )
+		  $output .= ' selected="selected"';
+		$output .= '>';
+		$title = apply_filters( 'list_pages', $page->post_title, $page );
+		$title = apply_filters( 'pagedropdown_multiple_title', $title, $page, $args );
+		$output .= $pad . ' ' . esc_html( $title );
+		$output .= "</option>\n";
+	  }
+	}
+  }

@@ -22,6 +22,15 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
           $icon = isset($bottomNav['icon']) ? esc_url($bottomNav['icon']) : '';
           $name = esc_html($bottomNav['name']);
           $selectedPage = ($isExternal) ? 0 : $this->getIDfromURL($url);
+
+          $endFlowPageIds = array();
+          // print_r($bottomNav);die;
+          $endFlowurls = $bottomNav['endFlowUrl'];
+          if(!empty($endFlowurls) && !$isExternal){
+            foreach($endFlowurls as $url){
+              $endFlowPageIds[] = $this->getIDfromURL($url);
+            }
+          }
           $args = array(
             'inputName'=>'bottomBarNavLogo_'.$count,
             'imageUrl'=>$icon,
@@ -33,6 +42,41 @@ $bottomBarNavs =  $config['bottomBarNav']['pages'];
           ?>
 
             <div class="flex-column navigationBottomBarItem">
+              <div class="endOfJourneyPageSelectionWrap radioInputs">
+                <fieldset class="flex-column mb10">
+                  <div class="flex-column mb10">
+                    <h4>Will this page have end of Journey Page?</h4>
+                    <div class="">
+                      <input type="radio" class="hasEndJourneyPage" name="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPage" id="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPageNo" value="no" <?php echo empty($endFlowPageIds) ? 'checked':''?>><label for="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPageNo" class="inputLabel">No</label>
+                      <input type="radio" class="hasEndJourneyPage" name="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPage" id="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPageYes" value="yes" <?php echo empty($endFlowPageIds) ? '':'checked'?> ><label for="bottomBar_<?php echo esc_attr($count);?>_hasEndJourneyPageYes" class="inputLabel">Yes</label>
+                    </div>
+                  </div>
+                  
+                    
+                  <div class="endFlowUrl <?php echo empty($endFlowPageIds) ?'hide':''?> ">
+                    <h4>Select Page</h4>
+                    <div class="dropdownWrap">
+                    <?php $pagesDropdownHtml = $this->wpna_dropdown_pages_multiple(
+                    [
+                    'name'=>'bottomBarEndFlowUrl_'.$count.'[]',
+                    'id'=>'bottomBarEndFlowUrl_'.$count,
+                    'class'=>'bottomBarEndFlowUrl wpna_multiselect select2',
+                    'echo'=>'1',
+                    'value_field'=>'guid',
+                    'selected' => $endFlowPageIds,
+                    'multiselect'=>true
+                    ]
+                    );
+                    echo html_entity_decode(esc_html($pagesDropdownHtml));
+
+                    ?>
+
+                    </div>
+                  </div>
+
+                </fieldset>
+              </div>
+
               <div class="flex-row bottomBarItemWrapTop">
                 <div class="bottomBarItemType">
                   <select onchange="handleBottomBarLinkTypeChange(this)"  required class="bottomBarItemType" name="bottomBarItemType_<?php echo $count;?>">
